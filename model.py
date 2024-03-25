@@ -3,7 +3,7 @@ from statsmodels.tsa.arima.model import ARIMA
 from matplotlib import pyplot as plt
 
 # read in data, here I use the first store's data
-df = pd.read_csv("D:\\Lecture\\DSA3101-Group\\visit_data.csv",parse_dates=True, index_col='visit_date') # use date as index column
+df = pd.read_csv("air_visit_data.csv" ,parse_dates=True, index_col='visit_date') # use date as index column
 print(df.head()) # print first few rows to check
 
 # plot
