@@ -9,13 +9,15 @@ from datetime import datetime, timedelta, date
 dash.register_page(__name__, path='/week', name="Week 📋")
 
 ####################### LOAD DATASET #############################
-df = pd.read_csv("output/2024_predictions.csv")
+df = pd.read_csv("output/predictions.csv")
 df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
-df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
+print(df.columns)
+print((df['Date']))
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 df['Public Holiday'] = df['Public Holiday'].fillna('')
 
 # customer_demand = pd.read_csv('Customer_demand.csv')
-manpower_schedule = pd.read_csv('output/Schedule.csv')
+manpower_schedule = pd.read_csv('output/final_schedule.csv')
 
 #setting the date
 current_date = datetime.now()
@@ -78,14 +80,25 @@ layout = html.Div(children=[
     ]),
     html.Br(),
     html.H1(children='Overview for the Week'),
-        html.Div(children =[
+    html.Div(children =[
         dcc.Graph(id='staff-present-fig',style= {'border':'2px solid black', 'display':'inline-block', 'width':'45%',  'margin':'5px', 'margin-right': '5%'}),
         dcc.Graph(id='cost-hiring-fig', style = {'border':'2px solid black', 'display':'inline-block' , 'width':'45%',  'margin':'5px'}),
         ], style={'background-color':'rgb(224, 255, 252)'}),
-        html.Br(),
-        html.Div(id='output-table'),
+    html.Br(),
+    html.Div(id='output-table'),
 
     ], className='row')    
+
+@callback(
+    Output('date-picker-range', 'end_date'),
+    [Input('date-picker-range', 'start_date')]
+)
+def update_end_date(start_date):
+    if start_date is not None:
+        start_date = datetime.strptime(start_date.split(' ')[0], '%Y-%m-%d').date()
+        end_date = start_date + timedelta(days=6)
+        return end_date.strftime('%Y-%m-%d')
+
 
 # Define callback to update other graphs
 @callback(

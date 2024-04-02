@@ -22,7 +22,9 @@ app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=
 
 app.layout = html.Div([
 	html.Br(),
-    html.Img(src='https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png', style={'height': '50px', 'margin-right': '15px','float': 'left'}),
+    html.Img(src='https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png', style={'height': '50px', 'margin-right': '10px','float': 'left'}),
+	html.Br(),
+	html.Br(),	
 	html.H1(datetime.datetime.now().strftime('Last updated: %Y-%m-%d %H:%M:%S'),
 		style={'opacity': '1','color': 'blue', 'fontSize': 15, 'position': 'absolute', 'top': '2px', 'right': '2px'}),
     html.Br(),
@@ -30,6 +32,7 @@ app.layout = html.Div([
 	    dcc.Link(page['name'], href=page["relative_path"], className="btn btn-dark m-2 fs-5")\
 			  for page in dash.page_registry.values()], style={'height': '50px', 'margin-right': '10px'}
 	),
+    html.Br(),
 	dash.page_container
 ], className="col-8 mx-auto")
 
