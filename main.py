@@ -22,7 +22,7 @@ app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=
 
 app.layout = html.Div([
 	html.Br(),
-        html.Img(src='https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png', style={'height': '50px', 'margin-right': '10px','float': 'left', 'margin-right': '20px'}),
+    html.Img(src='https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png', style={'height': '50px', 'margin-right': '10px','float': 'left', 'margin-right': '20px'}),
     html.Br(),
     html.Br(),
     html.Br(),
