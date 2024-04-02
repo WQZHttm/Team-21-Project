@@ -84,9 +84,10 @@ def produce_output(date,shift):
         final_df=df.loc[df['Shift']=='8pm-10pm']
     
     print('final',final_df)
-    
     # create a new df to group employees
     roles_df=final_df.pivot_table(index='Role', values='Employee_ID', aggfunc=lambda x: ', '.join(x)).reset_index()
+    if roles_df.empty:
+        return None, None
     roles_df.columns = ['Role', 'Employee_ID']
     print(roles_df)
     table = dash_table.DataTable(
