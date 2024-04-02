@@ -12,7 +12,7 @@ current_date = datetime.now()
 
 
 ####################### LOAD DATASET #############################
-df = pd.read_csv("data.csv")
+df = pd.read_csv("input/data.csv")
 
 ####################### PAGE LAYOUT #############################
 layout = html.Div(children=[

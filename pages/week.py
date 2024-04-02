@@ -4,18 +4,18 @@ from dash import html, dash_table, dcc,Input, Output,callback
 import plotly.graph_objects as go
 import plotly.express as px
 from dash import dash_table 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 dash.register_page(__name__, path='/week', name="Week 📋")
 
 ####################### LOAD DATASET #############################
-df = pd.read_csv("2024_predictions.csv")
+df = pd.read_csv("output/2024_predictions.csv")
 df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
 df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
 df['Public Holiday'] = df['Public Holiday'].fillna('')
 
 # customer_demand = pd.read_csv('Customer_demand.csv')
-manpower_schedule = pd.read_csv('Schedule.csv')
+manpower_schedule = pd.read_csv('output/Schedule.csv')
 
 #setting the date
 current_date = datetime.now()
