@@ -51,7 +51,7 @@ staff_counts = manpower_schedule.groupby(['Date_and_day', 'Role']).size().unstac
 staff_present_fig = px.bar(data_frame = staff_counts,  
 	x = 'Date_and_day',
 	y = ['chef', 'dishwasher', 'service'],
-	barmode = 'group',
+	barmode = 'stack',
 	labels = {'Date_and_day': 'Days of the Week', 'value' : 'Number of Staffs'} , 
 	title = 'Number of Staffs Present for Each Day' )
 
@@ -63,7 +63,7 @@ logo_link = 'https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.p
 
 
 layout = html.Div(children=[
-    html.Br(),
+    html.Div(id='output-table', style = {'width': '200px', 'margin-left': 'auto', 'margin-top': '0px'}),
     html.Div([
         html.Label( children = html.B('Select a date range: ')),
         dcc.DatePickerRange(
@@ -73,7 +73,6 @@ layout = html.Div(children=[
             start_date=start_date_default,
             end_date=end_date_default,
             display_format='YYYY-MM-DD',
-            style={'margin':'10px'}
         ),
         html.Div(id='output-container-date-picker-range'),
     ]),
@@ -84,11 +83,9 @@ layout = html.Div(children=[
         dcc.Graph(id='cost-hiring-fig', style = {'border':'2px solid black', 'display':'inline-block' , 'width':'45%',  'margin':'5px'}),
         ], style={'background-color':'rgb(224, 255, 252)'}),
     html.Br(),
-    html.Div(id='output-table'),
 
     ], className='row')    
 
-# auto select end_date
 @callback(
     Output('date-picker-range', 'end_date'),
     [Input('date-picker-range', 'start_date')]
@@ -120,32 +117,39 @@ def update_graphs(start_date, end_date):
         # Recalculate cost_group and staff_counts based on filtered_data
         cost_group = filtered_data.groupby('Date_and_day')['Cost'].sum().reset_index()
         staff_counts = filtered_data.groupby(['Date_and_day', 'Role']).size().unstack(fill_value=0).reset_index()
-        
+       
         # Update figures with filtered data
         staff_present_fig = px.bar(data_frame=staff_counts,  
                                    x='Date_and_day',
                                    y=['chef', 'dishwasher', 'service'],
-                                   barmode='group',
+                                   barmode='stack',
                                    labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
                                    title='Number of Staffs Present for Each Day')
-        table = dash_table.DataTable(
-            id='table',
-            columns=[
-                        {'name': 'Date', 'id': 'Date_and_day'},
-                        {'name': 'Public Holiday', 'id': 'Public Holiday'}
-                    ],
-            data=df2[['Date_and_day', 'Public Holiday']].to_dict('records'),
-            page_size=10,
-            style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
-            style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
-        
+
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
                                   y='Cost', 
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
                                   title ='Cost of hiring')
-        
-        return staff_present_fig, table, cost_hiring_fig
+
+
+        if (df2 ['Public Holiday'] != '').any():
+            filtered_df2 = df2[df2['Public Holiday'] != '']
+            table = dash_table.DataTable(
+                id='table',
+                columns=[
+                            {'name': 'Date', 'id': 'Date_and_day'},
+                            {'name': 'Public Holiday', 'id': 'Public Holiday'}
+                        ],
+                data=filtered_df2[['Date_and_day', 'Public Holiday']].to_dict('records'),
+                page_size=10,
+                style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
+                style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
+            
+            return staff_present_fig, table, cost_hiring_fig
+        else:
+            return staff_present_fig, html.Div(), cost_hiring_fig
+
     else:
         return {'data': [], 'layout': {}}, {'data': [], 'layout': {}}
     
