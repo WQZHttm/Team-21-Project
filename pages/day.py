@@ -9,28 +9,13 @@ dash.register_page(__name__, path='/', name="Day 📋")
 
 #current date
 
-current_date = datetime.datetime.now()
+current_date = datetime.datetime.today().date()
 
 
 ####################### LOAD DATASET #############################
 df = pd.read_csv("input/data.csv")
 
-####################### PAGE LAYOUT #############################
-layout = html.Div(children=[
-    html.Br(),
-    html.Label(children = html.B('Select a date:  ')),
-    dcc.DatePickerSingle(
-        min_date_allowed=datetime.datetime.today(), # CHECK
-        max_date_allowed=datetime.datetime(2024, 12, 31),
-        date=current_date,
-        style={'width':'200px', 'margin':'0 auto'}),
-    html.Br(),
-    html.Br(),
-    html.H1(children='Manpower Today'),
 
-])
-
-# Load data from CSV
 manpower_schedule = pd.read_csv('output/final_schedule.csv')
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
 #tabulating the cost
@@ -40,22 +25,15 @@ manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedu
 manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
 
-# GENERATE THE NEXT 6 DAYS (DEFAULT=CURRENT DAY) -- WORK WITH DATE FIRST
-# Get the first day of the week (Monday) based on the current date
-start_of_week = datetime.datetime.today() - datetime.timedelta(days=datetime.datetime.today().weekday())
-
-# Define days of the week starting from Monday
-days_of_week = [(start_of_week + datetime.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
-
-# Ordering for role
-custom_order = {"chef": 1, "service": 2, "dishwasher" :3}
-
-# Define app layout
+####################### PAGE LAYOUT #############################
 layout = html.Div([
    #Day dropdown
-    dcc.Dropdown(id='date',
-    options=[{'label': day, 'value': day} for day in days_of_week], # can add for the other questions
-    value=days_of_week[0], clearable=False),
+   html.Label(children = html.B('Select a date:  ')),
+    dcc.DatePickerSingle(id='date-picker',
+        min_date_allowed=datetime.datetime.today(), # CHECK
+        max_date_allowed=datetime.datetime(2024, 12, 31),
+        date=current_date,
+        style={'width':'200px', 'margin':'0 auto'}),
     html.Br(),
     dcc.Tabs(id="shift", value="morn", children=[
         dcc.Tab(label="Morning", value="morn"),
@@ -70,12 +48,11 @@ layout = html.Div([
 ])
 
 @callback([Output('employee-table', 'children'),Output('graph','figure')],
-          [Input('date','value'),Input("shift","value")])
+          [Input('date-picker','date'),Input("shift","value")])
 
 def produce_output(date,shift):
-    print(date, shift)
-    df=manpower_schedule.loc[manpower_schedule['Date'] == date]
-    print(df)
+    date_picked=(date)
+    df=manpower_schedule.loc[manpower_schedule['Date'] == date_picked]
     if shift=="morn":
         final_df=df.loc[df['Shift']=='10am-4.30pm']
     elif shift=='chidata':

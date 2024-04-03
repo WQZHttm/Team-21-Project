@@ -11,8 +11,6 @@ dash.register_page(__name__, path='/week', name="Week 📋")
 ####################### LOAD DATASET #############################
 df = pd.read_csv("output/predictions.csv")
 df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
-print(df.columns)
-print((df['Date']))
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 df['Public Holiday'] = df['Public Holiday'].fillna('')
 
@@ -128,7 +126,6 @@ def update_graphs(start_date, end_date):
                                    barmode='group',
                                    labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
                                    title='Number of Staffs Present for Each Day')
-        print(df2)
         table = dash_table.DataTable(
             id='table',
             columns=[
