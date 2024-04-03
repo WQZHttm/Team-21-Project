@@ -73,6 +73,7 @@ layout = html.Div(children=[
             start_date=start_date_default,
             end_date=end_date_default,
             display_format='YYYY-MM-DD',
+            style={'margin':'10px'}
         ),
         html.Div(id='output-container-date-picker-range'),
     ]),
@@ -87,6 +88,7 @@ layout = html.Div(children=[
 
     ], className='row')    
 
+# auto select end_date
 @callback(
     Output('date-picker-range', 'end_date'),
     [Input('date-picker-range', 'start_date')]

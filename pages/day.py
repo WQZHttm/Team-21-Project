@@ -4,18 +4,18 @@ from dash import html, dash_table, dcc,Input, Output,callback
 import plotly.graph_objects as go
 import plotly.express as px
 import datetime
+import numpy as np
 
 dash.register_page(__name__, path='/', name="Day 📋")
 
 #current date
 
 current_date = datetime.datetime.today().date()
+df = pd.read_csv("output/predictions.csv") # TO REMOVE
+df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 
 ####################### LOAD DATASET #############################
-df = pd.read_csv("input/data.csv")
-
-
 manpower_schedule = pd.read_csv('output/final_schedule.csv')
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
 #tabulating the cost
@@ -33,13 +33,15 @@ layout = html.Div([
         min_date_allowed=datetime.datetime.today(), # CHECK
         max_date_allowed=datetime.datetime(2024, 12, 31),
         date=current_date,
-        style={'width':'200px', 'margin':'0 auto'}),
+        style={'width':'200px', 'margin':'10px'}),
     html.Br(),
+    html.Br(),
+    html.H2(id='event-header'),
     dcc.Tabs(id="shift", value="morn", children=[
-        dcc.Tab(label="Morning", value="morn"),
-        dcc.Tab(label="Night (Chinese)", value="chidata"),
-        dcc.Tab(label="Night (Indian)", value="inddata"),
-    ]),
+        dcc.Tab(label="Morning\n(10am-4.30pm)", value="morn"),
+        dcc.Tab(label="Night (Chinese)\n(7pm-10pm)", value="chidata"),
+        dcc.Tab(label="Night (Indian)\n(8pm-10pm)", value="inddata"),
+    ],style={"white-space": "pre"}),
     html.Br(),
     html.Div(id='employee-table'),
     html.Br(),
@@ -47,11 +49,21 @@ layout = html.Div([
 
 ])
 
+# update event of the day
+@callback(Output('event-header','children'),
+          Input('date-picker','date'))
+def update_event(date):
+    df2=df.loc[df['Date']==date]
+    if not isinstance(df2['Public Holiday'].item(),str):
+        return "Today's Event: NA"
+    else:
+        return f"Today's Event: {df2['Public Holiday'].item()}"
+
 @callback([Output('employee-table', 'children'),Output('graph','figure')],
           [Input('date-picker','date'),Input("shift","value")])
 
 def produce_output(date,shift):
-    date_picked=(date)
+    date_picked=date
     df=manpower_schedule.loc[manpower_schedule['Date'] == date_picked]
     if shift=="morn":
         final_df=df.loc[df['Shift']=='10am-4.30pm']
@@ -66,7 +78,6 @@ def produce_output(date,shift):
     if roles_df.empty:
         return None, None
     roles_df.columns = ['Role', 'Employee_ID']
-    print(roles_df)
     table = dash_table.DataTable(
         id='table',
         columns=[
