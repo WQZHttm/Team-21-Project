@@ -45,7 +45,8 @@ layout = html.Div([
     html.Br(),
     html.Div(id='employee-table'),
     html.Br(),
-    dcc.Graph(id="graph"),
+    html.Br(),
+    html.Div(id="count-table"),
 
 ])
 
@@ -59,7 +60,7 @@ def update_event(date):
     else:
         return f"Today's Event: {df2['Public Holiday'].item()}"
 
-@callback([Output('employee-table', 'children'),Output('graph','figure')],
+@callback([Output('employee-table', 'children'),Output('count-table','children')],
           [Input('date-picker','date'),Input("shift","value")])
 
 def produce_output(date,shift):
@@ -90,13 +91,36 @@ def produce_output(date,shift):
         style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
         style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
 
-    # show graph of chefs
-    fig = px.histogram(final_df, x="Role")
-    fig.update_layout(
-        title='Histogram',
-        yaxis_title='Count',
-        yaxis=dict(
-            dtick=1  # Set dtick to 1 for y-axis
-        )
+    count = dash_table.DataTable(
+        id = 'count',
+        columns = [
+            {'name': 'Total no. of staff for this shift', 'id': 'Count'},
+        ],
+        data = [{'Count': len(final_df)}],
+        style_table={'width': '25%', 'margin': 'auto'},
+        style_header={
+            'background-color': 'dodgerblue',
+            'color': 'white',
+            'textAlign': 'center',
+            'font-weight': 'bold'
+        },
+        style_cell={
+            'background-color': 'lightgrey',
+            'color': 'black',
+            'border': 'solid 1px white',
+            'textAlign': 'center'
+        }
+
     )
-    return table,fig
+
+    # # show graph of chefs
+    # fig = px.histogram(final_df, x="Role")
+    # fig.update_layout(
+    #     title='Histogram',
+    #     yaxis_title='Count',
+    #     yaxis=dict(
+    #         dtick=1  # Set dtick to 1 for y-axis
+    #     )
+    # )
+
+    return table,count
