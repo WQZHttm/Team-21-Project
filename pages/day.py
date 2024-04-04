@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 import datetime
 import numpy as np
+import dash_bootstrap_components as dbc
+
 
 dash.register_page(__name__, path='/', name="Day 📋")
 
@@ -37,16 +39,29 @@ layout = html.Div([
     html.Br(),
     html.Br(),
     html.H2(id='event-header'),
+    
+    # shift tab
+    # html.Div(id="shift",children=[
+    #     dbc.Button("Morning\n(10am-4.30pm)", value="morn",active='exact'),
+    #     dbc.Button("Night (Chinese)\n(7pm-10pm)", value="chidata",active='exact'),
+    #     dbc.Button("Night (Indian)\n(8pm-10pm)", value="inddata",active='exact'),]
+    # ),
+    html.Div([
     dcc.Tabs(id="shift", value="morn", children=[
         dcc.Tab(label="Morning\n(10am-4.30pm)", value="morn"),
         dcc.Tab(label="Night (Chinese)\n(7pm-10pm)", value="chidata"),
         dcc.Tab(label="Night (Indian)\n(8pm-10pm)", value="inddata"),
-    ],style={"white-space": "pre"}),
+        ],style={"white-space": "pre"})
+    ],className='shift-tab'),
+    
+
     html.Br(),
-    html.Div(id='employee-table'),
-    html.Br(),
-    html.Br(),
-    html.Div(id="count-table"),
+    # day display
+    html.Div(
+        dbc.Row([dbc.Col(html.Div(id='employee-table'),width=6),
+                 dbc.Col(html.Div(id="count-table"),width=3)]),
+        className='day-display')
+
 
 ])
 
