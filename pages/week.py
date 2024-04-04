@@ -6,7 +6,7 @@ import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
 
-# dash.register_page(__name__, path='/week', name="Week 📋")
+dash.register_page(__name__, path='/week', name="Week 📋")
 
 ####################### LOAD DATASET #############################
 df = pd.read_csv("output/predictions.csv")

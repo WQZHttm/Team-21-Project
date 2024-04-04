@@ -6,7 +6,7 @@ import plotly.express as px
 import datetime
 import numpy as np
 
-# dash.register_page(__name__, path='/', name="Day 📋")
+dash.register_page(__name__, path='/', name="Day 📋")
 
 #current date
 
