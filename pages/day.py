@@ -118,6 +118,7 @@ def produce_output(date,shift):
             ),
         ],
         style={"width": "18rem"},
+        class_name='card',
     )
     # # show graph of chefs
     # fig = px.histogram(final_df, x="Role")
