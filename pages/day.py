@@ -28,6 +28,8 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 
 
 ####################### PAGE LAYOUT #############################
+
+
 layout = html.Div([
    #Day dropdown
    html.Label(children = html.B('Select a date:  ')),
@@ -106,28 +108,17 @@ def produce_output(date,shift):
         style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
         style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
 
-    count = dash_table.DataTable(
-        id = 'count',
-        columns = [
-            {'name': 'Total no. of staff for this shift', 'id': 'Count'},
+
+    count = dbc.Card(
+        [dbc.CardBody(
+                [
+                    html.H4("Total no. of staff for this shift", className="card-title"),
+                    html.P(len(final_df), className="card-text"),
+                ]
+            ),
         ],
-        data = [{'Count': len(final_df)}],
-        style_table={'width': '25%', 'margin': 'auto'},
-        style_header={
-            'background-color': 'dodgerblue',
-            'color': 'white',
-            'textAlign': 'center',
-            'font-weight': 'bold'
-        },
-        style_cell={
-            'background-color': 'lightgrey',
-            'color': 'black',
-            'border': 'solid 1px white',
-            'textAlign': 'center'
-        }
-
+        style={"width": "18rem"},
     )
-
     # # show graph of chefs
     # fig = px.histogram(final_df, x="Role")
     # fig.update_layout(
