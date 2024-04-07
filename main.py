@@ -9,28 +9,40 @@ external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
 
-sidebar=html.Div([
-	dbc.Nav(
-		[dbc.NavLink('Daily',href='/',active='exact'),
-   		dbc.NavLink('Week',href='/week',active='exact')],
-	vertical=True,
-	pills=True,
-	)
-])
+
+sidebar = html.Div([
+    html.Br(),
+    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
+    html.Br(),
+    html.Br(), 
+    html.Hr(),
+    html.Div([html.Span([
+                    html.I(className='bi bi-person-circle'),
+                    html.Span('Hao Xiang', id='user-login',style={'margin-left': '5px'})])],
+             className='sidebar-user'),
+    dbc.Nav(
+        [
+            dbc.NavLink(html.Span([
+                    html.I(className='bi bi-cloud'),
+                    html.Span('Daily', style={'margin-left': '5px'})]), href='/', active='exact',className='sidebar-list-item'),
+            dbc.NavLink(html.Span([
+                    html.I(className='bi bi-cloud'),
+                    html.Span('Week', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
+        ],
+        vertical=True,
+        pills=True,
+    ),
+], className='sidebar')
+
 
 
 app.layout = html.Div([
-	html.Br(),
-    html.Img(src='https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png', style={'height': '50px', 'margin-right': '10px','float': 'left'}),
-	html.Br(),
-	html.Br(),	
-	html.H1(datetime.datetime.now().strftime('Last updated: %Y-%m-%d %H:%M:%S'),
-		style={'opacity': '1','color': 'blue', 'fontSize': 15, 'position': 'absolute', 'top': '2px', 'right': '2px'}),
-    html.Br(),
+	# html.H1(datetime.datetime.now().strftime('Last updated: %Y-%m-%d %H:%M:%S'),
+	# 	style={'opacity': '1','color': 'blue', 'fontSize': 15, 'position': 'absolute', 'top': '2px', 'right': '2px'}),
+    # html.Br(),
     
     # side bar
-    html.Div(dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container, width=10)])),
-    html.Br(),
+    html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
 
 if __name__ == '__main__':

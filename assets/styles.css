@@ -1,19 +1,69 @@
+/* OVERALL */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Outfit', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  height: 100vh;
+  width: 98vw;
+}
+h1, h2 {
+  color: black;
+  font-family: 'Outfit', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+}
+h3, h4, h5, h6 {
+  color: black;
+  font-family: 'Outfit', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* SIDEBAR */
+.sidebar {
+    grid-area: sidebar;
+    height: 100vh;
+    justify-content: space-between;
+    background-color: #faf6f6da;
+}
+
+.sidebar-user {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 500;
+    font-size: 200;
+  }
+
+
 /* MAIN SECTION */
+
+.day-display{
+    height:50vh;
+}
+
 .card {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 25px;
+    padding: 25px 30px;
     border-radius: 5px;
-    background-color: #2e7d32;
+    background-color: #7bdff2;;
+    align-items: center;
+}
+.card-title{
+    text-align: center;
 }
 .card-text{
-    align-items: center;
+    text-align: center;
     font-size: 70px;
     font-weight: 700;
 }
-.card-inner{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+.shift-tab{
+    font-weight: 500;
+    font-size: medium;
 }

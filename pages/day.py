@@ -29,7 +29,6 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 
 ####################### PAGE LAYOUT #############################
 
-
 layout = html.Div([
    #Day dropdown
    html.Label(children = html.B('Select a date:  ')),
@@ -39,7 +38,6 @@ layout = html.Div([
         date=current_date,
         style={'width':'200px', 'margin':'10px'}),
     html.Br(),
-    html.Br(),
     html.H2(id='event-header'),
     
     # shift tab
@@ -48,20 +46,23 @@ layout = html.Div([
     #     dbc.Button("Night (Chinese)\n(7pm-10pm)", value="chidata",active='exact'),
     #     dbc.Button("Night (Indian)\n(8pm-10pm)", value="inddata",active='exact'),]
     # ),
+    html.Br(),
     html.Div([
     dcc.Tabs(id="shift", value="morn", children=[
-        dcc.Tab(label="Morning\n(10am-4.30pm)", value="morn"),
-        dcc.Tab(label="Night (Chinese)\n(7pm-10pm)", value="chidata"),
-        dcc.Tab(label="Night (Indian)\n(8pm-10pm)", value="inddata"),
+        
+        dcc.Tab(label=" Morning\n(10am-4.30pm)", value="morn",className="bi bi-sun"),
+        dcc.Tab(label=" Night (Chinese)\n(7pm-10pm)", value="chidata", className='bi bi-moon'),
+        dcc.Tab(label=" Night (Indian)\n(8pm-10pm)", value="inddata",className='bi bi-moon-stars'),
         ],style={"white-space": "pre"})
     ],className='shift-tab'),
     
 
     html.Br(),
+    html.Br(),
     # day display
     html.Div(
-        dbc.Row([dbc.Col(html.Div(id='employee-table'),width=6),
-                 dbc.Col(html.Div(id="count-table"),width=3)]),
+        dbc.Row([dbc.Col(html.Div(id='employee-table'),width=8),
+                 dbc.Col(html.Div(id="count-table"))]),
         className='day-display')
 
 
@@ -100,26 +101,26 @@ def produce_output(date,shift):
         id='table',
         columns=[
                     {'name': 'Role', 'id': 'Role'},
-                    {'name': 'Employees working', 'id': 'Employee_ID'}
+                    {'name': 'Employees Working', 'id': 'Employee_ID'}
                 ],
         
         data=roles_df[['Role', 'Employee_ID']].to_dict('records'),
         page_size=10,
-        style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
-        style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
+        style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+        style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
 
 
     count = dbc.Card(
         [dbc.CardBody(
                 [
-                    html.H4("Total no. of staff for this shift", className="card-title"),
+                    html.H4("Total no. of staff for this shift:", className="card-title"),
                     html.P(len(final_df), className="card-text"),
                 ]
             ),
         ],
-        style={"width": "18rem"},
         class_name='card',
     )
+
     # # show graph of chefs
     # fig = px.histogram(final_df, x="Role")
     # fig.update_layout(
