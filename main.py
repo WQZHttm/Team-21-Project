@@ -3,12 +3,19 @@ import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
+import dash_auth
 
+# username password combi
+USER_PASS_MAPPING={
+	'admin1':'admin1',
+	'admin123':'admin123',
+	'admin456':'admin456'
+}
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-
+auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING) 
 
 sidebar = html.Div([
     html.Br(),
