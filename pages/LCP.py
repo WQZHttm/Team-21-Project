@@ -39,6 +39,18 @@ def calculate_defaults(selected_date):
     defaultcost = sum(filtered_data['Total Paid'])
     return defaultchef, defaultservice, defaultdishwasher, defaultpt, defaultcost
 
+def calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate):
+    filtered_data = manpower_schedule[manpower_schedule['Date'] == selecteddate]
+    if not pd.isna(filtered_data['Public Holiday'].iloc[0]):
+        selectedcost = (selectedchef * 17) + (selectedservice * 16) + (selecteddishwasher * 16) + (selectedpt * 15)
+    elif filtered_data['Day'].iloc[0] == 'Saturday':
+        selectedcost = (selectedchef * 16) + (selectedservice * 15) + (selecteddishwasher * 15) + (selectedpt * 14)
+    elif filtered_data['Day'].iloc[0] == 'Sunday':
+        selectedcost = (selectedchef * 16) + (selectedservice * 15) + (selecteddishwasher * 15) + (selectedpt * 14)
+    else:
+        selectedcost = (selectedchef * 15) + (selectedservice * 14) + (selecteddishwasher * 14) + (selectedpt * 13)
+    return selectedcost
+
 
 layout = html.Div([
     html.Label(html.B('Select a date: ')),
@@ -85,7 +97,8 @@ layout = html.Div([
                 dbc.Card(
                     dbc.CardBody([
                         html.H3("Total Labour Cost: ", className= "card-title"),
-                        html.Div(id = 'total-cost-output')
+                        html.Div(id = 'total-cost-output'),
+                        html.Div(id = 'selected-cost-output')
                     ])
                 )
             ),
@@ -111,16 +124,27 @@ def update_defaults(selected_date):
     selected_date = datetime.strptime(selected_date, '%Y-%m-%d')
     defaultchef, defaultservice, defaultdishwasher, defaultpt, total_cost = calculate_defaults(selected_date)
     return (f'Optimal No. of Chefs: {defaultchef}', \
-        f'Optimal No. of Service Staff: {defaultservice}', \
-        f'Optimal No. of Dishwashers: {defaultdishwasher}', \
-        f'Optimal No. of PT: {defaultpt}', \
-        f'Optimal Cost: ${total_cost}',
-        defaultchef,
-        defaultservice,
-        defaultdishwasher,
-        defaultpt
-    )
+            f'Optimal No. of Service Staff: {defaultservice}', \
+            f'Optimal No. of Dishwashers: {defaultdishwasher}', \
+            f'Optimal No. of PT: {defaultpt}', \
+            f'Optimal Cost: ${total_cost}',
+            defaultchef,
+            defaultservice,
+            defaultdishwasher,
+            defaultpt
+            )
 
+@callback(
+    Output('selected-cost-output', 'children'),
+    Input('slider-chef', 'value'),
+    Input('slider-service', 'value'),
+    Input('slider-dishwasher', 'value'),
+    Input('slider-pt', 'value'),
+    Input('date-picker', 'date')
+)
+def update_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate):
+    selectedcost = calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate)
+    return f'Selected Cost: ${selectedcost} / Hour'
 
 
 if __name__ == '__main__':
