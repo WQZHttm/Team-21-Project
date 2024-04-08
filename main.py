@@ -28,6 +28,10 @@ sidebar = html.Div([
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
                     html.Span('Week', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
+            dbc.NavLink(html.Span([
+                    html.I(className='bi bi-cloud'),
+                    html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
+    
         ],
         vertical=True,
         pills=True,
