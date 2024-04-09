@@ -15,7 +15,7 @@ USER_PASS_MAPPING={
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING) 
+auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
     html.Br(),
@@ -38,6 +38,9 @@ sidebar = html.Div([
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
                     html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
+            dbc.NavLink(html.Span([
+                    html.I(className='bi bi-cloud'),
+                    html.Span('Labour Cost Percentage', style={'margin-left': '5px'})]), href='/lcp', active='exact',className='sidebar-list-item'),
     
         ],
         vertical=True,
