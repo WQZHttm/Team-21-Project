@@ -176,5 +176,3 @@ def DecisionTree(data,prediction_data):
                              '8pm-9pm',
                              '9pm-10pm']]
   return(predictions)
-
-DecisionTree(df,data2024)
