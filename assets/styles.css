@@ -67,3 +67,16 @@ h3, h4, h5, h6 {
     font-weight: 500;
     font-size: medium;
 }
+
+/* Day page */
+
+
+.histogram-container {
+    margin-top: 10px;
+    padding: 30px;
+    background-color:   #b0c4de;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 2px #e9ecef;
+    width: 100%; /* Adjust width as needed */
+    max-width: 800px; /* Set a maximum width for responsiveness */
+}
