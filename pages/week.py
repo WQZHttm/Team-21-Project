@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
+import dash_bootstrap_components as dbc
+
 
 dash.register_page(__name__, path='/week', name="Week 📋")
 
@@ -63,28 +65,35 @@ logo_link = 'https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.p
 
 
 layout = html.Div(children=[
-    html.Div(id='output-table', style = {'width': '200px', 'margin-left': 'auto', 'margin-top': '0px'}),
+    
     html.Div([
         html.Label( children = html.B('Select a date range: ')),
-        dcc.DatePickerRange(
-            id='date-picker-range',
-            min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
-            max_date_allowed=datetime(2024, 12, 31), 
-            start_date=start_date_default,
-            end_date=end_date_default,
-            display_format='YYYY-MM-DD',
-        ),
-        html.Div(id='output-container-date-picker-range'),
     ]),
+
+    html.Div([
+        dbc.Row([dbc.Col(
+            dcc.DatePickerRange(
+                id='date-picker-range',
+                min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
+                max_date_allowed=datetime(2024, 12, 31), 
+                start_date=start_date_default,
+                end_date=end_date_default,
+                display_format='YYYY-MM-DD'),
+            ),
+            dbc.Col(html.Div(id='output-container-date-picker-range')),
+            dbc.Col(html.Div(id='output-table'))
+])]),
+
+
+
     html.Br(),
     html.H1(children='Overview for the Week'),
     html.Div(children =[
-        dcc.Graph(id='staff-present-fig',style= {'border':'2px solid black', 'display':'inline-block', 'width':'45%',  'margin':'5px', 'margin-right': '5%'}),
-        dcc.Graph(id='cost-hiring-fig', style = {'border':'2px solid black', 'display':'inline-block' , 'width':'45%',  'margin':'5px'}),
-        ], style={'background-color':'rgb(224, 255, 252)'}),
-    html.Br(),
+        dbc.Row([dbc.Col(dcc.Graph(id='staff-present-fig'), className='chart'),
+                 (dbc.Col(dcc.Graph(id='cost-hiring-fig'),className='chart'))])]),
 
-    ], className='row')    
+
+    html.Br()])
 
 @callback(
     Output('date-picker-range', 'end_date'),
@@ -146,6 +155,10 @@ def update_graphs(start_date, end_date):
                 style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
                 style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
             
+
+        
+
+
             return staff_present_fig, table, cost_hiring_fig
         else:
             return staff_present_fig, html.Div(), cost_hiring_fig

@@ -49,7 +49,7 @@ h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 25px 30px;
+    padding: 25px;
     border-radius: 5px;
     background-color: #7bdff2;;
     align-items: center;
@@ -66,4 +66,12 @@ h3, h4, h5, h6 {
 .shift-tab{
     font-weight: 500;
     font-size: medium;
+}
+
+/* to add shadows */
+.chart{
+  border: 2px solid lightgrey;
+  justify-content: space-around;
+  padding: 25px;
+  border-radius: 5px;
 }
