@@ -67,3 +67,53 @@ h3, h4, h5, h6 {
     font-weight: 500;
     font-size: medium;
 }
+
+
+/* LCP */
+
+.bordered-col{
+    border: 2px solid black;
+    padding: 40px;
+    margin-right: -2px;
+    background-color: #faf0e6;
+}
+
+.rc-slider-track {
+  background-color: #6495ED;
+}
+
+.rc-slider-dot-active {
+  border-color: #6495ED;
+  border: solid 2px #6495ED;
+}
+
+.rc-slider-handle {
+  background-color: #B0C4DE;
+  border: solid 1.5px black;
+}
+
+.rc-slider-handle:hover {
+  border-color: #B0C4DE;
+}
+
+.rc-slider-handle-active:active {
+  border-color: #B0C4DE;
+}
+
+.rc-slider-rail {
+  background-color: #C5EAF7;
+}
+
+.rc-slider-dot {
+  border-color: #B0C4DE;
+  border: solid 1px #B0C4DE;
+}
+
+.costtable{
+    background-color: #B0C4DE;
+    align-items: center;
+}
+
+.costtabletext{
+    text-align: center;
+}
