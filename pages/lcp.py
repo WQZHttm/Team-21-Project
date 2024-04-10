@@ -8,7 +8,6 @@ import numpy as np
 import dash_bootstrap_components as dbc
 
 
-
 dash.register_page(__name__, path='/lcp', name="Labour Cost Percentage")
 
 
@@ -39,16 +38,17 @@ def calculate_defaults(selected_date):
     defaultcost = sum(filtered_data['Total Paid'])
     return defaultchef, defaultservice, defaultdishwasher, defaultpt, defaultcost
 
+
 def calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate):
     filtered_data = manpower_schedule[manpower_schedule['Date'] == selecteddate]
     if not pd.isna(filtered_data['Public Holiday'].iloc[0]):
-        selectedcost = (selectedchef * 17) + (selectedservice * 16) + (selecteddishwasher * 16) + (selectedpt * 15)
+        selectedcost = (selectedchef * 17 * 4) + (selectedservice * 16 * 5.5) + (selecteddishwasher * 16 * 4) + (selectedpt * 15 * 5)
     elif filtered_data['Day'].iloc[0] == 'Saturday':
-        selectedcost = (selectedchef * 16) + (selectedservice * 15) + (selecteddishwasher * 15) + (selectedpt * 14)
+        selectedcost = (selectedchef * 16 * 4) + (selectedservice * 15 * 5.5) + (selecteddishwasher * 15 * 4) + (selectedpt * 14 * 5)
     elif filtered_data['Day'].iloc[0] == 'Sunday':
-        selectedcost = (selectedchef * 16) + (selectedservice * 15) + (selecteddishwasher * 15) + (selectedpt * 14)
+        selectedcost = (selectedchef * 16 * 4) + (selectedservice * 15 * 5.5) + (selecteddishwasher * 15 * 4) + (selectedpt * 14 * 5)
     else:
-        selectedcost = (selectedchef * 15) + (selectedservice * 14) + (selecteddishwasher * 14) + (selectedpt * 13)
+        selectedcost = (selectedchef * 15 * 4) + (selectedservice * 14 * 5.5) + (selecteddishwasher * 14 * 4) + (selectedpt * 13 * 5)
     return selectedcost
 
 
@@ -68,43 +68,47 @@ layout = html.Div([
     html.Div(
         dbc.Row([
             dbc.Col([
-                html.Div(id= 'slider-chef-output'),
-                html.Br(),
+                html.H4("No. of Chefs:"),
                 dcc.Slider(0, 20, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-chef'),
+                           id = 'slider-chef', className='slider'),
+                html.Div(id= 'slider-chef-output', className='sliderdefault'),
                 html.Br(),
-                html.Div(id= 'slider-service-output'),
-                html.Br(),
+                html.H4("No. of Full-Time Service Staff:"),
                 dcc.Slider(0, 20, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-service'),
+                           id = 'slider-service', className='slider'),
+                html.Div(id= 'slider-service-output', className='sliderdefault'),
                 html.Br(),
-                html.Div(id= 'slider-dishwasher-output'),
-                html.Br(),
+                html.H4("No. of Dishwashers:"),
                 dcc.Slider(0, 20, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-dishwasher'),
+                           id = 'slider-dishwasher', className='slider'),
+                html.Div(id= 'slider-dishwasher-output', className='sliderdefault'),
                 html.Br(),
-                html.Div(id= 'slider-pt-output'),
-                html.Br(),
+                html.H4("No. of Part-Timers:"),
                 dcc.Slider(0,20,1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-pt')
+                           id = 'slider-pt', className='slider'),
+                html.Div(id= 'slider-pt-output', className='sliderdefault'),
 
-            ]),
+            ], className = 'bordered-col'),
             dbc.Col(
-                dbc.Card(
+                dbc.Card([
                     dbc.CardBody([
-                        html.H3("Total Labour Cost: ", className= "card-title"),
-                        html.Div(id = 'total-cost-output'),
-                        html.Div(id = 'selected-cost-output')
+                        html.H2("Labour Cost for the day: ", className= "costtabletitle"),
+                        html.Br(),
+                        html.Div(id = 'total-cost-output', className='costtabletext'),
+                        html.Div(id = 'selected-cost-output', className='costtabletext'),
+                        html.Br(),
+                        html.Div(id = 'cost-diff', className='costtabletext')
                     ])
-                )
+                ], className = 'costtable',
+                ), className = 'bordered-col'
             ),
         ])
     ),
@@ -127,11 +131,11 @@ layout = html.Div([
 def update_defaults(selected_date):
     selected_date = datetime.strptime(selected_date, '%Y-%m-%d')
     defaultchef, defaultservice, defaultdishwasher, defaultpt, total_cost = calculate_defaults(selected_date)
-    return (f'Optimal No. of Chefs: {defaultchef}', \
-            f'Optimal No. of Service Staff: {defaultservice}', \
-            f'Optimal No. of Dishwashers: {defaultdishwasher}', \
-            f'Optimal No. of PT: {defaultpt}', \
-            f'Optimal Cost: ${total_cost}',
+    return (f'Default = {defaultchef}', \
+            f'Default = {defaultservice}', \
+            f'Default = {defaultdishwasher}', \
+            f'Default = {defaultpt}', \
+            f"Default Cost: ${total_cost}",
             defaultchef,
             defaultservice,
             defaultdishwasher,
@@ -140,6 +144,7 @@ def update_defaults(selected_date):
 
 @callback(
     Output('selected-cost-output', 'children'),
+    Output('cost-diff', 'children'),
     Input('slider-chef', 'value'),
     Input('slider-service', 'value'),
     Input('slider-dishwasher', 'value'),
@@ -148,7 +153,12 @@ def update_defaults(selected_date):
 )
 def update_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate):
     selectedcost = calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate)
-    return f'Selected Cost: ${selectedcost} / Hour'
+    defaultchef, defaultservice, defaultdishwasher, defaultpt, total_cost = calculate_defaults(selecteddate)
+    costdiff = selectedcost - total_cost
+    sign = "-" if costdiff < 0 else ""
+    return (f"Selected Cost: ~${selectedcost} (Estimate)",
+            f'Change in Labour Cost: {sign}${abs(costdiff)}'
+            )
 
 
 if __name__ == '__main__':
