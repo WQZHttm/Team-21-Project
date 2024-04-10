@@ -74,40 +74,39 @@ layout = html.Div([
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-chef', className='slider'),
-                html.Div(id= 'slider-chef-output'),
-                html.Br(),
+                html.Div(id= 'slider-chef-output', className='sliderdefault'),
                 html.Br(),
                 html.H4("No. of Full-Time Service Staff:"),
                 dcc.Slider(0, 20, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-service', className='slider'),
-                html.Div(id= 'slider-service-output'),
-                html.Br(),
+                html.Div(id= 'slider-service-output', className='sliderdefault'),
                 html.Br(),
                 html.H4("No. of Dishwashers:"),
                 dcc.Slider(0, 20, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-dishwasher', className='slider'),
-                html.Div(id= 'slider-dishwasher-output'),
-                html.Br(),
+                html.Div(id= 'slider-dishwasher-output', className='sliderdefault'),
                 html.Br(),
                 html.H4("No. of Part-Timers:"),
                 dcc.Slider(0,20,1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-pt', className='slider'),
-                html.Div(id= 'slider-pt-output'),
+                html.Div(id= 'slider-pt-output', className='sliderdefault'),
 
             ], className = 'bordered-col'),
             dbc.Col(
                 dbc.Card([
                     dbc.CardBody([
-                        html.H2("Labour Cost for the day: ", className= "card-title"),
+                        html.H2("Labour Cost for the day: ", className= "costtabletitle"),
                         html.Br(),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.Div(id = 'selected-cost-output', className='costtabletext')
+                        html.Div(id = 'selected-cost-output', className='costtabletext'),
+                        html.Br(),
+                        html.Div(id = 'cost-diff', className='costtabletext')
                     ])
                 ], className = 'costtable',
                 ), className = 'bordered-col'
@@ -137,7 +136,7 @@ def update_defaults(selected_date):
             f'Default = {defaultservice}', \
             f'Default = {defaultdishwasher}', \
             f'Default = {defaultpt}', \
-            f'Default Cost: ${total_cost}',
+            f"Default Cost: ${total_cost}",
             defaultchef,
             defaultservice,
             defaultdishwasher,
@@ -146,6 +145,7 @@ def update_defaults(selected_date):
 
 @callback(
     Output('selected-cost-output', 'children'),
+    Output('cost-diff', 'children'),
     Input('slider-chef', 'value'),
     Input('slider-service', 'value'),
     Input('slider-dishwasher', 'value'),
@@ -154,7 +154,12 @@ def update_defaults(selected_date):
 )
 def update_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate):
     selectedcost = calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate)
-    return f'Selected Cost: ~${selectedcost} (Estimate)'
+    defaultchef, defaultservice, defaultdishwasher, defaultpt, total_cost = calculate_defaults(selecteddate)
+    costdiff = selectedcost - total_cost
+    sign = "-" if costdiff < 0 else ""
+    return (f"Selected Cost: ~${selectedcost} (Estimate)",
+            f'Change in Labour Cost: {sign}${abs(costdiff)}'
+            )
 
 
 if __name__ == '__main__':

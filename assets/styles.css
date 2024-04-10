@@ -109,11 +109,24 @@ h3, h4, h5, h6 {
   border: solid 1px #B0C4DE;
 }
 
+.sliderdefault{
+    text-align:center;
+    font-size:15px;
+    border-bottom:2px inset black;
+    padding:25px;
+}
+
 .costtable{
     background-color: #B0C4DE;
     align-items: center;
 }
 
+.costtabletitle{
+    text-align:center;
+    text-decoration:underline;
+}
+
 .costtabletext{
-    text-align: center;
+    font-size: 35px;
+    font-weight: 80
 }
