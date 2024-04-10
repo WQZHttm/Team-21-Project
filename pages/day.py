@@ -30,22 +30,16 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 ####################### PAGE LAYOUT #############################
 
 layout = html.Div([
+    html.Br(),
    #Day dropdown
-   html.Label(children = html.B('Select a date:  ')),
+    html.Label(children = html.B('Select a date:  ')),
     dcc.DatePickerSingle(id='date-picker',
         min_date_allowed=datetime.datetime.today(), # CHECK
         max_date_allowed=datetime.datetime(2024, 12, 31),
         date=current_date,
-        style={'width':'200px', 'margin':'10px'}),
+        className='date-picker'),
     html.Br(),
     html.H2(id='event-header'),
-    
-    # shift tab
-    # html.Div(id="shift",children=[
-    #     dbc.Button("Morning\n(10am-4.30pm)", value="morn",active='exact'),
-    #     dbc.Button("Night (Chinese)\n(7pm-10pm)", value="chidata",active='exact'),
-    #     dbc.Button("Night (Indian)\n(8pm-10pm)", value="inddata",active='exact'),]
-    # ),
     html.Br(),
     html.Div([
     dcc.Tabs(id="shift", value="morn", children=[

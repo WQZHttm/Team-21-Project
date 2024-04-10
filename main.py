@@ -15,7 +15,7 @@ USER_PASS_MAPPING={
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
+# auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
     html.Br(),

@@ -63,34 +63,32 @@ logo_link = 'https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.p
 
 ####################### PAGE LAYOUT #############################
 
+headers_week=html.Div([
+        html.Label(children = html.B('Select a date range: ')),
+                dcc.DatePickerRange(
+                    id='date-picker-range',
+                    min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
+                    max_date_allowed=datetime(2024, 12, 31), 
+                    start_date=start_date_default,
+                    end_date=end_date_default,
+                    display_format='YYYY-MM-DD',
+                    className='date-picker'),
+                html.Br(),
+                html.H1(children='Overview for the Week'),
+
+])
+
 
 layout = html.Div(children=[
-    
-    html.Div([
-        html.Label( children = html.B('Select a date range: ')),
-    ]),
-
-    html.Div([
-        dbc.Row([dbc.Col(
-            dcc.DatePickerRange(
-                id='date-picker-range',
-                min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
-                max_date_allowed=datetime(2024, 12, 31), 
-                start_date=start_date_default,
-                end_date=end_date_default,
-                display_format='YYYY-MM-DD'),
-            ),
-            dbc.Col(html.Div(id='output-container-date-picker-range')),
-            dbc.Col(html.Div(id='output-table'))
-])]),
-
-
-
     html.Br(),
-    html.H1(children='Overview for the Week'),
+    html.Div([
+        dbc.Row([dbc.Col(headers_week),
+                dbc.Col(html.Div(id='output-table'),width=4)])]),
+    html.Br(),
     html.Div(children =[
         dbc.Row([dbc.Col(dcc.Graph(id='staff-present-fig'), className='chart'),
-                 (dbc.Col(dcc.Graph(id='cost-hiring-fig'),className='chart'))])]),
+                 (dbc.Col(dcc.Graph(id='cost-hiring-fig'),className='chart'))])],
+                 style={'position':'relative'}),
 
 
     html.Br()])
@@ -144,19 +142,22 @@ def update_graphs(start_date, end_date):
 
         if (df2 ['Public Holiday'] != '').any():
             filtered_df2 = df2[df2['Public Holiday'] != '']
-            table = dash_table.DataTable(
-                id='table',
-                columns=[
-                            {'name': 'Date', 'id': 'Date_and_day'},
-                            {'name': 'Public Holiday', 'id': 'Public Holiday'}
-                        ],
-                data=filtered_df2[['Date_and_day', 'Public Holiday']].to_dict('records'),
-                page_size=10,
-                style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
-                style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
-            
 
-        
+            ph_obj = filtered_df2[['Date_and_day','Public Holiday']].apply(lambda row: ': '.join(map(str, row)), axis=1)
+
+            ph_text=''
+            for string_row in ph_obj:
+                ph_text+=(string_row+'\n')
+            table = dbc.Card(
+                [dbc.CardBody(
+                        [
+                            html.H4(" Events:",className='bi bi-calendar-event'),
+                            html.P(ph_text,className='event-text'),
+                        ]
+                    ),
+                ],
+                class_name='card',
+            )
 
 
             return staff_present_fig, table, cost_hiring_fig

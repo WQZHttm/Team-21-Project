@@ -19,7 +19,8 @@ start_of_current_week = current_date - timedelta(days=current_date.weekday())
 end_of_current_week = start_of_current_week + timedelta(days=6)
 
 layout = html.Div([
-    html.Label('Select Date Range:    ', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'}),
+    html.Br(),
+    html.Label('Select Date Range:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'},className='date-picker'),
     dcc.DatePickerRange(
         id='date-picker-range',
         start_date_placeholder_text='Start Date',
@@ -30,7 +31,7 @@ layout = html.Div([
     ),
     html.Br(),
     html.Br(),
-    html.Label('Enter Employee Name:    ', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'}),
+    html.Label('Enter Employee Name:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'}, className='date-picker'),
     dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name'),
     html.Br(),
     html.Br(),
