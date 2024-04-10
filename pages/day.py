@@ -8,6 +8,7 @@ import numpy as np
 import dash_bootstrap_components as dbc
 
 
+
 dash.register_page(__name__, path='/', name="Day 📋")
 
 #current date
@@ -19,6 +20,8 @@ df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 ####################### LOAD DATASET #############################
 manpower_schedule = pd.read_csv('output/final_schedule.csv')
+customer_prediction = pd.read_csv('output/predictions.csv')
+customer_prediction['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y')
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
 #tabulating the cost
 manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
@@ -30,16 +33,22 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 ####################### PAGE LAYOUT #############################
 
 layout = html.Div([
-    html.Br(),
    #Day dropdown
-    html.Label(children = html.B('Select a date:  ')),
+   html.Label(children = html.B('Select a date:  ')),
     dcc.DatePickerSingle(id='date-picker',
         min_date_allowed=datetime.datetime.today(), # CHECK
         max_date_allowed=datetime.datetime(2024, 12, 31),
         date=current_date,
-        className='date-picker'),
+        style={'width':'200px', 'margin':'10px'}),
     html.Br(),
     html.H2(id='event-header'),
+    
+    # shift tab
+    # html.Div(id="shift",children=[
+    #     dbc.Button("Morning\n(10am-4.30pm)", value="morn",active='exact'),
+    #     dbc.Button("Night (Chinese)\n(7pm-10pm)", value="chidata",active='exact'),
+    #     dbc.Button("Night (Indian)\n(8pm-10pm)", value="inddata",active='exact'),]
+    # ),
     html.Br(),
     html.Div([
     dcc.Tabs(id="shift", value="morn", children=[
@@ -54,10 +63,15 @@ layout = html.Div([
     html.Br(),
     html.Br(),
     # day display
-    html.Div(
+    html.Div([
         dbc.Row([dbc.Col(html.Div(id='employee-table'),width=8),
-                 dbc.Col(html.Div(id="count-table"))]),
-        className='day-display')
+                 dbc.Col(html.Div(id="count-table")),
+                 ]),
+        dbc.Row([
+            dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'), width = 8)
+                ]),
+
+        ], className='day-display'),
 
 
 ])
@@ -72,12 +86,14 @@ def update_event(date):
     else:
         return f"Today's Event: {df2['Public Holiday'].item()}"
 
-@callback([Output('employee-table', 'children'),Output('count-table','children')],
+
+
+@callback([Output('employee-table', 'children'),Output('count-table','children'), Output('histogram-container', 'children')],
           [Input('date-picker','date'),Input("shift","value")])
 
+
 def produce_output(date,shift):
-    date_picked=date
-    df=manpower_schedule.loc[manpower_schedule['Date'] == date_picked]
+    df= manpower_schedule.loc[manpower_schedule['Date'] == date]
     if shift=="morn":
         final_df=df.loc[df['Shift']=='10am-4.30pm']
     elif shift=='chidata':
@@ -114,6 +130,28 @@ def produce_output(date,shift):
         ],
         class_name='card',
     )
+    df3 = customer_prediction.loc[customer_prediction['Date']== date]
+    print(df3)
+    x_values = df3.columns[9:].tolist()
+    print(x_values)
+    y_values = df3.iloc[0, 9:].values.tolist() 
+    print(y_values)
+    histogram_fig = px.histogram(x = x_values, y= y_values, title="Customer demand across the day",
+        labels={'x': 'Time', 'y': 'Customer Count'}, histnorm = 'density')
+
+    histogram_fig.update_layout(
+    title=dict(y=0.99, x = 0.07, font=dict(size=17)), 
+    margin = dict(t = 40),
+    bargap = 0, 
+    plot_bgcolor='rgba(0,0,0,0)', 
+    paper_bgcolor='rgba(0,0,0,0)', 
+    yaxis_title = 'Customer Count',
+)
+
+    histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False)
+
+    histogram_container = dcc.Graph(figure=histogram_fig)
+
 
     # # show graph of chefs
     # fig = px.histogram(final_df, x="Role")
@@ -125,4 +163,4 @@ def produce_output(date,shift):
     #     )
     # )
 
-    return table,count
+    return table,count, histogram_container
