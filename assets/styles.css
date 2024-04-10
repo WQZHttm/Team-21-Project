@@ -44,22 +44,18 @@ h3, h4, h5, h6 {
   margin:10px;
 }
 
-
-
-
 .day-display{
     height:50vh;
 }
 
-/* grid-template-columns: 1fr 1fr; */
-
 .card {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    padding: 5px;
+    padding: 25px 30px;
     border-radius: 5px;
-    background-color: #7bdff2;
-    text-align: center;
+    background-color: #7bdff2;;
+    align-items: center;
 }
 .card-title{
     text-align: center;
@@ -74,7 +70,6 @@ h3, h4, h5, h6 {
     font-weight: 500;
     font-size: medium;
 }
-
 
 
 /* WEEK */
@@ -149,4 +144,18 @@ h3, h4, h5, h6 {
 .costtabletext{
     font-size: 35px;
     font-weight: 80
+}
+
+
+/* Day page */
+
+
+.histogram-container {
+    margin-top: 10px;
+    padding: 30px;
+    background-color:   #b0c4de;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 2px #e9ecef;
+    width: 100%; /* Adjust width as needed */
+    max-width: 800px; /* Set a maximum width for responsiveness */
 }
