@@ -28,7 +28,7 @@ layout = html.Div([
     dbc.Row([
         dbc.Col(
             html.Div([
-                html.Label('Select Date Range:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'}),
+                html.Label('Select Date Range:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'},className='date-picker'),
                 dcc.DatePickerRange(
                     id='date-picker-range',
                     start_date_placeholder_text='Start Date',
@@ -41,7 +41,7 @@ layout = html.Div([
         ),
         dbc.Col(
             html.Div([
-                html.Label('Enter Employee Name:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'}),
+                html.Label('Enter Employee Name:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'},className='date-picker'),
                 dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name')
             ]), width={"size": 8, "offset": 0}
         )

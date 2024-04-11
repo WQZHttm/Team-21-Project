@@ -49,14 +49,14 @@ h3, h4, h5, h6 {
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 25px 30px;
-    border-radius: 5px;
-    background-color: #7bdff2;;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #7bdff2;
+  text-align: center;
 }
+
 .card-title{
     text-align: center;
 }
