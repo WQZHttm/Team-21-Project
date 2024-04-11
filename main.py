@@ -3,7 +3,7 @@ import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
-import dash_auth
+
 
 # auth login details {user:password}
 USER_PASS_MAPPING={
