@@ -5,13 +5,6 @@ import datetime
 import dash_bootstrap_components as dbc
 
 
-# auth login details {user:password}
-USER_PASS_MAPPING={
-	'admin1':'admin1',
-	'admin123':'admin123',
-	'admin456':'admin456'
-}
-
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
@@ -19,7 +12,7 @@ app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=
 
 sidebar = html.Div([
     html.Br(),
-    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
+    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left','border-bottom': '2px solid grey'}),
     html.Br(),
     html.Br(), 
     html.Hr(),

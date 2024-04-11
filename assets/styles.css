@@ -28,14 +28,19 @@ h3, h4, h5, h6 {
     justify-content: space-between;
     background-color: #faf6f6da;
 }
-
+.sidebar-logo{
+  height: 70px;
+  margin-right: 10px;
+  float: left;
+}
 .sidebar-user {
     display: flex;
-    justify-content: space-between;
     text-align: center;
     margin-bottom: 30px;
     font-weight: 500;
     font-size: 200;
+    margin-left: 40px;
+    /* border-bottom: 2px solid grey; */
   }
 
 
