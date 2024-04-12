@@ -25,10 +25,11 @@ start_of_current_week = current_date - timedelta(days=current_date.weekday())
 end_of_current_week = start_of_current_week + timedelta(days=6)
 
 layout = html.Div([
+    html.Br(),
     dbc.Row([
         dbc.Col(
             html.Div([
-                html.Label('Select Date Range:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'},className='date-picker'),
+                html.Label('Select a date range:', style={'fontWeight': 'bold'}),
                 dcc.DatePickerRange(
                     id='date-picker-range',
                     start_date_placeholder_text='Start Date',
@@ -41,7 +42,7 @@ layout = html.Div([
         ),
         dbc.Col(
             html.Div([
-                html.Label('Enter Employee Name:', style={'textDecoration': 'underline', 'fontWeight': 'bold', 'fontSize': '25px'},className='date-picker'),
+                html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
                 dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name')
             ]), width={"size": 8, "offset": 0}
         )
@@ -101,17 +102,17 @@ def update_employee_info(start_date, end_date, employee_id):
                 columns=[{'name': ' Employee Information ', 'id': 'Attribute'}, {'name': ' ', 'id': 'Value'}],
                 data=[
                     {'Attribute': 'Role', 'Value': role},
-                    {'Attribute': 'Job Status', 'Value': job_status},
-                    {'Attribute': 'Total Hours Worked', 'Value': f"{total_hours_worked} hours"},
+                    {'Attribute': 'Job status', 'Value': job_status},
                     {'Attribute': 'Rate', 'Value': f"${hourly_rate}/ hr"},
-                    {'Attribute': 'Total Salary ($)', 'Value': f"${total_salary}"}
+                    {'Attribute': 'Total hours worked for the week', 'Value': f"{total_hours_worked} hours"},
+                    {'Attribute': 'Total salary for the week ($) ', 'Value': f"${total_salary}"}
                 ],
                 style_table={'overflowY': 'auto'},
                 style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
                 style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                 style_data_conditional=[
                     {'if': {'column_id': 'Attribute'},'color': '#000000'},
-                    {'if': {'column_id': 'Value'},'color': '#FF0000'}
+                    {'if': {'column_id': 'Value'},'color': '#1e90ff'}
                     ]
 
             )
@@ -134,21 +135,40 @@ def employee_schedule(start_date,end_date,employee_id):
         filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_id)]
 
         if not filtered_manpower_schedule.empty:
-            dates = filtered_manpower_schedule['Date'].tolist()
-            shifts = filtered_manpower_schedule['Shift'].tolist()
+            grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
+            
+            # Get unique dates
+            unique_dates = grouped_schedule['Date'].unique()
+
+            # Create DataTable for work schedule
+            work_schedule_table_columns = [{'name': 'Date', 'id': 'Date'}]  # Initialize columns with 'Date'
+            work_schedule_table_data = [{'Date': 'Shift'}]  # Initialize data with 'Shift' for the first row
+
+
+            for date in unique_dates:
+                # Add a new column for each unique date
+                work_schedule_table_columns.append({'name': date, 'id': date})
+                
+                # Get the shifts for the current date
+                shifts_for_date = grouped_schedule[grouped_schedule['Date'] == date]['Shift'].iloc[0]
+                work_schedule_table_data[0][date] = shifts_for_date
+
+
             work_schedule_table = dash_table.DataTable(
                 id='schedule',
-                columns=[{'name': 'Date', 'id': 'Date'}, {'name': 'Shift', 'id': 'Shift'}],
-                data=[{'Date': date, 'Shift': shift} for date, shift in zip(dates, shifts)],
+                columns=work_schedule_table_columns,
+                data=work_schedule_table_data,
                 style_table={'overflowY': 'auto'},
                 style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-                style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                 style_data_conditional=[
-                    {'if': {'column_id': 'Date'},'color': '#000000'},
-                    {'if': {'column_id': 'Shift'},'color': '#FF0000'}
-                    ]
-
-
+                    {'if': {'column_id': 'Date'}, "background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                    {'if' : {'column_id' : unique_dates }, 'color' : '#1e90ff', 'whiteSpace': 'pre-line', 'border' : 'solid 2px black'}
+                ],
+                style_header_conditional=[
+                    
+                        {'if': {'column_id': 'Date'},'backgroundColor': '#83C5BE','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+                        { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 2px black'}
+                ]
             )
             return work_schedule_table
         else:
