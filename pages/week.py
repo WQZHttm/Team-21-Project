@@ -122,16 +122,22 @@ def update_graphs(start_date, end_date):
         df2 = df.loc[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
         # Recalculate cost_group and staff_counts based on filtered_data
+        print(filtered_data)
         cost_group = filtered_data.groupby('Date_and_day')['Cost'].sum().reset_index()
-        staff_counts = filtered_data.groupby(['Date_and_day', 'Role']).size().unstack(fill_value=0).reset_index()
-       
+        staff_counts=filtered_data.groupby(['Date_and_day', 'Role']).size().reset_index()
+        print(staff_counts)
+        print('sc',staff_counts.columns)
+        staff_counts.columns = ['Date_and_day', 'Role', 'Counts']
+        print(staff_counts)
         # Update figures with filtered data
         staff_present_fig = px.bar(data_frame=staff_counts,  
-                                   x='Date_and_day',
-                                   y=['chef', 'dishwasher', 'service'],
-                                   barmode='stack',
-                                   labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
-                                   title='Number of Staffs Present for Each Day')
+                                x='Date_and_day',
+                                y=['Counts'],
+                                color='Role',
+                                # barmode='stack',
+                                labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
+                                title='Number of Staffs Present for Each Day',
+                                text=staff_counts['Counts'].apply(lambda x: '{0:.0f}'.format(x)))
 
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
