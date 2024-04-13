@@ -142,6 +142,7 @@ h3, h4, h5, h6 {
 .costtable{
     background-color: #B0C4DE;
     align-items: center;
+    height: 40vh;
 }
 
 .costtabletitle{
@@ -154,7 +155,17 @@ h3, h4, h5, h6 {
     font-weight: 80
 }
 
+.graph-title{
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-align:center;
+}
 
+.graph-container{
+    margin-top: -5px;
+
+}
 /* Day page */
 
 

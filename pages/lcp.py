@@ -94,32 +94,31 @@ layout = html.Div([
     html.Br(),
     html.H1('Labour Cost Percentage'),
     html.Br(),
-    html.Br(),
     html.Div([
         dbc.Row([
             dbc.Col([
                 html.H3("Morning Shift", className='slidertitle'),
                 html.Br(),
                 html.H4("No. of Chefs:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-chef1', className='slider'),
                 html.Br(),
                 html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-service1', className='slider'),
                 html.Br(),
                 html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-dishwasher1', className='slider'),
                 html.Br(),
                 html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,20,1,
+                dcc.Slider(0,10,1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-pt1', className='slider'),
@@ -131,25 +130,25 @@ layout = html.Div([
                 html.H3("Night (Chinese Buffet)", className='slidertitle'),
                 html.Br(),
                 html.H4("No. of Chefs:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-chef2', className='slider'),
                 html.Br(),
                 html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-service2', className='slider'),
                 html.Br(),
                 html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-dishwasher2', className='slider'),
                 html.Br(),
                 html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,20,1,
+                dcc.Slider(0,10,1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-pt2', className='slider'),
@@ -161,25 +160,25 @@ layout = html.Div([
                 html.H3("Night (Indian Buffet)", className='slidertitle'),
                 html.Br(),
                 html.H4("No. of Chefs:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-chef3', className='slider'),
                 html.Br(),
                 html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-service3', className='slider'),
                 html.Br(),
                 html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 20, 1,
+                dcc.Slider(0, 10, 1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-dishwasher3', className='slider'),
                 html.Br(),
                 html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,20,1,
+                dcc.Slider(0,10,1,
                            value=0,
                            tooltip={"placement": 'bottom', "always_visible": True},
                            id = 'slider-pt3', className='slider'),
@@ -188,15 +187,28 @@ layout = html.Div([
 
             ], className = 'bordered-col'),
         ]),
-        dbc.Card([
-            dbc.CardBody([
-                html.H2("Labour Cost for the day: ", className= "costtabletitle"),
-                html.Br(),
-                html.Div(id = 'total-cost-output', className='costtabletext'),
-                html.Div(id = 'selected-total', className='costtabletext')
-            ])
-        ], className = 'costtable',
-        ),
+        html.Br(),
+        dbc.Row([
+            dbc.Col([
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Br(),
+                        html.H2("Labour Cost for the day: ", className= "costtabletitle"),
+                        html.Br(),
+                        html.Br(),
+                        html.Div(id = 'total-cost-output', className='costtabletext'),
+                        html.Br(),
+                        html.Div(id = 'selected-total', className='costtabletext')
+                    ])
+                ], className = 'costtable',
+                ),
+            ], width = 6),
+            dbc.Col([
+                html.Div(id = 'graph')
+            ], width = 5),
+
+        ])
+
 
     ]),
 ])
@@ -276,6 +288,7 @@ def update_selected3(selectedchef, selectedservice, selecteddishwasher, selected
 
 @callback(
     Output('selected-total', 'children'),
+    Output('graph', 'children'),
     Input('slider-chef1', 'value'),
     Input('slider-service1', 'value'),
     Input('slider-dishwasher1', 'value'),
@@ -299,7 +312,27 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
                                     selectedchef2, selectedservice2, selecteddishwasher2, selectedpt2,
                                     selectedchef3, selectedservice3, selecteddishwasher3, selectedpt3,
                                     selecteddate)
-    return f"Total Selected Labour Cost: ${selectedtotal}"
+    defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1, \
+        defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
+        defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost = calculate_defaults(selecteddate)
+
+
+    graphdata = [
+        go.Bar(
+            x=['Optimised', 'Selected'],
+            y=[total_cost, selectedtotal],
+            text=[f'${total_cost}', f'${selectedtotal}'],
+            marker=dict(color=['blue','green']),
+        )
+    ]
+    graphlayout = go.Layout(
+        title = dict(text='Total Labour Cost Comparison', x=0.5, y=0.95, font=dict(size=20, color='black')),
+        margin=dict(l=50, r=50, t=50, b=60)
+    )
+    figure = go.Figure(data=graphdata, layout=graphlayout)
+    graph = dcc.Graph(figure = figure)
+
+    return f"Total Selected Labour Cost: ${selectedtotal}", graph
 
 if __name__ == '__main__':
     app.run(debug=True)
