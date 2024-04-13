@@ -33,8 +33,9 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 ####################### PAGE LAYOUT #############################
 
 layout = html.Div([
-   #Day dropdown
-   html.Label(children = html.B('Select a date:  ')),
+    html.Br(),
+    #Day dropdown
+    html.Label(children = html.B('Select a date:  ')),
     dcc.DatePickerSingle(id='date-picker',
         min_date_allowed=datetime.datetime.today(), # CHECK
         max_date_allowed=datetime.datetime(2024, 12, 31),
@@ -105,7 +106,7 @@ def produce_output(date,shift):
     # create a new df to group employees
     roles_df=final_df.pivot_table(index='Role', values='Employee_ID', aggfunc=lambda x: ', '.join(x)).reset_index()
     if roles_df.empty:
-        return None, None
+        return None, None,html.H4('No Indian Buffet Today')
     roles_df.columns = ['Role', 'Employee_ID']
     table = dash_table.DataTable(
         id='table',
@@ -116,8 +117,8 @@ def produce_output(date,shift):
         
         data=roles_df[['Role', 'Employee_ID']].to_dict('records'),
         page_size=10,
-        style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-        style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
+        style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+        style_header={"background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
 
 
     count = dbc.Card(
@@ -136,7 +137,7 @@ def produce_output(date,shift):
     print(x_values)
     y_values = df3.iloc[0, 9:].values.tolist() 
     print(y_values)
-    histogram_fig = px.histogram(x = x_values, y= y_values, title="Customer demand across the day",
+    histogram_fig = px.histogram(x = x_values, y= y_values, title=f"Customer demand on {date}",
         labels={'x': 'Time', 'y': 'Customer Count'}, histnorm = 'density')
 
     histogram_fig.update_layout(
@@ -149,18 +150,7 @@ def produce_output(date,shift):
 )
 
     histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False)
-
+    histogram_fig.update_traces(marker_color='#fce5cd')
     histogram_container = dcc.Graph(figure=histogram_fig)
-
-
-    # # show graph of chefs
-    # fig = px.histogram(final_df, x="Role")
-    # fig.update_layout(
-    #     title='Histogram',
-    #     yaxis_title='Count',
-    #     yaxis=dict(
-    #         dtick=1  # Set dtick to 1 for y-axis
-    #     )
-    # )
 
     return table,count, histogram_container

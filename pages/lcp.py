@@ -83,6 +83,7 @@ def calculate_total(selectedchef1, selectedservice1, selecteddishwasher1, select
 
 
 layout = html.Div([
+    html.Br(),
     html.Label(html.B('Select a date: ')),
     dcc.DatePickerSingle(
         id = 'date-picker',
@@ -92,7 +93,7 @@ layout = html.Div([
         style = {'width' : '200px', 'margin' : '10px'}
     ),
     html.Br(),
-    html.H1('Labour Cost Percentage'),
+    html.H2('Labour Cost Percentage'),
     html.Br(),
     html.Div([
         dbc.Row([

@@ -58,7 +58,7 @@ h3, h4, h5, h6 {
   justify-content: space-around;
   padding: 5px;
   border-radius: 5px;
-  background-color: #7bdff2;
+  background-color: #b6d7a8;
   text-align: center;
 }
 
@@ -172,7 +172,7 @@ h3, h4, h5, h6 {
 .histogram-container {
     margin-top: 10px;
     padding: 30px;
-    background-color:   #b0c4de;
+    background-color:   #b6d7a8;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 2px #e9ecef;
     width: 100%; /* Adjust width as needed */

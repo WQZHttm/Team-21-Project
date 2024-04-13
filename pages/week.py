@@ -74,7 +74,7 @@ headers_week=html.Div([
                     display_format='YYYY-MM-DD',
                     className='date-picker'),
                 html.Br(),
-                html.H1(children='Overview for the Week'),
+                html.H2(children='Overview for the Week'),
 
 ])
 
