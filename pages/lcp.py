@@ -28,12 +28,42 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 
 manpower_schedule['Total Paid'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
 
+##Baseline##
+# A = ["A1", "A2", "A3", "A4", "A5"] #Chefs
+# B = ["B1", "B2", "B3", "B4", "B5"] #FT
+# C = ["C1", "C2"] #DW
+# D = ["D1", "D2", "D3"] #PT
+
+# Cycle Order for services and part time: B1 D1 D3 D2 B3 B4 B2 B5
+## Mon = [[A1, A2, A3, A4, B3, C1, D2, D3], [A3, A4, B2, B4, B5, C1], [A2, B3, C2, D2, D3]]     A5, B1, C2, D1 on off
+Mon = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 3, 3, 3, 2]), sum([6.5, 3, 2]), sum([6.5, 6.5, 2, 2])]
+
+## Tue = [[A1, A2, A3, A5, B3, B4, C2, D2], [A2, A3, B1, B2, B5, C2, D1], [A1, B3, B4, C1, D2]]     A5, B1, C2, D1 on off
+Tue = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 6.5, 3, 3, 3, 2, 2]), sum([6.5, 3, 2]), sum([6.5, 3, 2])]
+
+## Wed = [[A1, A2, A4, A5, B2, B3, B4, C1], [A1, A2, B1, B5, C2, D1, D3], [A5, B2, B3, B4, C1]]     A3, D2 on off
+Wed = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 6.5, 6.5, 3, 3, 2, 2, 2]), sum([6.5, 3, 2]), sum([3, 3])]
+
+## Thur = [[A1, A3, A4, A5, B2, B4, B5, C2], [A1, A5, B1, C1, D1, D2, D3], [A4, B2, B4, B5, C2]]    A2, B3 on off
+Thur = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 6.5, 6.5, 3, 2, 2, 2]), sum([6.5, 3, 2]), sum([3, 3, 3])]
+
+## Fri = [[A2, A3, A4, A5, B1, B2, B5, C1], [A4, A5, B3, C2, D1, D2, D3], [A3, B1, B2, B5, C1]]     A1, B4 on off
+Fri = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 6.5, 6.5, 3, 2, 2, 2]), sum([6.5, 3, 2]), sum([3, 3, 3])]
+
+## Sat = [[A1, A2, A3, A4, B1, B5, C2, D1], [A4, A5, B3, B4, C1, D2, D3],[A3, B1, B5, C2, D1]]      B2 on off
+Sat = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 6.5, 3, 3, 2, 2]), sum([6.5, 3, 2]), sum([6.5, 3, 3, 2])]
+
+## Sun = [[A1, A2, A4, A5, B1, C1, D1, D3], [A1, A2, B2, B3, B4, C2, D2], [A3, B1, C1, D1, D3]]     B5 on off
+Sun = [sum([6.5, 6.5, 6.5, 6.5, 3, 3, 2]), sum([6.5, 3, 3, 3, 2]), sum([6.5, 3, 2]), sum([6.5, 6.5, 3, 2, 2])]
+Week = [Mon, Tue, Wed, Thur, Fri, Sat, Sun]
+
 
 def calculate_defaults(selected_date):
     filtered_data = manpower_schedule[manpower_schedule['Date'] == selected_date]
     filtered_data1 = filtered_data[filtered_data['Shift'] == '10am-4.30pm']
     filtered_data2 = filtered_data[filtered_data['Shift'] == '7pm-10pm']
     filtered_data3 = filtered_data[filtered_data['Shift'] == '8pm-10pm']
+    day = filtered_data['Day'].iloc[0]
 
     defaultchef1 = len(filtered_data1[filtered_data1['Role'] == 'chef'])
     defaultservice1 = len(filtered_data1[(filtered_data1['Role'] == 'service') & (filtered_data1['Job_status'] == 'full-time')])
@@ -50,11 +80,25 @@ def calculate_defaults(selected_date):
     defaultdishwasher3 = len(filtered_data3[filtered_data3['Role'] == 'dishwasher'])
     defaultpt3 = len(filtered_data3[filtered_data3['Job_status'] == 'part-time'])
 
+    w = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    for i in range(len(Week)):
+        if w[i] == day:
+            hours = Week[i]
+            if not pd.isna(filtered_data['Public Holiday'].iloc[0]):
+                baselinecost = (hours[0] * 17) + (hours[1] * 16) + (hours[2] * 16) + (hours[3] * 15)
+            elif filtered_data['Day'].iloc[0] == 'Saturday':
+                baselinecost = (hours[0] * 16) + (hours[1] * 15) + (hours[2] * 15) + (hours[3] * 14)
+            elif filtered_data['Day'].iloc[0] == 'Sunday':
+                baselinecost = (hours[0] * 16) + (hours[1] * 15) + (hours[2] * 15) + (hours[3] * 14)
+            else:
+                baselinecost = (hours[0] * 15) + (hours[1] * 14) + (hours[2] * 14) + (hours[3] * 13)
+
+
     defaultcost = sum(filtered_data['Total Paid'])
     return defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1, \
         defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
         defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, \
-        defaultcost
+        defaultcost, baselinecost
 
 
 def calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate, shift):
@@ -98,115 +142,117 @@ layout = html.Div([
     html.Div([
         dbc.Row([
             dbc.Col([
-                html.H3("Morning Shift", className='slidertitle'),
-                html.Br(),
-                html.H4("No. of Chefs:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-chef1', className='slider'),
-                html.Br(),
-                html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-service1', className='slider'),
-                html.Br(),
-                html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-dishwasher1', className='slider'),
-                html.Br(),
-                html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,10,1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-pt1', className='slider'),
-                html.Br(),
-                html.Div(id = 'selected-cost-output1', className='costtabletext')
-
-            ], className = 'bordered-col'),
+                dbc.Card([
+                    html.H5("Morning Shift", className='slidertitle'),
+                    html.Br(),
+                    html.H6("No. of Chefs:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-chef1', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Full-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-service1', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Part-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0,10,1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-pt1', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Dishwashers:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-dishwasher1', className='slider'),
+                    html.Br(),
+                    html.Div(id = 'selected-cost-output1', className='costtabletext')
+                ], className = 'card')
+            ], width = 4),
             dbc.Col([
-                html.H3("Night (Chinese Buffet)", className='slidertitle'),
-                html.Br(),
-                html.H4("No. of Chefs:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-chef2', className='slider'),
-                html.Br(),
-                html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-service2', className='slider'),
-                html.Br(),
-                html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-dishwasher2', className='slider'),
-                html.Br(),
-                html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,10,1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-pt2', className='slider'),
-                html.Br(),
-                html.Div(id = 'selected-cost-output2', className='costtabletext')
-
-            ], className = 'bordered-col'),
+                dbc.Card([
+                    html.H5("Night (Chinese Buffet)", className='slidertitle'),
+                    html.Br(),
+                    html.H6("No. of Chefs:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-chef2', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Full-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-service2', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Part-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0,10,1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-pt2', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Dishwashers:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-dishwasher2', className='slider'),
+                    html.Br(),
+                    html.Div(id = 'selected-cost-output2', className='costtabletext')
+                ], className = 'card')
+            ], width = 4),
             dbc.Col([
-                html.H3("Night (Indian Buffet)", className='slidertitle'),
-                html.Br(),
-                html.H4("No. of Chefs:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-chef3', className='slider'),
-                html.Br(),
-                html.H4("No. of Full-Time Service Staff:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-service3', className='slider'),
-                html.Br(),
-                html.H4("No. of Dishwashers:"),
-                dcc.Slider(0, 10, 1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-dishwasher3', className='slider'),
-                html.Br(),
-                html.H4("No. of Part-Timers:"),
-                dcc.Slider(0,10,1,
-                           value=0,
-                           tooltip={"placement": 'bottom', "always_visible": True},
-                           id = 'slider-pt3', className='slider'),
-                html.Br(),
-                html.Div(id = 'selected-cost-output3', className='costtabletext')
-
-            ], className = 'bordered-col'),
+                dbc.Card([
+                    html.H5("Night (Indian Buffet)", className='slidertitle'),
+                    html.Br(),
+                    html.H6("No. of Chefs:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-chef3', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Full-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-service3', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Part-Time Service Staff:", className='slidertext'),
+                    dcc.Slider(0,10,1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-pt3', className='slider'),
+                    html.Br(),
+                    html.H6("No. of Dishwashers:", className='slidertext'),
+                    dcc.Slider(0, 10, 1,
+                               value=0,
+                               tooltip={"placement": 'bottom', "always_visible": True},
+                               id = 'slider-dishwasher3', className='slider'),
+                    html.Br(),
+                    html.Div(id = 'selected-cost-output3', className='costtabletext')
+                ], className = 'card')
+            ], width = 4),
         ]),
         html.Br(),
         dbc.Row([
             dbc.Col([
+                html.Br(),
                 dbc.Card([
                     dbc.CardBody([
+                        html.H5("Labour Cost for the day: ", className= "slidertitle"),
                         html.Br(),
-                        html.H2("Labour Cost for the day: ", className= "costtabletitle"),
-                        html.Br(),
-                        html.Br(),
+                        html.Div(id = 'baseline-cost', className='costtabletext'),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.Br(),
                         html.Div(id = 'selected-total', className='costtabletext')
                     ])
                 ], className = 'costtable',
                 ),
-            ], width = 6),
+            ], width = 3),
             dbc.Col([
                 html.Div(id = 'graph')
-            ], width = 5),
+            ], width = 6),
 
         ])
 
@@ -217,6 +263,7 @@ layout = html.Div([
 ## DEFAULTS ##
 @callback(
     Output('total-cost-output', 'children'),
+    Output('baseline-cost', 'children'),
     Output('slider-chef1', 'value'),
     Output('slider-service1', 'value'),
     Output('slider-dishwasher1', 'value'),
@@ -236,8 +283,9 @@ def update_defaults(selected_date):
     selected_date = datetime.strptime(selected_date, '%Y-%m-%d')
     defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1, \
         defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
-        defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost = calculate_defaults(selected_date)
+        defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost, baselinecost = calculate_defaults(selected_date)
     return (f"Optimised Cost: ${total_cost}",
+            f"Total Baseline Cost: ${baselinecost}",
             defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1,
             defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2,
             defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3,
@@ -315,25 +363,29 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
                                     selecteddate)
     defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1, \
         defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
-        defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost = calculate_defaults(selecteddate)
+        defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost, baselinecost = calculate_defaults(selecteddate)
+
 
 
     graphdata = [
         go.Bar(
-            x=['Optimised', 'Selected'],
-            y=[total_cost, selectedtotal],
-            text=[f'${total_cost}', f'${selectedtotal}'],
-            marker=dict(color=['blue','green']),
+            y=['Baseline', 'Optimised', 'Selected'],
+            x=[baselinecost,total_cost, selectedtotal],
+            text=[f'${baselinecost}', f'${total_cost}', f'${selectedtotal}'],
+            marker=dict(color=['#6495ED', '#FF7F50','#32CD32']),
+            orientation='h'
         )
     ]
     graphlayout = go.Layout(
-        title = dict(text='Total Labour Cost Comparison', x=0.5, y=0.95, font=dict(size=20, color='black')),
-        margin=dict(l=50, r=50, t=50, b=60)
+        title = dict(text='Total Labour Cost Comparison', x=0.5, y=0.95, font=dict(size=16, color='black')),
+        margin=dict(l=50, r=50, t=40, b=60),
+        width= 800,
+        height = 380
     )
     figure = go.Figure(data=graphdata, layout=graphlayout)
     graph = dcc.Graph(figure = figure)
 
-    return f"Total Selected Labour Cost: ${selectedtotal}", graph
+    return f"Total Selected Labour Cost: ${selectedtotal}",  graph
 
 if __name__ == '__main__':
     app.run(debug=True)

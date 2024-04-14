@@ -91,33 +91,31 @@ h3, h4, h5, h6 {
 
 /* LCP */
 
-.bordered-col{
-    border: 2px solid black;
-    padding: 40px;
-    margin-right: -2px;
-    background-color: #faf0e6;
-}
 
 .rc-slider-track {
   background-color: #6495ED;
 }
 
-.rc-slider-dot-active {
-  border-color: #6495ED;
-  border: solid 2px #6495ED;
-}
-
 .rc-slider-handle {
   background-color: #B0C4DE;
-  border: solid 1.5px black;
+  border: solid 2px black;
 }
 
+.rc-slider-dot-active {
+  border: solid 1px black;
+}
+
+
 .rc-slider-handle:hover {
-  border-color: #B0C4DE;
+  border: solid 2px black;
 }
 
 .rc-slider-handle-active:active {
-  border-color: #B0C4DE;
+  border: solid 2px black;
+}
+
+.rc-slider-handle:focus {
+  border: solid 2px black;
 }
 
 .rc-slider-rail {
@@ -125,34 +123,32 @@ h3, h4, h5, h6 {
 }
 
 .rc-slider-dot {
-  border-color: #B0C4DE;
-  border: solid 1px #B0C4DE;
+  border: solid 1px black;
 }
 
-.sliderdefault{
-    text-align:center;
-    font-size:15px;
-    border-bottom:2px inset black;
-    padding:25px;
-}
+
 .slidertitle{
     text-align:center;
     text-decoration:underline;
-}
-.costtable{
-    background-color: #B0C4DE;
-    align-items: center;
-    height: 40vh;
+    padding: 5px;
 }
 
-.costtabletitle{
-    text-align:center;
-    text-decoration:underline;
+.costtable{
+    background-color: #FEB56A;
+    align-items: center;
+    height: 30vh;
+}
+
+.slidertext{
+    padding: 5px;
+    text-align: left;
+    margin-left: 15px;
 }
 
 .costtabletext{
-    font-size: 30px;
-    font-weight: 80
+    padding: 10px;
+    font-size: medium;
+    font-weight: 300;
 }
 
 .graph-title{
