@@ -24,58 +24,77 @@ current_date = datetime.now()
 start_of_current_week = current_date - timedelta(days=current_date.weekday())
 end_of_current_week = start_of_current_week + timedelta(days=6)
 
-layout = html.Div([
-    html.Br(),
-    dbc.Row([
-        dbc.Col(
-            html.Div([
-                html.Label('Select a date range:', style={'fontWeight': 'bold'}),
-                dcc.DatePickerRange(
-                    id='date-picker-range',
-                    start_date_placeholder_text='Start Date',
-                    end_date_placeholder_text='End Date',
-                    start_date=start_of_current_week.date(),
-                    end_date=end_of_current_week.date(),
-                    display_format='YYYY-MM-DD'
-                )
-            ])
-        ),
-        dbc.Col(
-            html.Div([
-                html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
-                dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name')
-            ]), width={"size": 8, "offset": 0}
-        )
-    ]),
-    html.Br(),
-    html.Br(),
-    html.Div([
-        dbc.Row([
-            dbc.Col(
-                html.Div([
-                    html.Div(id='employee-info-output')
-                ]), width={"size": 6, "offset": 0}
-            ),
-            dbc.Col(
-                html.Div([
-                    html.Img(id='employee-image', height=200),
-                    html.P(style={'textAlign': 'center', 'fontWeight': 'bold'})
-                ]), width={"size": 4, "offset": 0}
-            )
 
-    ])
-]),
-    html.Br(),
-    html.Div([
-        dbc.Row([
-            dbc.Col(
-                html.Div([
-                    html.Div(id= 'work-schedule-output')
-                ]), width={"size": 6, "offset": 0}
+
+# headers 
+header = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div([
+            html.Label('Select a date range:', style={'fontWeight': 'bold'}),
+            dcc.DatePickerRange(
+                id='date-picker-range',
+                start_date_placeholder_text='Start Date',
+                end_date_placeholder_text='End Date',
+                start_date=start_of_current_week.date(),
+                end_date=end_of_current_week.date(),
+                display_format='YYYY-MM-DD',
+                style = {'margin' : '10px'}
             ),
-        ])
+            html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0})
+        ]), width={'size': 6}),
+        dbc.Col(html.Div([
+            html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
+            dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name', style = {'margin': '10px'})
+        ]), width={'size': 6})
     ])
 ])
+
+
+#first row
+
+first_row = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div(id='employee-info-output'), width={"size": 6}),
+        dbc.Col(html.Div([
+            html.Img(id='employee-image', height=200),
+            html.P(style={'textAlign': 'center', 'fontWeight': 'bold'})]
+            ), width = {'size' : 4})
+        ])
+    ])
+
+
+#second row 
+
+second_row = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div(id= 'work-schedule-output'), width = {'size': 9})
+        ])
+    ])
+
+
+
+layout = html.Div([
+    html.Br(),
+    header,
+    html.Br(),
+    first_row,
+    html.Br(),
+    html.Div(id='employee-schedule-heading'),
+    html.Br(),
+    second_row
+
+    ])
+
+
+@callback(
+    Output('employee-schedule-heading', 'children'),
+    [Input('employee-name-input', 'value')]
+)
+def update_employee_schedule_heading(employee_name):
+    if employee_name and employee_name in manpower_schedule['Employee_ID'].unique():
+        return html.B(f"{employee_name}'s Schedule", style={'font-size': '20px'})
+    else:
+        return ""
 
 # Callback to update employee information based on selected date range and employee ID
 @callback(
@@ -109,7 +128,7 @@ def update_employee_info(start_date, end_date, employee_id):
                 ],
                 style_table={'overflowY': 'auto'},
                 style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-                style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                style_header={"background-color": "#f9cb9c", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                 style_data_conditional=[
                     {'if': {'column_id': 'Attribute'},'color': '#000000'},
                     {'if': {'column_id': 'Value'},'color': '#1e90ff'}
@@ -121,9 +140,7 @@ def update_employee_info(start_date, end_date, employee_id):
         else:
             return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}) 
     else:
-        return html.P('Please select a date range and enter an employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'})
-
-
+        return []
 @callback(
     Output('work-schedule-output', 'children'),
     [Input('date-picker-range', 'start_date'),
@@ -161,12 +178,12 @@ def employee_schedule(start_date,end_date,employee_id):
                 style_table={'overflowY': 'auto'},
                 style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
                 style_data_conditional=[
-                    {'if': {'column_id': 'Date'}, "background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                    {'if': {'column_id': 'Date'}, "background-color": "#f9cb9c", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                     {'if' : {'column_id' : unique_dates }, 'color' : '#1e90ff', 'whiteSpace': 'pre-line', 'border' : 'solid 2px black'}
                 ],
                 style_header_conditional=[
                     
-                        {'if': {'column_id': 'Date'},'backgroundColor': '#83C5BE','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+                        {'if': {'column_id': 'Date'},'backgroundColor': '#f9cb9c','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
                         { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 2px black'}
                 ]
             )
