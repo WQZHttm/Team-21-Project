@@ -124,7 +124,7 @@ def produce_output(date,shift):
     count = dbc.Card(
         [dbc.CardBody(
                 [
-                    html.H4("Total no. of staff for this shift:", className="card-title"),
+                    html.H4("Total number of staff for this shift:", className="card-title"),
                     html.P(len(final_df), className="card-text"),
                 ]
             ),
@@ -144,13 +144,13 @@ def produce_output(date,shift):
     title=dict(y=0.99, x = 0.07, font=dict(size=17)), 
     margin = dict(t = 40),
     bargap = 0, 
-    plot_bgcolor='rgba(0,0,0,0)', 
-    paper_bgcolor='rgba(0,0,0,0)', 
+    plot_bgcolor='#F4F4F4', 
+    paper_bgcolor='#F4F4F4', 
     yaxis_title = 'Customer Count',
 )
 
-    histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False)
-    histogram_fig.update_traces(marker_color='#fce5cd')
+    histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False, line_color = 'black')
+    histogram_fig.update_traces(marker_color='#b6d7a8')
     histogram_container = dcc.Graph(figure=histogram_fig)
 
     return table,count, histogram_container
