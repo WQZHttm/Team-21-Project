@@ -22,7 +22,6 @@ def Requirements(C_Buffet, I_Buffet, I_Reserve):
     return Req
 
 def day_state(PH, Day):
-    print(len(PH), len(Day))
     day_status = []
     for i in range(len(PH)):
       if not pd.isna(PH[i]):
@@ -128,6 +127,8 @@ def smart_Schedule(input):
                 elif j == 1: service_req[i].extend([req[i][j][1] for k in range(2)])
                 else: service_req[i][2] += req[i][j][1]
 
+        print(service_req)
+
         Rank = [service_req[i][2] for i in range(7)]
         info = [i[0] for i in sorted(enumerate(Rank), key=lambda x:x[1])]
         Rank_lst = []
@@ -139,7 +140,7 @@ def smart_Schedule(input):
 
         for k in range(8):
 
-            solver = pywraplp.Solver.CreateSolver('GLOP')
+            solver = pywraplp.Solver.CreateSolver('CP-SAT')
             variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 169)]
 
             # Minimum hours
@@ -298,3 +299,8 @@ def smart_Schedule(input):
             full_Schedule[i][j].extend(dish[i][j])
 
     return full_Schedule
+
+
+df = pd.read_csv("../output/predictions.csv").head(7)
+
+print(smart_Schedule(df))
