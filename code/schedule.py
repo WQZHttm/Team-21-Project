@@ -1,5 +1,7 @@
 from ortools.linear_solver import pywraplp
 from datetime import datetime
+import pandas as pd
+import time
 
 def Requirements(C_Buffet, I_Buffet, I_Reserve):
     Req = []
@@ -19,28 +21,32 @@ def Requirements(C_Buffet, I_Buffet, I_Reserve):
 
     return Req
 
+def day_state(PH, Day):
+    print(len(PH), len(Day))
+    day_status = []
+    for i in range(len(PH)):
+      if not pd.isna(PH[i]):
+        day_status.append(2)
+      elif Day[i] == 'Saturday' or Day[i] == 'Sunday':
+        day_status.append(1)
+      else:
+        day_status.append(0)
+
+    return day_status
+
+
 def smart_Schedule(input):
 
     Chinese = input['Chinese_Buffet_Busy'].tolist()
     Indian = input['Indian_Buffet_Busy'].tolist()
     Indian_R = input['India_Reservation'].tolist()
+    PH = input['Public Holiday'].tolist()
+    Day = input['Day'].tolist()
 
     req = Requirements(Chinese, Indian, Indian_R)
+    day_status = day_state(PH, Day)
 
-    day_status = []
-    for idx, row in input.iterrows():
-      dat = row['Date']
-      date = datetime.strptime(dat, '%d/%m/%Y')
-      day = row['Day']
-      public_holiday = row['Public Holiday']
-      if public_holiday:
-        day_status.append(2)
-      elif day == 'Saturday' or day == 'Sunday':
-        day_status.append(1)
-      else:
-        day_status.append(0)
-
-    def kitchen_Schedule():
+    def kitchen_Schedule(req, day_status):
 
         kitchen_req = [[], [], [], [], [], [], []]
         for i in range(7):
@@ -112,7 +118,7 @@ def smart_Schedule(input):
             return roster
         else:
             print('The problem does not have an optimal solution.')
-    def SP_Schedule():
+    def SP_Schedule(req, day_status):
 
         # Schedule meets requirements for the week
         service_req = [[], [], [], [], [], [], []]
@@ -133,7 +139,7 @@ def smart_Schedule(input):
 
         for k in range(8):
 
-            solver = pywraplp.Solver.CreateSolver('SCIP')
+            solver = pywraplp.Solver.CreateSolver('GLOP')
             variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 169)]
 
             # Minimum hours
@@ -199,7 +205,8 @@ def smart_Schedule(input):
             else:
                   print('The problem does not have an optimal solution.')
 
-    def dish_Schedule():
+
+    def dish_Schedule(req, day_status):
 
         dish_req = [[], [], [], [], [], [], []]
         for i in range(7):
@@ -280,13 +287,14 @@ def smart_Schedule(input):
         return roster
 
 
-    kitchen = kitchen_Schedule()
-    serve = SP_Schedule()
-    dish = dish_Schedule()
+    kitchen = kitchen_Schedule(req, day_status)
+    serve = SP_Schedule(req, day_status)
+    dish = dish_Schedule(req, day_status)
 
     full_Schedule = kitchen
     for i in range(7):
         for j in range(3):
             full_Schedule[i][j].extend(serve[i][j])
             full_Schedule[i][j].extend(dish[i][j])
+
     return full_Schedule
