@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/19kBhEaubdCffRidhJxqgBWIRCKR9RE1_
 """
 
-!pip3 install ortools
-
 from ortools.linear_solver import pywraplp
 solver = pywraplp.Solver.CreateSolver('SCIP')
 
