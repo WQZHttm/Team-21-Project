@@ -127,8 +127,8 @@ def update_employee_info(start_date, end_date, employee_id):
                     {'Attribute': 'Total salary for the week ($) ', 'Value': f"${total_salary}"}
                 ],
                 style_table={'overflowY': 'auto'},
-                style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-                style_header={"background-color": "#f9cb9c", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+                style_header={"background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                 style_data_conditional=[
                     {'if': {'column_id': 'Attribute'},'color': '#000000'},
                     {'if': {'column_id': 'Value'},'color': '#1e90ff'}
@@ -176,14 +176,14 @@ def employee_schedule(start_date,end_date,employee_id):
                 columns=work_schedule_table_columns,
                 data=work_schedule_table_data,
                 style_table={'overflowY': 'auto'},
-                style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+                style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
                 style_data_conditional=[
-                    {'if': {'column_id': 'Date'}, "background-color": "#f9cb9c", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                    {'if': {'column_id': 'Date'}, "background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                     {'if' : {'column_id' : unique_dates }, 'color' : '#1e90ff', 'whiteSpace': 'pre-line', 'border' : 'solid 2px black'}
                 ],
                 style_header_conditional=[
                     
-                        {'if': {'column_id': 'Date'},'backgroundColor': '#f9cb9c','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+                        {'if': {'column_id': 'Date'},'backgroundColor': '#fda64a','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
                         { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 2px black'}
                 ]
             )
