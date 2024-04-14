@@ -73,8 +73,10 @@ headers_week=html.Div([
                     end_date=end_date_default,
                     display_format='YYYY-MM-DD',
                     className='date-picker'),
+        html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
+
                 html.Br(),
-                html.H2(children='Overview for the Week'),
+                html.H1(children='Overview for the Week'),
 
 ])
 
@@ -137,13 +139,18 @@ def update_graphs(start_date, end_date):
                                 # barmode='stack',
                                 labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
                                 title='Number of Staffs Present for Each Day',
-                                text=staff_counts['Counts'].apply(lambda x: '{0:.0f}'.format(x)))
+                                text=staff_counts['Counts'].apply(lambda x: '{0:.0f}'.format(x)),
+                                color_discrete_map={'chef': '#fda64a', 'dishwasher': '#93c47d', 'service': '#93d1e0'}  # Map roles to colors
+)
+
 
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
                                   y='Cost', 
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
-                                  title ='Cost of hiring')
+                                  title ='Cost of Hiring')
+        cost_hiring_fig.update_traces(marker_color='#fda64a')
+
 
 
         if (df2 ['Public Holiday'] != '').any():
@@ -162,7 +169,7 @@ def update_graphs(start_date, end_date):
                         ]
                     ),
                 ],
-                class_name='card',
+                style={'background-color': '#E8E8E8'},
             )
 
 
