@@ -129,8 +129,6 @@ def smart_Schedule(input):
                 elif j == 1: service_req[i].extend([req[i][j][1] for k in range(2)])
                 else: service_req[i][2] += req[i][j][1]
 
-        print(service_req)
-
         Rank = [service_req[i][2] for i in range(7)]
         info = [i[0] for i in sorted(enumerate(Rank), key=lambda x:x[1])]
         Rank_lst = []
@@ -305,8 +303,3 @@ def smart_Schedule(input):
             full_Schedule[i][j].extend(dish[i][j])
 
     return full_Schedule
-
-
-df = pd.read_csv("../output/predictions.csv").head(7)
-
-print(smart_Schedule(df))
