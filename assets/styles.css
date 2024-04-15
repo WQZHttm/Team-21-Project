@@ -136,7 +136,7 @@ h3, h4, h5, h6 {
 .costtable{
     background-color: #FEB56A;
     align-items: center;
-    height: 30vh;
+
 }
 
 .slidertext{
@@ -175,8 +175,31 @@ h3, h4, h5, h6 {
     max-width: 800px; /* Set a maximum width for responsiveness */
 }
 
+/* Employee Details page */
+.employee-card{
+  height: auto;
+}
+.employee-table{
+  /* height: auto; */
+  min-height: 100%;
+  /* display: inline-block; */
+}
+.employee-image{
+    height: 100px;
+    width: 100px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.ed-first{
+  display: flex;
+  align-items: stretch;
+  width: 90%;
+  display: inline-block;
+}
+
 
 .DateRangePicker.DateRangePicker_1 .DateInput.DateInput_1:first-child .DateInput_input.DateInput_input_1 {
+    /* Your custom styling for the start date input box */
     background-color: #F9AF85
 
 }
