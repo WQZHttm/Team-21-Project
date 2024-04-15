@@ -36,31 +36,6 @@ manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedu
 manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
 
-#group by 'Date_and_day' and sum the cost 
-cost_group = manpower_schedule.groupby('Date_and_day')['Cost'].sum().reset_index()
-#cost of hiring bar graph 
-cost_hiring_fig = px.bar(data_frame = cost_group, 
-	x = 'Date_and_day',
-	y = 'Cost', 
-	labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} , 
-	title = 'Cost of hiring' ,
-	)
-
-
-#group by day and type of staffs, then counting 
-staff_counts = manpower_schedule.groupby(['Date_and_day', 'Role']).size().unstack(fill_value=0).reset_index()
-#staff present for the week graph
-staff_present_fig = px.bar(data_frame = staff_counts,  
-	x = 'Date_and_day',
-	y = ['chef', 'dishwasher', 'service'],
-	barmode = 'stack',
-	labels = {'Date_and_day': 'Days of the Week', 'value' : 'Number of Staffs'} , 
-	title = 'Number of Staffs Present for Each Day' )
-
-#logo link 
-logo_link = 'https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png'
-
-
 ####################### PAGE LAYOUT #############################
 
 headers_week=html.Div([
@@ -140,15 +115,23 @@ def update_graphs(start_date, end_date):
                                 labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
                                 title='Number of Staffs Present for Each Day',
                                 text=staff_counts['Counts'].apply(lambda x: '{0:.0f}'.format(x)),
-                                color_discrete_map={'chef': '#fda64a', 'dishwasher': '#93c47d', 'service': '#93d1e0'}  # Map roles to colors
-)
-
+                                color_discrete_map={'chef': '#fda64a', 'dishwasher': '#93c47d', 'service': '#93d1e0'},  # Map roles to colors
+) 
+        staff_present_fig.update_traces(textangle = 0)
+        # staff_present_fig.update_layout(legend=dict(
+        #     orientation="h",
+        #     yanchor="bottom",
+        #     y=1.02,
+        #     xanchor="right",
+        #     x=1
+        # ))
 
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
                                   y='Cost', 
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
                                   title ='Cost of Hiring')
+        
         cost_hiring_fig.update_traces(marker_color='#fda64a')
 
 

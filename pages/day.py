@@ -29,7 +29,6 @@ manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedu
 # customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
 manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
-
 ####################### PAGE LAYOUT #############################
 
 layout = html.Div([
@@ -43,13 +42,6 @@ layout = html.Div([
         style={'width':'200px', 'margin':'10px'}),
     html.Br(),
     html.H2(id='event-header'),
-    
-    # shift tab
-    # html.Div(id="shift",children=[
-    #     dbc.Button("Morning\n(10am-4.30pm)", value="morn",active='exact'),
-    #     dbc.Button("Night (Chinese)\n(7pm-10pm)", value="chidata",active='exact'),
-    #     dbc.Button("Night (Indian)\n(8pm-10pm)", value="inddata",active='exact'),]
-    # ),
     html.Br(),
     html.Div([
     dcc.Tabs(id="shift", value="morn", children=[
@@ -124,7 +116,7 @@ def produce_output(date,shift):
     count = dbc.Card(
         [dbc.CardBody(
                 [
-                    html.H4("Total number of staff for this shift:", className="card-title"),
+                    html.H4(f"Total number of staff for this shift:", className="card-title"),
                     html.P(len(final_df), className="card-text"),
                 ]
             ),
@@ -137,7 +129,7 @@ def produce_output(date,shift):
     print(x_values)
     y_values = df3.iloc[0, 9:].values.tolist() 
     print(y_values)
-    histogram_fig = px.histogram(x = x_values, y= y_values, title=f"Customer demand on {date}",
+    histogram_fig = px.histogram(x = x_values, y= y_values, title=f"Predicted Customer Demand on {date}",
         labels={'x': 'Time', 'y': 'Customer Count'}, histnorm = 'density')
 
     histogram_fig.update_layout(

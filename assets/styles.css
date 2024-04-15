@@ -136,7 +136,7 @@ h3, h4, h5, h6 {
 .costtable{
     background-color: #FEB56A;
     align-items: center;
-    height: 30vh;
+
 }
 
 .slidertext{
@@ -168,9 +168,31 @@ h3, h4, h5, h6 {
 .histogram-container {
     margin-top: 10px;
     padding: 30px;
-    background-color:   ##F4F4F4;
+    background-color:   #F4F4F4;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 2px #e9ecef;
     width: 100%; /* Adjust width as needed */
     max-width: 800px; /* Set a maximum width for responsiveness */
+}
+
+/* Employee Details page */
+.employee-card{
+  height: auto;
+}
+.employee-table{
+  /* height: auto; */
+  min-height: 100%;
+  /* display: inline-block; */
+}
+.employee-image{
+    height: 100px;
+    width: 100px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.ed-first{
+  display: flex;
+  align-items: stretch;
+  width: 90%;
+  display: inline-block;
 }

@@ -6,7 +6,7 @@ import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
 import dash_bootstrap_components as dbc
-
+from urllib.parse import quote
 
 dash.register_page(__name__, path='/employee_details', name="Employee Details👬")
 
@@ -46,7 +46,8 @@ header = html.Div([
             html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
             dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name', style = {'margin': '10px'})
         ]), width={'size': 6})
-    ])
+    ]),
+
 ])
 
 
@@ -54,13 +55,10 @@ header = html.Div([
 
 first_row = html.Div([
     dbc.Row([
-        dbc.Col(html.Div(id='employee-info-output'), width={"size": 6}),
-        dbc.Col(html.Div([
-            html.Img(id='employee-image', height=200),
-            html.P(style={'textAlign': 'center', 'fontWeight': 'bold'})]
-            ), width = {'size' : 4})
+        dbc.Col(html.Div(id='employee-info-output',className='employee-table'), width=7),
+        dbc.Col(html.Div(id='employee-card'),width=5),
         ])
-    ])
+    ],className='ed-first')
 
 
 #second row 
@@ -98,14 +96,15 @@ def update_employee_schedule_heading(employee_name):
 
 # Callback to update employee information based on selected date range and employee ID
 @callback(
-    Output('employee-info-output', 'children'),
+    [Output('employee-info-output', 'children'),
+     Output('employee-card', 'children')],
     [Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
 )
-def update_employee_info(start_date, end_date, employee_id):
-    if start_date and end_date and employee_id:
-        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_id)]
+def update_employee_info(start_date, end_date, employee_name):
+    if start_date and end_date and employee_name:
+        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
         
         if not filtered_manpower_schedule.empty:
             # Extract employee information
@@ -136,20 +135,69 @@ def update_employee_info(start_date, end_date, employee_id):
 
             )
             
-            return employee_info_table
+            # UPDATE EMPLOYEE CARD
+            employee_image_path = employee_image_mapping.get(employee_name)
+            if not employee_image_path:
+                employee_image_path=''
+            employee_card=dbc.Card(
+                        dbc.CardBody([
+                                        html.Img(src=employee_image_path,className='employee-image'),
+                                        html.H4(employee_name),
+                                        html.H6(role),
+                                        html.A(
+                                            " Message on WhatsApp",
+                                            href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
+                                            target="_blank",
+                                            style={
+                                                'display': 'inline-block',
+                                                'background-color': '#25d366',
+                                                'color': 'white',
+                                                'padding': '5px 10px',
+                                                'border-radius': '5px',
+                                                'text-decoration': 'none',
+                                            },
+                                            className='bi bi-whatsapp'
+                                        )
+
+                                    ],
+                                    className='employee-card')
+            )
+            if employee_name is None:
+                return None         
+
+
+
+
+
+
+            return employee_info_table, employee_card
         else:
-            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}) 
+            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None
     else:
-        return []
+        return [], None
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 @callback(
     Output('work-schedule-output', 'children'),
     [Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
     )
-def employee_schedule(start_date,end_date,employee_id):
-    if start_date and end_date and employee_id:
-        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_id)]
+def employee_schedule(start_date,end_date,employee_name):
+    if start_date and end_date and employee_name:
+        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
 
         if not filtered_manpower_schedule.empty:
             grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
@@ -192,24 +240,4 @@ def employee_schedule(start_date,end_date,employee_id):
             return []
     else:
         return []
-
-@callback(
-    Output('employee-image', 'src'),
-    [Input('employee-name-input', 'value')]
-)
-def update_employee_image(employee_name):
-    # Assuming you have a dictionary mapping employee names to image paths
-    employee_image_path = employee_image_mapping.get(employee_name)
-    if employee_image_path:
-        return employee_image_path
-    else:
-        # Default image path if employee name is not found
-        return ''
-
-
-
-
-
-
-
 

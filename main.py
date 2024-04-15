@@ -1,9 +1,13 @@
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc,Input, Output,callback
 import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
+import pandas as pd
 
+
+
+####################### DASH APP #############################
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
@@ -51,6 +55,13 @@ app.layout = html.Div([
     # side bar
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
+
+# TO UPDATE WHEN APP HAS AUTHENTICATION
+# @app.callback(
+# 	Output('user-login','children'),
+# 	Input()
+# )
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
