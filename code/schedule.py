@@ -101,7 +101,9 @@ def smart_Schedule(input):
         objective.SetMinimization
 
         # Solve
-        status = solver.Solve()
+        solverParams = pywraplp.MPSolverParameters()
+        solverParams.SetDoubleParam(solverParams.RELATIVE_MIP_GAP, 0.01)
+        status = solver.Solve(solverParams)
         lst = []
         if status == pywraplp.Solver.OPTIMAL:
             for i, var in enumerate(variables):
@@ -140,7 +142,7 @@ def smart_Schedule(input):
 
         for k in range(8):
 
-            solver = pywraplp.Solver.CreateSolver('CP-SAT')
+            solver = pywraplp.Solver.CreateSolver('SCIP')
             variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 169)]
 
             # Minimum hours
@@ -189,7 +191,9 @@ def smart_Schedule(input):
             objective.SetMinimization
 
             # Solve
-            status = solver.Solve()
+            solverParams = pywraplp.MPSolverParameters()
+            solverParams.SetDoubleParam(solverParams.RELATIVE_MIP_GAP, 0.01)
+            status = solver.Solve(solverParams)
             lst = []
             if status == pywraplp.Solver.OPTIMAL:
                   for i, var in enumerate(variables):
@@ -269,7 +273,9 @@ def smart_Schedule(input):
         objective.SetMinimization
 
         # Solve
-        status = solver.Solve()
+        solverParams = pywraplp.MPSolverParameters()
+        solverParams.SetDoubleParam(solverParams.RELATIVE_MIP_GAP, 0.01)
+        status = solver.Solve(solverParams)
         lst = []
         if status == pywraplp.Solver.OPTIMAL:
             for i, var in enumerate(variables):
