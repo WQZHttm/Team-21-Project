@@ -48,7 +48,7 @@ headers_week=html.Div([
                     end_date=end_date_default,
                     display_format='YYYY-MM-DD',
                     className='date-picker'),
-        html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
+        html.Div("(Default Start Day: Monday)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
 
                 html.Br(),
                 html.H1(children='Overview for the Week'),
@@ -71,6 +71,20 @@ layout = html.Div(children=[
     html.Br()])
 
 @callback(
+    Output('date-picker-range', 'start_date'),
+    Input('date-picker-range', 'start_date')
+)
+def update_start_date(start_date):
+    if start_date is not None:
+        selected_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        # Check if the selected date is Monday (0 is Monday, 6 is Sunday)
+        if selected_date.weekday() != 0:
+            # Find the previous Monday
+            previous_monday = selected_date - timedelta(days=selected_date.weekday())
+            return previous_monday
+    return start_date
+
+@callback(
     Output('date-picker-range', 'end_date'),
     [Input('date-picker-range', 'start_date')]
 )
@@ -79,6 +93,8 @@ def update_end_date(start_date):
         start_date = datetime.strptime(start_date.split(' ')[0], '%Y-%m-%d').date()
         end_date = start_date + timedelta(days=6)
         return end_date.strftime('%Y-%m-%d')
+    
+
 
 
 # Define callback to update other graphs

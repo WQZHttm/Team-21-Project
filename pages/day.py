@@ -14,14 +14,10 @@ dash.register_page(__name__, path='/', name="Day 📋")
 #current date
 
 current_date = datetime.datetime.today().date()
-df = pd.read_csv("output/predictions.csv") # TO REMOVE
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
-
-
 ####################### LOAD DATASET #############################
 manpower_schedule = pd.read_csv('output/final_schedule.csv')
 customer_prediction = pd.read_csv('output/predictions.csv')
-customer_prediction['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y')
+customer_prediction['Date'] = pd.to_datetime(customer_prediction['Date'], format='%d/%m/%Y')
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
 #tabulating the cost
 manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
@@ -73,7 +69,7 @@ layout = html.Div([
 @callback(Output('event-header','children'),
           Input('date-picker','date'))
 def update_event(date):
-    df2=df.loc[df['Date']==date]
+    df2=customer_prediction.loc[customer_prediction['Date']==date]
     if not isinstance(df2['Public Holiday'].item(),str):
         return "Today's Event: NA"
     else:
