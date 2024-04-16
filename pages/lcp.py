@@ -243,11 +243,11 @@ layout = html.Div([
                     dbc.CardBody([
                         html.H5("Labour Cost for the day: ", className= "slidertitle"),
                         html.Div(id = 'baseline-cost', className='costtabletext'),
-                        html.H6("( Based on Manual Scheduling )", style= {"font-weight": "250"}),
+                        html.H6("( Manual Scheduling without Optimisation )", style= {"font-weight": "250"}),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.H6("( Based on Suggested Scheduling )", style= {"font-weight": "250"}),
+                        html.H6("( Suggested Scheduling using Optimisation )", style= {"font-weight": "250"}),
                         html.Div(id = 'selected-total', className='costtabletext'),
-                        html.H6("( Based on Selected Scheduling )", style= {"font-weight": "250"}),
+                        html.H6("( Custom Scheduling based on selected sliders )", style= {"font-weight": "250"}),
                     ])
                 ], className = 'costtable',
                 ),
@@ -371,9 +371,9 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
 
     graphdata = [
         go.Bar(
-            y=['Baseline', 'Optimised', 'Selected'],
-            x=[baselinecost,total_cost, selectedtotal],
-            text=[f'${baselinecost}', f'${total_cost}', f'${selectedtotal}'],
+            y=['Selected', 'Optimised', 'Baseline'],
+            x=[selectedtotal,total_cost, baselinecost],
+            text=[f'${selectedtotal}', f'${total_cost}', f'${baselinecost}'],
             marker=dict(color=['#fda64a','#93c47d','#93d1e0']),
             orientation='h'
         )
