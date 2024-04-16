@@ -242,10 +242,12 @@ layout = html.Div([
                 dbc.Card([
                     dbc.CardBody([
                         html.H5("Labour Cost for the day: ", className= "slidertitle"),
-                        html.Br(),
                         html.Div(id = 'baseline-cost', className='costtabletext'),
+                        html.H6("( Based on Manual Scheduling )", style= {"font-weight": "250"}),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.Div(id = 'selected-total', className='costtabletext')
+                        html.H6("( Based on Suggested Scheduling )", style= {"font-weight": "250"}),
+                        html.Div(id = 'selected-total', className='costtabletext'),
+                        html.H6("( Based on Selected Scheduling )", style= {"font-weight": "250"}),
                     ])
                 ], className = 'costtable',
                 ),
@@ -285,7 +287,7 @@ def update_defaults(selected_date):
         defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
         defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost, baselinecost = calculate_defaults(selected_date)
     return (f"Optimised Cost: ${total_cost}",
-            f"Total Baseline Cost: ${baselinecost}",
+            f"Baseline Cost: ${baselinecost}",
             defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1,
             defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2,
             defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3,
@@ -372,7 +374,7 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
             y=['Baseline', 'Optimised', 'Selected'],
             x=[baselinecost,total_cost, selectedtotal],
             text=[f'${baselinecost}', f'${total_cost}', f'${selectedtotal}'],
-            marker=dict(color=['#6495ED', '#FF7F50','#32CD32']),
+            marker=dict(color=['#fda64a','#93c47d','#93d1e0']),
             orientation='h'
         )
     ]
@@ -385,7 +387,7 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
     figure = go.Figure(data=graphdata, layout=graphlayout)
     graph = dcc.Graph(figure = figure)
 
-    return f"Total Selected Labour Cost: ${selectedtotal}",  graph
+    return f"Selected Labour Cost: ${selectedtotal}",  graph
 
 if __name__ == '__main__':
     app.run(debug=True)
