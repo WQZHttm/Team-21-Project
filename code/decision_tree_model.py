@@ -16,8 +16,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 from flask import Flask,jsonify
 
-df = pd.read_csv('data_with_hour.csv')
-data2024 = pd.read_csv('test.csv')
+df = pd.read_csv('../input/data_with_hour.csv')
+data2024 = pd.read_csv('../input/test.csv')
 
 app = Flask(__name__)
 app.route('/predict', methods=['GET'])
