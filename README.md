@@ -12,7 +12,7 @@ This project aims to relieve the problem of manpower shortages by optimising lab
 
 This is done so in the following order: 
 
-1. An ARIMA model to predict customer counts for the week
+1. A Decision Tree model to predict customer counts for the week
 
 2. A scheduling algorithm that recommends a schedule based on the prediction of customer count for the week and the number of employees 
 
