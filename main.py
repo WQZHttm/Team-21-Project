@@ -1,18 +1,22 @@
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc,Input, Output,callback
 import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
+import pandas as pd
 
+
+
+####################### DASH APP #############################
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-
+# auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
     html.Br(),
-    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
+    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left','border-bottom': '2px solid grey'}),
     html.Br(),
     html.Br(), 
     html.Hr(),
@@ -27,13 +31,14 @@ sidebar = html.Div([
                     html.Span('Daily', style={'margin-left': '5px'})]), href='/', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
-                    html.Span('Week', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
+                    html.Span('Weekly', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
-                    html.Span('Labour Cost Percentage', style={'margin-left': '5px'})]), href='/LCP', active='exact',className='sidebar-list-item'),
-             dbc.NavLink(html.Span([
+                    html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
+            dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
-                    html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),           
+                    html.Span('Labour Cost Percentage', style={'margin-left': '5px'})]), href='/lcp', active='exact',className='sidebar-list-item'),
+    
         ],
         vertical=True,
         pills=True,
@@ -50,6 +55,13 @@ app.layout = html.Div([
     # side bar
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
+
+# TO UPDATE WHEN APP HAS AUTHENTICATION
+# @app.callback(
+# 	Output('user-login','children'),
+# 	Input()
+# )
+
 
 if __name__ == '__main__':
 	app.run(debug=True)

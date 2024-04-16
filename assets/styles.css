@@ -28,32 +28,40 @@ h3, h4, h5, h6 {
     justify-content: space-between;
     background-color: #faf6f6da;
 }
-
+.sidebar-logo{
+  height: 70px;
+  margin-right: 10px;
+  float: left;
+}
 .sidebar-user {
     display: flex;
-    justify-content: space-between;
     text-align: center;
     margin-bottom: 30px;
     font-weight: 500;
     font-size: 200;
+    margin-left: 40px;
+    /* border-bottom: 2px solid grey; */
   }
 
 
 /* MAIN SECTION */
+.date-picker{
+  margin:10px;
+}
 
 .day-display{
     height:50vh;
 }
 
 .card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 25px 30px;
-    border-radius: 5px;
-    background-color: #7bdff2;;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #E8E8E8;
+  text-align: center;
 }
+
 .card-title{
     text-align: center;
 }
@@ -68,15 +76,130 @@ h3, h4, h5, h6 {
     font-size: medium;
 }
 
+
+/* WEEK */
+
+
+/* to add shadows */
+.chart{
+  border: 2px solid lightgrey;
+  justify-content: space-around;
+  padding: 25px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+/* LCP */
+
+
+.rc-slider-track {
+  background-color: #6495ED;
+}
+
+.rc-slider-handle {
+  background-color: #B0C4DE;
+  border: solid 2px black;
+}
+
+.rc-slider-dot-active {
+  border: solid 1px black;
+}
+
+
+.rc-slider-handle:hover {
+  border: solid 2px black;
+}
+
+.rc-slider-handle-active:active {
+  border: solid 2px black;
+}
+
+.rc-slider-handle:focus {
+  border: solid 2px black;
+}
+
+.rc-slider-rail {
+  background-color: #C5EAF7;
+}
+
+.rc-slider-dot {
+  border: solid 1px black;
+}
+
+
+.slidertitle{
+    text-align:center;
+    text-decoration:underline;
+    padding: 5px;
+}
+
+.costtable{
+    background-color: #FEB56A;
+    align-items: center;
+
+}
+
+.slidertext{
+    padding: 5px;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.costtabletext{
+    padding: 10px;
+    font-size: medium;
+    font-weight: 300;
+}
+
+.graph-title{
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-align:center;
+}
+
+.graph-container{
+    margin-top: -5px;
+
+}
 /* Day page */
 
 
 .histogram-container {
     margin-top: 10px;
     padding: 30px;
-    background-color:   #b0c4de;
+    background-color:   #F4F4F4;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 2px #e9ecef;
     width: 100%; /* Adjust width as needed */
     max-width: 800px; /* Set a maximum width for responsiveness */
+}
+
+/* Employee Details page */
+.employee-card{
+  height: auto;
+}
+.employee-table{
+  /* height: auto; */
+  min-height: 100%;
+  /* display: inline-block; */
+}
+.employee-image{
+    height: 100px;
+    width: 100px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.ed-first{
+  display: flex;
+  align-items: stretch;
+  width: 90%;
+  display: inline-block;
+}
+
+
+.DateRangePicker.DateRangePicker_1 .DateInput.DateInput_1:first-child .DateInput_input.DateInput_input_1 {
+    /* Your custom styling for the start date input box */
+    background-color: #F9AF85
+
 }

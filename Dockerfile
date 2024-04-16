@@ -2,10 +2,10 @@
 FROM python:3.10.6
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /main
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY . /main
 
 # Install any needed dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8050
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]

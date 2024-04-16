@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
+import dash_bootstrap_components as dbc
+
 
 dash.register_page(__name__, path='/week', name="Week 📋")
 
@@ -34,57 +36,53 @@ manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedu
 manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
 
-#group by 'Date_and_day' and sum the cost 
-cost_group = manpower_schedule.groupby('Date_and_day')['Cost'].sum().reset_index()
-#cost of hiring bar graph 
-cost_hiring_fig = px.bar(data_frame = cost_group, 
-	x = 'Date_and_day',
-	y = 'Cost', 
-	labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} , 
-	title = 'Cost of hiring' ,
-	)
-
-
-#group by day and type of staffs, then counting 
-staff_counts = manpower_schedule.groupby(['Date_and_day', 'Role']).size().unstack(fill_value=0).reset_index()
-#staff present for the week graph
-staff_present_fig = px.bar(data_frame = staff_counts,  
-	x = 'Date_and_day',
-	y = ['chef', 'dishwasher', 'service'],
-	barmode = 'stack',
-	labels = {'Date_and_day': 'Days of the Week', 'value' : 'Number of Staffs'} , 
-	title = 'Number of Staffs Present for Each Day' )
-
-#logo link 
-logo_link = 'https://www.mountfaberleisure.com/wp-content/uploads/2023/08/logo.png'
-
-
 ####################### PAGE LAYOUT #############################
+
+headers_week=html.Div([
+        html.Label(children = html.B('Select a date range: ')),
+                dcc.DatePickerRange(
+                    id='date-picker-range',
+                    min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
+                    max_date_allowed=datetime(2024, 12, 31), 
+                    start_date=start_date_default,
+                    end_date=end_date_default,
+                    display_format='YYYY-MM-DD',
+                    className='date-picker'),
+        html.Div("(Default Start Day: Monday)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
+
+                html.Br(),
+                html.H1(children='Overview for the Week'),
+
+])
 
 
 layout = html.Div(children=[
-    html.Div(id='output-table', style = {'width': '200px', 'margin-left': 'auto', 'margin-top': '0px'}),
+    html.Br(),
     html.Div([
-        html.Label( children = html.B('Select a date range: ')),
-        dcc.DatePickerRange(
-            id='date-picker-range',
-            min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
-            max_date_allowed=datetime(2024, 12, 31), 
-            start_date=start_date_default,
-            end_date=end_date_default,
-            display_format='YYYY-MM-DD',
-        ),
-        html.Div(id='output-container-date-picker-range'),
-    ]),
+        dbc.Row([dbc.Col(headers_week),
+                dbc.Col(html.Div(id='output-table'),width=4)])]),
     html.Br(),
-    html.H1(children='Overview for the Week'),
     html.Div(children =[
-        dcc.Graph(id='staff-present-fig',style= {'border':'2px solid black', 'display':'inline-block', 'width':'45%',  'margin':'5px', 'margin-right': '5%'}),
-        dcc.Graph(id='cost-hiring-fig', style = {'border':'2px solid black', 'display':'inline-block' , 'width':'45%',  'margin':'5px'}),
-        ], style={'background-color':'rgb(224, 255, 252)'}),
-    html.Br(),
+        dbc.Row([dbc.Col(dcc.Graph(id='staff-present-fig'), className='chart'),
+                 (dbc.Col(dcc.Graph(id='cost-hiring-fig'),className='chart'))])],
+                 style={'position':'relative'}),
 
-    ], className='row')    
+
+    html.Br()])
+
+@callback(
+    Output('date-picker-range', 'start_date'),
+    Input('date-picker-range', 'start_date')
+)
+def update_start_date(start_date):
+    if start_date is not None:
+        selected_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        # Check if the selected date is Monday (0 is Monday, 6 is Sunday)
+        if selected_date.weekday() != 0:
+            # Find the previous Monday
+            previous_monday = selected_date - timedelta(days=selected_date.weekday())
+            return previous_monday
+    return start_date
 
 @callback(
     Output('date-picker-range', 'end_date'),
@@ -95,6 +93,8 @@ def update_end_date(start_date):
         start_date = datetime.strptime(start_date.split(' ')[0], '%Y-%m-%d').date()
         end_date = start_date + timedelta(days=6)
         return end_date.strftime('%Y-%m-%d')
+    
+
 
 
 # Define callback to update other graphs
@@ -115,37 +115,63 @@ def update_graphs(start_date, end_date):
         df2 = df.loc[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
         # Recalculate cost_group and staff_counts based on filtered_data
+        print(filtered_data)
         cost_group = filtered_data.groupby('Date_and_day')['Cost'].sum().reset_index()
-        staff_counts = filtered_data.groupby(['Date_and_day', 'Role']).size().unstack(fill_value=0).reset_index()
-       
+        staff_counts=filtered_data.groupby(['Date_and_day', 'Role']).size().reset_index()
+        print(staff_counts)
+        print('sc',staff_counts.columns)
+        staff_counts.columns = ['Date_and_day', 'Role', 'Counts']
+        print(staff_counts)
         # Update figures with filtered data
         staff_present_fig = px.bar(data_frame=staff_counts,  
-                                   x='Date_and_day',
-                                   y=['chef', 'dishwasher', 'service'],
-                                   barmode='stack',
-                                   labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
-                                   title='Number of Staffs Present for Each Day')
+                                x='Date_and_day',
+                                y=['Counts'],
+                                color='Role',
+                                # barmode='stack',
+                                labels={'Date_and_day': 'Days of the Week', 'value': 'Number of Staffs'}, 
+                                title='Number of Staffs Present for Each Day',
+                                text=staff_counts['Counts'].apply(lambda x: '{0:.0f}'.format(x)),
+                                color_discrete_map={'chef': '#fda64a', 'dishwasher': '#93c47d', 'service': '#93d1e0'},  # Map roles to colors
+) 
+        staff_present_fig.update_traces(textangle = 0)
+        # staff_present_fig.update_layout(legend=dict(
+        #     orientation="h",
+        #     yanchor="bottom",
+        #     y=1.02,
+        #     xanchor="right",
+        #     x=1
+        # ))
 
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
                                   y='Cost', 
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
-                                  title ='Cost of hiring')
+                                  title ='Cost of Hiring')
+        
+        cost_hiring_fig.update_traces(marker_color='#fda64a')
+
 
 
         if (df2 ['Public Holiday'] != '').any():
             filtered_df2 = df2[df2['Public Holiday'] != '']
-            table = dash_table.DataTable(
-                id='table',
-                columns=[
-                            {'name': 'Date', 'id': 'Date_and_day'},
-                            {'name': 'Public Holiday', 'id': 'Public Holiday'}
-                        ],
-                data=filtered_df2[['Date_and_day', 'Public Holiday']].to_dict('records'),
-                page_size=10,
-                style_cell={"background-color": "lightgrey", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left"},
-                style_header={"background-color": "dodgerblue", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
-            
+
+            ph_obj = filtered_df2[['Date_and_day','Public Holiday']].apply(lambda row: ': '.join(map(str, row)), axis=1)
+
+            ph_text=''
+            for string_row in ph_obj:
+                ph_text+=(string_row+'\n')
+            table = dbc.Card(
+                [dbc.CardBody(
+                        [
+                            html.H4(" Events:",className='bi bi-calendar-event'),
+                            html.P(ph_text,className='event-text'),
+                        ]
+                    ),
+                ],
+                style={'background-color': '#E8E8E8'},
+            )
+
+
             return staff_present_fig, table, cost_hiring_fig
         else:
             return staff_present_fig, html.Div(), cost_hiring_fig
