@@ -1,9 +1,13 @@
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc,Input, Output,callback
 import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
+import pandas as pd
 
+
+
+####################### DASH APP #############################
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
@@ -27,7 +31,7 @@ sidebar = html.Div([
                     html.Span('Daily', style={'margin-left': '5px'})]), href='/', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
-                    html.Span('Week', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
+                    html.Span('Weekly', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
                     html.I(className='bi bi-cloud'),
                     html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
@@ -51,6 +55,13 @@ app.layout = html.Div([
     # side bar
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
+
+# TO UPDATE WHEN APP HAS AUTHENTICATION
+# @app.callback(
+# 	Output('user-login','children'),
+# 	Input()
+# )
+
 
 if __name__ == '__main__':
 	app.run(debug=True)

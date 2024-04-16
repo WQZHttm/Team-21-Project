@@ -6,7 +6,7 @@ import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
 import dash_bootstrap_components as dbc
-
+from urllib.parse import quote
 
 dash.register_page(__name__, path='/employee_details', name="Employee Details👬")
 
@@ -24,69 +24,87 @@ current_date = datetime.now()
 start_of_current_week = current_date - timedelta(days=current_date.weekday())
 end_of_current_week = start_of_current_week + timedelta(days=6)
 
-layout = html.Div([
-    html.Br(),
-    dbc.Row([
-        dbc.Col(
-            html.Div([
-                html.Label('Select a date range:', style={'fontWeight': 'bold'}),
-                dcc.DatePickerRange(
-                    id='date-picker-range',
-                    start_date_placeholder_text='Start Date',
-                    end_date_placeholder_text='End Date',
-                    start_date=start_of_current_week.date(),
-                    end_date=end_of_current_week.date(),
-                    display_format='YYYY-MM-DD'
-                )
-            ])
-        ),
-        dbc.Col(
-            html.Div([
-                html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
-                dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name')
-            ]), width={"size": 8, "offset": 0}
-        )
-    ]),
-    html.Br(),
-    html.Br(),
-    html.Div([
-        dbc.Row([
-            dbc.Col(
-                html.Div([
-                    html.Div(id='employee-info-output')
-                ]), width={"size": 6, "offset": 0}
-            ),
-            dbc.Col(
-                html.Div([
-                    html.Img(id='employee-image', height=200),
-                    html.P(style={'textAlign': 'center', 'fontWeight': 'bold'})
-                ]), width={"size": 4, "offset": 0}
-            )
 
-    ])
-]),
-    html.Br(),
-    html.Div([
-        dbc.Row([
-            dbc.Col(
-                html.Div([
-                    html.Div(id= 'work-schedule-output')
-                ]), width={"size": 6, "offset": 0}
+
+# headers 
+header = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div([
+            html.Label('Select a date range:', style={'fontWeight': 'bold'}),
+            dcc.DatePickerRange(
+                id='date-picker-range',
+                start_date_placeholder_text='Start Date',
+                end_date_placeholder_text='End Date',
+                start_date=start_of_current_week.date(),
+                end_date=end_of_current_week.date(),
+                display_format='YYYY-MM-DD',
+                style = {'margin' : '10px'}
             ),
+            html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0})
+        ]), width={'size': 6}),
+        dbc.Col(html.Div([
+            html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
+            dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name', style = {'margin': '10px'})
+        ]), width={'size': 6})
+    ]),
+
+])
+
+
+#first row
+
+first_row = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div(id='employee-info-output',className='employee-table'), width=7),
+        dbc.Col(html.Div(id='employee-card'),width=5),
+        ])
+    ],className='ed-first')
+
+
+#second row 
+
+second_row = html.Div([
+    dbc.Row([
+        dbc.Col(html.Div(id= 'work-schedule-output'), width = {'size': 9})
         ])
     ])
-])
+
+
+
+layout = html.Div([
+    html.Br(),
+    header,
+    html.Br(),
+    first_row,
+    html.Br(),
+    html.Div(id='employee-schedule-heading'),
+    html.Br(),
+    second_row
+
+    ])
+
+
+@callback(
+    Output('employee-schedule-heading', 'children'),
+    [Input('employee-name-input', 'value')]
+)
+def update_employee_schedule_heading(employee_name):
+    if employee_name and employee_name in manpower_schedule['Employee_ID'].unique():
+        return html.B(f"{employee_name}'s Schedule", style={'font-size': '20px'})
+    else:
+        return ""
 
 # Callback to update employee information based on selected date range and employee ID
 @callback(
-    Output('employee-info-output', 'children'),
+    [Output('employee-info-output', 'children'),
+     Output('employee-card', 'children')],
     [Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
 )
-def update_employee_info(start_date, end_date, employee_id):
-    if start_date and end_date and employee_id:
-        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_id)]
+def update_employee_info(start_date, end_date, employee_name):
+    if start_date and end_date and employee_name:
+        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
         
         if not filtered_manpower_schedule.empty:
             # Extract employee information
@@ -108,20 +126,67 @@ def update_employee_info(start_date, end_date, employee_id):
                     {'Attribute': 'Total salary for the week ($) ', 'Value': f"${total_salary}"}
                 ],
                 style_table={'overflowY': 'auto'},
-                style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-                style_header={"background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+                style_header={"background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
                 style_data_conditional=[
                     {'if': {'column_id': 'Attribute'},'color': '#000000'},
-                    {'if': {'column_id': 'Value'},'color': '#1e90ff'}
+                    {'if': {'column_id': 'Value'},'color': 'black'}
                     ]
 
             )
             
-            return employee_info_table
+            # UPDATE EMPLOYEE CARD
+            employee_image_path = employee_image_mapping.get(employee_name)
+            if not employee_image_path:
+                employee_image_path=''
+            employee_card=dbc.Card(
+                        dbc.CardBody([
+                                        html.Img(src=employee_image_path,className='employee-image'),
+                                        html.H4(employee_name),
+                                        html.H6(role),
+                                        html.A(
+                                            " Message on WhatsApp",
+                                            href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
+                                            target="_blank",
+                                            style={
+                                                'display': 'inline-block',
+                                                'background-color': '#25d366',
+                                                'color': 'white',
+                                                'padding': '5px 10px',
+                                                'border-radius': '5px',
+                                                'text-decoration': 'none',
+                                            },
+                                            className='bi bi-whatsapp'
+                                        )
+
+                                    ],
+                                    className='employee-card')
+            )
+            if employee_name is None:
+                return None         
+
+
+
+
+
+
+            return employee_info_table, employee_card
         else:
-            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}) 
+            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None
     else:
-        return html.P('Please select a date range and enter an employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'})
+        return [], None
+
+
+    
+
+
+
+
+
+
+
+
+
 
 
 @callback(
@@ -130,9 +195,9 @@ def update_employee_info(start_date, end_date, employee_id):
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
     )
-def employee_schedule(start_date,end_date,employee_id):
-    if start_date and end_date and employee_id:
-        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_id)]
+def employee_schedule(start_date,end_date,employee_name):
+    if start_date and end_date and employee_name:
+        filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
 
         if not filtered_manpower_schedule.empty:
             grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
@@ -159,15 +224,15 @@ def employee_schedule(start_date,end_date,employee_id):
                 columns=work_schedule_table_columns,
                 data=work_schedule_table_data,
                 style_table={'overflowY': 'auto'},
-                style_cell={"background-color": "#EDF6F9", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+                style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
                 style_data_conditional=[
-                    {'if': {'column_id': 'Date'}, "background-color": "#83C5BE", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
-                    {'if' : {'column_id' : unique_dates }, 'color' : '#1e90ff', 'whiteSpace': 'pre-line', 'border' : 'solid 2px black'}
+                    {'if': {'column_id': 'Date'}, "background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+                    {'if' : {'column_id' : unique_dates }, 'color' : 'black', 'whiteSpace': 'pre-line', 'border' : 'solid 1px white'}
                 ],
                 style_header_conditional=[
                     
-                        {'if': {'column_id': 'Date'},'backgroundColor': '#83C5BE','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
-                        { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 2px black'}
+                        {'if': {'column_id': 'Date'},'backgroundColor': '#fda64a','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+                        { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 1px white'}
                 ]
             )
             return work_schedule_table
@@ -175,24 +240,4 @@ def employee_schedule(start_date,end_date,employee_id):
             return []
     else:
         return []
-
-@callback(
-    Output('employee-image', 'src'),
-    [Input('employee-name-input', 'value')]
-)
-def update_employee_image(employee_name):
-    # Assuming you have a dictionary mapping employee names to image paths
-    employee_image_path = employee_image_mapping.get(employee_name)
-    if employee_image_path:
-        return employee_image_path
-    else:
-        # Default image path if employee name is not found
-        return ''
-
-
-
-
-
-
-
 

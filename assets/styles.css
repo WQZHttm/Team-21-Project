@@ -58,7 +58,7 @@ h3, h4, h5, h6 {
   justify-content: space-around;
   padding: 5px;
   border-radius: 5px;
-  background-color: #7bdff2;
+  background-color: #E8E8E8;
   text-align: center;
 }
 
@@ -91,33 +91,31 @@ h3, h4, h5, h6 {
 
 /* LCP */
 
-.bordered-col{
-    border: 2px solid black;
-    padding: 40px;
-    margin-right: -2px;
-    background-color: #faf0e6;
-}
 
 .rc-slider-track {
   background-color: #6495ED;
 }
 
-.rc-slider-dot-active {
-  border-color: #6495ED;
-  border: solid 2px #6495ED;
-}
-
 .rc-slider-handle {
   background-color: #B0C4DE;
-  border: solid 1.5px black;
+  border: solid 2px black;
 }
 
+.rc-slider-dot-active {
+  border: solid 1px black;
+}
+
+
 .rc-slider-handle:hover {
-  border-color: #B0C4DE;
+  border: solid 2px black;
 }
 
 .rc-slider-handle-active:active {
-  border-color: #B0C4DE;
+  border: solid 2px black;
+}
+
+.rc-slider-handle:focus {
+  border: solid 2px black;
 }
 
 .rc-slider-rail {
@@ -125,42 +123,83 @@ h3, h4, h5, h6 {
 }
 
 .rc-slider-dot {
-  border-color: #B0C4DE;
-  border: solid 1px #B0C4DE;
+  border: solid 1px black;
 }
 
-.sliderdefault{
+
+.slidertitle{
     text-align:center;
-    font-size:15px;
-    border-bottom:2px inset black;
-    padding:25px;
+    text-decoration:underline;
+    padding: 5px;
 }
 
 .costtable{
-    background-color: #B0C4DE;
+    background-color: #FEB56A;
     align-items: center;
+
 }
 
-.costtabletitle{
-    text-align:center;
-    text-decoration:underline;
+.slidertext{
+    padding: 5px;
+    text-align: left;
+    margin-left: 15px;
 }
 
 .costtabletext{
-    font-size: 35px;
-    font-weight: 80
+    padding: 10px;
+    font-size: medium;
+    font-weight: 300;
 }
 
+.graph-title{
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 0;
+    text-align:center;
+}
 
+.graph-container{
+    margin-top: -5px;
+
+}
 /* Day page */
 
 
 .histogram-container {
     margin-top: 10px;
     padding: 30px;
-    background-color:   #b0c4de;
+    background-color:   #F4F4F4;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 2px #e9ecef;
     width: 100%; /* Adjust width as needed */
     max-width: 800px; /* Set a maximum width for responsiveness */
+}
+
+/* Employee Details page */
+.employee-card{
+  height: auto;
+}
+.employee-table{
+  /* height: auto; */
+  min-height: 100%;
+  /* display: inline-block; */
+}
+.employee-image{
+    height: 100px;
+    width: 100px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.ed-first{
+  display: flex;
+  align-items: stretch;
+  width: 90%;
+  display: inline-block;
+}
+
+
+.DateRangePicker.DateRangePicker_1 .DateInput.DateInput_1:first-child .DateInput_input.DateInput_input_1 {
+    /* Your custom styling for the start date input box */
+    background-color: #F9AF85
+
 }
