@@ -50,7 +50,7 @@ headers_week=html.Div(
                         end_date=end_date_default,
                         display_format='YYYY-MM-DD',
                         className='date-picker'),
-                    html.Div("(Default Start Day: Monday)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
+                    html.Div("(Select Monday as the start date in the highlighted box)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
                     html.Br(),
                     html.H1(children='Overview for the Week'),
 

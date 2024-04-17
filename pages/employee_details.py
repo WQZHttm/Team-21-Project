@@ -42,7 +42,7 @@ header = html.Div([
                 display_format='YYYY-MM-DD',
                 style = {'margin' : '10px'}
             ),
-            html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0})
+            html.Div("(Select Monday as the start date in the highlighted box)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0})
         ]), width={'size': 6}),
         dbc.Col(html.Div([
                 html.Span([html.I(className='bi bi-person-badge'),
@@ -54,14 +54,17 @@ header = html.Div([
 ])
 
 
+
+
 #first row
 
 first_row = html.Div([
     dbc.Row([
         dbc.Col(html.Div(id='employee-info-output',className='employee-table'), width=7),
-        dbc.Col(html.Div(id='employee-card'),width=5),
-        ])
-    ],className='ed-first')
+        dbc.Col([html.Div(id='employee-card'),html.Div(id='whatsapp')], width = 5)
+        
+        
+    ])],className='ed-first')
 
 
 #second row 
@@ -71,19 +74,6 @@ second_row = html.Div([
         dbc.Col(html.Div(id= 'work-schedule-output'), width = {'size': 9})
         ])
     ])
-
-whatsapp_button=html.A(" Message on WhatsApp",
-                        href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
-                        target="_blank",
-                        style={
-                            'display': 'inline-block',
-                            'background-color': '#547047',
-                            'color': 'white',
-                            'padding': '5px 10px',
-                            'border-radius': '5px',
-                            'text-decoration': 'none',
-                        },
-                        className='bi bi-whatsapp')
 
 layout = html.Div([
     html.Br(),
@@ -112,7 +102,8 @@ def update_employee_schedule_heading(employee_name):
 # Callback to update employee information based on selected date range and employee ID
 @callback(
     [Output('employee-info-output', 'children'),
-     Output('employee-card', 'children')],
+     Output('employee-card', 'children'),
+     Output('whatsapp','children')],
     [Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
@@ -170,17 +161,28 @@ def update_employee_info(start_date, end_date, employee_name):
                                         # html.H6(role),
                                         html.Br(),
                                         html.Br(),
-                                        whatsapp_button,
+                                        
                                     ],
                                     className='employee-card')
-
+            whatsapp_button=html.A("WhatsApp Message",
+                        href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
+                        target="_blank",
+                        style={
+                            'display': 'inline-block',
+                            'background-color': '#547047',
+                            'color': 'white',
+                            'padding': '5px 10px',
+                            'border-radius': '5px',
+                            'text-decoration': 'none',
+                        },
+                        className='bi bi-whatsapp')
             if employee_name is None:
                 return None         
-            return employee_info_table, employee_card
+            return employee_info_table, employee_card, whatsapp_button
         else:
             return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None
     else:
-        return [], None
+        return [], None, None
 
 
     

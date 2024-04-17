@@ -214,7 +214,7 @@ h3, h4, h5, h6 {
   display: flex;
 }
 /* Employee Details page */
-.employee-card{
+/* .employee-card{
   height: auto;
   background-color: white;
   align-items: center;
@@ -224,7 +224,7 @@ h3, h4, h5, h6 {
   text-align: center;
   margin-left:0px;
 
-}
+} */
 .employee-table{
   /* height: auto; */
   min-height: 100%;
