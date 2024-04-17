@@ -44,12 +44,12 @@ h3, h4, h5, h6 {
   }
 
   .sidebar .nav-link {
-    color: #859e7b;
+    color: #547047;
 }
 
 .sidebar .nav-link.active {
   color: #fff;
-  background-color: #b6d7a8;
+  background-color: #547047;
 ;
 }
 /* MAIN SECTION */
@@ -71,7 +71,7 @@ h3, h4, h5, h6 {
 }
 
 .standard-card {
-  background-color: #b6d7a8;
+  background-color: #e7e7e7;
   width: 300px;
   height: 173px;
 }
@@ -247,5 +247,5 @@ h3, h4, h5, h6 {
 
 
 .DateRangePicker.DateRangePicker_1 .DateInput.DateInput_1:first-child .DateInput_input.DateInput_input_1 {
-    background-color: #c6e9b7;
+    background-color: #cae8f5;
 }

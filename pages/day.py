@@ -60,7 +60,7 @@ layout = html.Div([
                  ],className='day-middle-row'),
         dbc.Row([
             dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'),width='auto')
-                ],justify="center"),
+                ],justify="left"),
 
         ], className='day-display'),
 

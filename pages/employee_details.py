@@ -77,7 +77,7 @@ whatsapp_button=html.A(" Message on WhatsApp",
                         target="_blank",
                         style={
                             'display': 'inline-block',
-                            'background-color': '#25d366',
+                            'background-color': '#547047',
                             'color': 'white',
                             'padding': '5px 10px',
                             'border-radius': '5px',
