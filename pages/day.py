@@ -73,9 +73,9 @@ layout = html.Div([
 def update_event(date):
     df2=customer_prediction.loc[customer_prediction['Date']==date]
     if not isinstance(df2['Public Holiday'].item(),str):
-        return "Today's Event: NA"
+        return "Event of the Day: NA"
     else:
-        return f"Today's Event: {df2['Public Holiday'].item()}"
+        return f"Event of the Day: {df2['Public Holiday'].item()}"
 
 
 
