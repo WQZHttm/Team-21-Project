@@ -104,9 +104,13 @@ def produce_output(date,shift):
                     {'name': 'Role', 'id': 'Role'},
                     {'name': 'Employees Working', 'id': 'Employee_ID'}
                 ],
-        
+
         data=roles_df[['Role', 'Employee_ID']].to_dict('records'),
         page_size=10,
+        style_data_conditional=[{
+            'if':{'column_id': 'Role','filter_query': '{Role} eq "chef"'},
+            'text':'Chef',
+        }],
         style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
         style_header={"background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"}),
 
@@ -141,6 +145,7 @@ def produce_output(date,shift):
 
     histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False, line_color = 'black')
     histogram_fig.update_traces(marker_color='#b6d7a8')
+    histogram_fig.add_hline(y=50,line_color='orange',annotation_text='Busy',annotation_position="right")
     histogram_container = dcc.Graph(figure=histogram_fig)
 
     return table,count, histogram_container

@@ -165,25 +165,17 @@ def update_employee_info(start_date, end_date, employee_name):
 
             #                         ],
             #                         className='employee-card')
-            employee_card=html.Div([
-                                        html.Img(src=employee_image_path,className='employee-image'),
+            employee_card=html.Div([html.Img(src=employee_image_path,className='employee-image'),
                                         # html.H4(employee_name),
                                         # html.H6(role),
                                         html.Br(),
                                         html.Br(),
                                         whatsapp_button,
-
                                     ],
                                     className='employee-card')
 
             if employee_name is None:
                 return None         
-
-
-
-
-
-
             return employee_info_table, employee_card
         else:
             return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None

@@ -9,7 +9,7 @@ import pandas as pd
 
 ####################### DASH APP #############################
 
-external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
+external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
 # auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
@@ -18,8 +18,7 @@ sidebar = html.Div([
     html.Br(),
     html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
     html.Br(),
-    html.Br(), 
-    html.Br(),
+
     html.Br(), 
     html.Br(),
     html.Div([html.Span([

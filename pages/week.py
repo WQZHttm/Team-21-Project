@@ -149,7 +149,7 @@ def update_graphs(start_date, end_date):
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
                                   title ='Cost of Hiring')
         
-        cost_hiring_fig.update_traces(marker_color='#93c47d')
+        cost_hiring_fig.update_traces(marker_color='#fda64a')
 
 
 
@@ -169,7 +169,7 @@ def update_graphs(start_date, end_date):
                         ]
                     ),
                 ],
-                style={'background-color': '#E8E8E8'},
+                style={'background-color': '#b6d7a8'},
             )
 
 
