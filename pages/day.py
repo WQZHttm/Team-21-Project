@@ -6,7 +6,7 @@ import plotly.express as px
 import datetime
 import numpy as np
 import dash_bootstrap_components as dbc
-
+from main import fetch_data
 
 
 dash.register_page(__name__, path='/', name="Day 📋")
@@ -16,7 +16,7 @@ dash.register_page(__name__, path='/', name="Day 📋")
 current_date = datetime.datetime.today().date()
 ####################### LOAD DATASET #############################
 manpower_schedule = pd.read_csv('output/final_schedule.csv')
-customer_prediction = pd.read_csv('output/predictions.csv')
+customer_prediction = fetch_data('prediction')
 customer_prediction['Date'] = pd.to_datetime(customer_prediction['Date'], format='%d/%m/%Y')
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
 #tabulating the cost

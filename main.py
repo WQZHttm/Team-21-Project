@@ -4,6 +4,31 @@ import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
 import pandas as pd
+import mysql.connector
+import yaml
+
+####################### SQL INTEGRATION #############################
+with open("docker-compose.yml", "r") as file:
+    config =yaml.safe_load(file)['services']['db']['environment']
+    
+
+def fetch_data(table):
+
+    cnx = mysql.connector.connect(
+        host='db',
+        user=config['MYSQL_USER'],
+        password=config['MYSQL_PASSWORD'],
+        database=config['MYSQL_DATABASE']
+    )
+    cursor = cnx.cursor()
+    print('connected', cnx.is_connected())
+    cursor.execute(f"SELECT * FROM {table}")
+    result = cursor.fetchall()
+    cursor.close()
+    cnx.close()
+    return pd.DataFrame(result)
+
+
 
 
 
