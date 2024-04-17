@@ -38,20 +38,21 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 
 ####################### PAGE LAYOUT #############################
 
-headers_week=html.Div([
-        html.Label(children = html.B('Select a date range: ')),
-                dcc.DatePickerRange(
-                    id='date-picker-range',
-                    min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
-                    max_date_allowed=datetime(2024, 12, 31), 
-                    start_date=start_date_default,
-                    end_date=end_date_default,
-                    display_format='YYYY-MM-DD',
-                    className='date-picker'),
-        html.Div("(Default Start Day: Monday)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
-
-                html.Br(),
-                html.H1(children='Overview for the Week'),
+headers_week=html.Div(
+        children = [html.Span([
+                        html.I(className='bi bi-calendar4-range'),
+                        html.B('Select a date range: ', style={'margin-left': '5px'})]),
+                    dcc.DatePickerRange(
+                        id='date-picker-range',
+                        min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
+                        max_date_allowed=datetime(2024, 12, 31), 
+                        start_date=start_date_default,
+                        end_date=end_date_default,
+                        display_format='YYYY-MM-DD',
+                        className='date-picker'),
+                    html.Div("(Default Start Day: Monday)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0}),
+                    html.Br(),
+                    html.H1(children='Overview for the Week'),
 
 ])
 
@@ -134,13 +135,13 @@ def update_graphs(start_date, end_date):
                                 color_discrete_map={'chef': '#fda64a', 'dishwasher': '#93c47d', 'service': '#93d1e0'},  # Map roles to colors
 ) 
         staff_present_fig.update_traces(textangle = 0)
-        # staff_present_fig.update_layout(legend=dict(
-        #     orientation="h",
-        #     yanchor="bottom",
-        #     y=1.02,
-        #     xanchor="right",
-        #     x=1
-        # ))
+        staff_present_fig.update_layout(legend=dict(
+            # orientation="h",
+            # yanchor="bottom",
+            # y=1,
+            xanchor="right",
+            x=1.5
+        ))
 
         cost_hiring_fig = px.bar(data_frame=cost_group, 
                                   x='Date_and_day',
@@ -148,14 +149,14 @@ def update_graphs(start_date, end_date):
                                   labels = {'Date_and_day': 'Days of the Week', 'Cost' : 'Cost($)'} ,
                                   title ='Cost of Hiring')
         
-        cost_hiring_fig.update_traces(marker_color='#fda64a')
+        cost_hiring_fig.update_traces(marker_color='#93c47d')
 
 
 
         if (df2 ['Public Holiday'] != '').any():
             filtered_df2 = df2[df2['Public Holiday'] != '']
 
-            ph_obj = filtered_df2[['Date_and_day','Public Holiday']].apply(lambda row: ': '.join(map(str, row)), axis=1)
+            ph_obj = filtered_df2[['Date_and_day','Public Holiday']].apply(lambda row: ':\n'.join(map(str, row)), axis=1)
 
             ph_text=''
             for string_row in ph_obj:
@@ -163,7 +164,7 @@ def update_graphs(start_date, end_date):
             table = dbc.Card(
                 [dbc.CardBody(
                         [
-                            html.H4(" Events:",className='bi bi-calendar-event'),
+                            html.H4(" Events",className='bi bi-calendar-event'),
                             html.P(ph_text,className='event-text'),
                         ]
                     ),

@@ -16,10 +16,12 @@ app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=
 
 sidebar = html.Div([
     html.Br(),
-    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left','border-bottom': '2px solid grey'}),
+    html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
     html.Br(),
     html.Br(), 
-    html.Hr(),
+    html.Br(),
+    html.Br(), 
+    html.Br(),
     html.Div([html.Span([
                     html.I(className='bi bi-person-circle'),
                     html.Span('Hao Xiang', id='user-login',style={'margin-left': '5px'})])],
@@ -30,13 +32,13 @@ sidebar = html.Div([
                     html.I(className='bi bi-cloud'),
                     html.Span('Daily', style={'margin-left': '5px'})]), href='/', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-cloud'),
+                    html.I(className='bi bi-collection'),
                     html.Span('Weekly', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-cloud'),
+                    html.I(className='bi bi-card-list'),
                     html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-cloud'),
+                    html.I(className='bi bi-percent'),
                     html.Span('Labour Cost Percentage', style={'margin-left': '5px'})]), href='/lcp', active='exact',className='sidebar-list-item'),
     
         ],

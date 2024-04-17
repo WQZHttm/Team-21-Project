@@ -30,7 +30,9 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 layout = html.Div([
     html.Br(),
     #Day dropdown
-    html.Label(children = html.B('Select a date:  ')),
+    
+    html.Span([html.I(className='bi bi-calendar4-event'),
+                        html.B('Select a date: ', style={'margin-left': '5px'})]),
     dcc.DatePickerSingle(id='date-picker',
         min_date_allowed=datetime.datetime.today(), # CHECK
         max_date_allowed=datetime.datetime(2024, 12, 31),
@@ -55,10 +57,10 @@ layout = html.Div([
     html.Div([
         dbc.Row([dbc.Col(html.Div(id='employee-table'),width=8),
                  dbc.Col(html.Div(id="count-table")),
-                 ]),
+                 ],className='day-middle-row'),
         dbc.Row([
-            dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'), width = 8)
-                ]),
+            dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'),width='auto')
+                ],justify="center"),
 
         ], className='day-display'),
 
@@ -117,7 +119,7 @@ def produce_output(date,shift):
                 ]
             ),
         ],
-        class_name='card',
+        class_name='standard-card',
     )
     df3 = customer_prediction.loc[customer_prediction['Date']== date]
     print(df3)

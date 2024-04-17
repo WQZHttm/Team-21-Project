@@ -30,7 +30,9 @@ end_of_current_week = start_of_current_week + timedelta(days=6)
 header = html.Div([
     dbc.Row([
         dbc.Col(html.Div([
-            html.Label('Select a date range:', style={'fontWeight': 'bold'}),
+            html.Span([
+                        html.I(className='bi bi-calendar4-range'),
+                        html.B('Select a date range: ', style={'margin-left': '5px'})]),
             dcc.DatePickerRange(
                 id='date-picker-range',
                 start_date_placeholder_text='Start Date',
@@ -43,7 +45,8 @@ header = html.Div([
             html.Div("(Select Monday as the start date)", style={'color': 'black', 'fontSize': 12, 'padding': 0, 'margin': 0})
         ]), width={'size': 6}),
         dbc.Col(html.Div([
-            html.Label('Enter an employee name:', style={'fontWeight': 'bold'}),
+                html.Span([html.I(className='bi bi-person-badge'),
+                        html.B('Enter an employee name:  ', style={'margin-left': '5px'})]),
             dcc.Input(id='employee-name-input', type='text', placeholder='Enter Employee Name', style = {'margin': '10px'})
         ]), width={'size': 6})
     ]),
@@ -69,13 +72,25 @@ second_row = html.Div([
         ])
     ])
 
-
+whatsapp_button=html.A(" Message on WhatsApp",
+                        href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
+                        target="_blank",
+                        style={
+                            'display': 'inline-block',
+                            'background-color': '#25d366',
+                            'color': 'white',
+                            'padding': '5px 10px',
+                            'border-radius': '5px',
+                            'text-decoration': 'none',
+                        },
+                        className='bi bi-whatsapp')
 
 layout = html.Div([
     html.Br(),
     header,
     html.Br(),
     first_row,
+    html.Br(),
     html.Br(),
     html.Div(id='employee-schedule-heading'),
     html.Br(),
@@ -139,29 +154,28 @@ def update_employee_info(start_date, end_date, employee_name):
             employee_image_path = employee_image_mapping.get(employee_name)
             if not employee_image_path:
                 employee_image_path=''
-            employee_card=dbc.Card(
-                        dbc.CardBody([
+            # employee_card=dbc.Card(
+            #             dbc.CardBody([
+            #                             html.Img(src=employee_image_path,className='employee-image'),
+            #                             # html.H4(employee_name),
+            #                             # html.H6(role),
+            #                             html.Br(),
+            #                             html.Br(),
+            #                             whatsapp_button,
+
+            #                         ],
+            #                         className='employee-card')
+            employee_card=html.Div([
                                         html.Img(src=employee_image_path,className='employee-image'),
-                                        html.H4(employee_name),
-                                        html.H6(role),
-                                        html.A(
-                                            " Message on WhatsApp",
-                                            href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
-                                            target="_blank",
-                                            style={
-                                                'display': 'inline-block',
-                                                'background-color': '#25d366',
-                                                'color': 'white',
-                                                'padding': '5px 10px',
-                                                'border-radius': '5px',
-                                                'text-decoration': 'none',
-                                            },
-                                            className='bi bi-whatsapp'
-                                        )
+                                        # html.H4(employee_name),
+                                        # html.H6(role),
+                                        html.Br(),
+                                        html.Br(),
+                                        whatsapp_button,
 
                                     ],
                                     className='employee-card')
-            )
+
             if employee_name is None:
                 return None         
 
