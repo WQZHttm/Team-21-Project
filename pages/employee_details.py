@@ -145,17 +145,6 @@ def update_employee_info(start_date, end_date, employee_name):
             employee_image_path = employee_image_mapping.get(employee_name)
             if not employee_image_path:
                 employee_image_path=''
-            # employee_card=dbc.Card(
-            #             dbc.CardBody([
-            #                             html.Img(src=employee_image_path,className='employee-image'),
-            #                             # html.H4(employee_name),
-            #                             # html.H6(role),
-            #                             html.Br(),
-            #                             html.Br(),
-            #                             whatsapp_button,
-
-            #                         ],
-            #                         className='employee-card')
             employee_card=html.Div([html.Img(src=employee_image_path,className='employee-image'),
                                         # html.H4(employee_name),
                                         # html.H6(role),
@@ -180,7 +169,7 @@ def update_employee_info(start_date, end_date, employee_name):
                 return None         
             return employee_info_table, employee_card, whatsapp_button
         else:
-            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None
+            return html.P('No data available for the selected date range and employee name.', style={'fontWeight': 'bold', 'fontSize': '20px'}), None, None
     else:
         return [], None, None
 
@@ -208,41 +197,78 @@ def employee_schedule(start_date,end_date,employee_name):
         filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
 
         if not filtered_manpower_schedule.empty:
-            grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
+            # # grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
             
-            # Get unique dates
-            unique_dates = grouped_schedule['Date'].unique()
 
-            # Create DataTable for work schedule
-            work_schedule_table_columns = [{'name': 'Date', 'id': 'Date'}]  # Initialize columns with 'Date'
-            work_schedule_table_data = [{'Date': 'Shift'}]  # Initialize data with 'Shift' for the first row
+            # # Get unique dates
+            # unique_dates = grouped_schedule['Date'].unique()
+
+            # # Create DataTable for work schedule
+            # work_schedule_table_columns = [{'name': 'Date', 'id': 'Date'}]  # Initialize columns with 'Date'
+            # work_schedule_table_data = [{'Date': 'Shift'}]  # Initialize data with 'Shift' for the first row
 
 
-            for date in unique_dates:
-                # Add a new column for each unique date
-                work_schedule_table_columns.append({'name': date, 'id': date})
+            # for date in unique_dates:
+            #     # Add a new column for each unique date
+            #     work_schedule_table_columns.append({'name': date, 'id': date})
                 
-                # Get the shifts for the current date
-                shifts_for_date = grouped_schedule[grouped_schedule['Date'] == date]['Shift'].iloc[0]
-                work_schedule_table_data[0][date] = shifts_for_date
+            #     # Get the shifts for the current date
+            #     shifts_for_date = grouped_schedule[grouped_schedule['Date'] == date]['Shift'].iloc[0]
+            #     work_schedule_table_data[0][date] = shifts_for_date
 
 
-            work_schedule_table = dash_table.DataTable(
-                id='schedule',
-                columns=work_schedule_table_columns,
-                data=work_schedule_table_data,
-                style_table={'overflowY': 'auto'},
-                style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-                style_data_conditional=[
-                    {'if': {'column_id': 'Date'}, "background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
-                    {'if' : {'column_id' : unique_dates }, 'color' : 'black', 'whiteSpace': 'pre-line', 'border' : 'solid 1px white'}
-                ],
-                style_header_conditional=[
+            # work_schedule_table = dash_table.DataTable(
+            #     id='schedule',
+            #     columns=work_schedule_table_columns,
+            #     data=work_schedule_table_data,
+            #     style_table={'overflowY': 'auto'},
+            #     style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+            #     style_data_conditional=[
+            #         {'if': {'column_id': 'Date'}, "background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
+            #         {'if' : {'column_id' : unique_dates }, 'color' : 'black', 'whiteSpace': 'pre-line', 'border' : 'solid 1px white'}
+            #     ],
+            #     style_header_conditional=[
                     
-                        {'if': {'column_id': 'Date'},'backgroundColor': '#fda64a','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
-                        { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 1px white'}
-                ]
-            )
+            #             {'if': {'column_id': 'Date'},'backgroundColor': '#fda64a','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+            #             { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 1px white'}
+            #     ]
+            # )
+
+            filtered_manpower_schedule['☀️ Morning (10am-4.30pm)'] = filtered_manpower_schedule.apply(lambda x: x['Employee_ID'] if x['Shift'] == '10am-4.30pm' else '', axis=1)
+            filtered_manpower_schedule['🌙 Night-Chinese (7pm-10pm)'] = filtered_manpower_schedule.apply(lambda x: x['Employee_ID'] if x['Shift'] == '7pm-10pm' else '', axis=1)
+            filtered_manpower_schedule['🌕 Night-Indian (8pm-10pm)'] = filtered_manpower_schedule.apply(lambda x: x['Employee_ID'] if x['Shift'] == '8pm-10pm' else '', axis=1)
+
+            # Aggregating the data to remove duplicates
+            filtered_manpower_schedule = filtered_manpower_schedule.groupby('Date').agg({
+                '☀️ Morning (10am-4.30pm)': ' '.join,
+                '🌙 Night-Chinese (7pm-10pm)': ' '.join,
+                '🌕 Night-Indian (8pm-10pm)': ' '.join
+            }).reset_index()
+            
+            # Convert non-empty employee IDs to ticks and store them in new columns
+            for col in ['☀️ Morning (10am-4.30pm)', '🌙 Night-Chinese (7pm-10pm)', '🌕 Night-Indian (8pm-10pm)']:
+                filtered_manpower_schedule[col] = filtered_manpower_schedule[col].apply(lambda x: '✓' if x.strip() != '' else '')
+            
+            work_schedule_table=dash_table.DataTable(
+                    id='table',
+                    columns=[{"name": i, "id": i} for i in filtered_manpower_schedule.columns],
+                    data=filtered_manpower_schedule.to_dict('records'),
+                    style_cell={"background-color": "#b6d7a8", "border": "solid 1px black", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
+                    style_header={'backgroundColor': '#547047','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
+                    style_data_conditional=[
+                        {
+                            'if': {'column_id': col},
+                            'backgroundColor': '#b6d7a8',
+                            # 'color': 'white'
+                        } for col in filtered_manpower_schedule.columns[1:] if filtered_manpower_schedule[col].str.contains('✓').any()
+                    ] + [
+                        {
+                            'if': {'column_id': col, 'filter_query': '{{{0}}} is blank'.format(col)},
+                            'backgroundColor': 'white',
+                            'color': 'black'
+                        } for col in filtered_manpower_schedule.columns[1:]
+                    ],
+                )            
             return work_schedule_table
         else:
             return []
