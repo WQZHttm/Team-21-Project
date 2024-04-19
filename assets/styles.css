@@ -24,7 +24,7 @@ h3, h4, h5, h6 {
 /* SIDEBAR */
 .sidebar {
     grid-area: sidebar;
-    height: 100vh;
+    height: 200vh;
     justify-content: space-between;
     background-color: #faf6f6da;
 }
@@ -39,11 +39,19 @@ h3, h4, h5, h6 {
     margin-bottom: 30px;
     font-weight: 500;
     font-size: 200;
-    margin-left: 40px;
+    margin-left: 15px;
     /* border-bottom: 2px solid grey; */
   }
 
+  .sidebar .nav-link {
+    color: #547047;
+}
 
+.sidebar .nav-link.active {
+  color: #fff;
+  background-color: #547047;
+;
+}
 /* MAIN SECTION */
 .date-picker{
   margin:10px;
@@ -54,20 +62,27 @@ h3, h4, h5, h6 {
 }
 
 .card {
-  display: flex;
+  /* display: flex; */
   justify-content: space-around;
   padding: 5px;
   border-radius: 5px;
-  background-color: #E8E8E8;
   text-align: center;
+
+}
+
+.standard-card {
+  background-color: #e7e7e7;
+  width: 300px;
+  height: 173px;
 }
 
 .card-title{
     text-align: center;
+    margin-bottom: 0px;
 }
 .card-text{
     text-align: center;
-    font-size: 70px;
+    font-size: 60px;
     font-weight: 700;
 }
 
@@ -75,7 +90,9 @@ h3, h4, h5, h6 {
     font-weight: 500;
     font-size: medium;
 }
-
+.shift-tab--selected {
+  border-top: 2px solid brown;
+}
 
 /* WEEK */
 
@@ -84,13 +101,23 @@ h3, h4, h5, h6 {
 .chart{
   border: 2px solid lightgrey;
   justify-content: space-around;
-  padding: 25px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
   margin: 5px;
 }
 
 /* LCP */
 
+.lcp-card {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px;
+  border-radius: 10px;
+  border: 2px solid lightgrey;
+  background-color: white;
+  text-align: center;
+
+}
 
 .rc-slider-track {
   background-color: #6495ED;
@@ -119,7 +146,7 @@ h3, h4, h5, h6 {
 }
 
 .rc-slider-rail {
-  background-color: #C5EAF7;
+  background-color: #9BD8F1;
 }
 
 .rc-slider-dot {
@@ -136,7 +163,10 @@ h3, h4, h5, h6 {
 .costtable{
     background-color: #FEB56A;
     align-items: center;
-
+    height: 330px;
+    display:flex;
+    justify-content:center;
+    padding-top: 20px;
 }
 
 .slidertext{
@@ -146,9 +176,9 @@ h3, h4, h5, h6 {
 }
 
 .costtabletext{
-    padding: 10px;
+    padding-top: 16px;
     font-size: medium;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .graph-title{
@@ -158,41 +188,64 @@ h3, h4, h5, h6 {
     text-align:center;
 }
 
-.graph-container{
-    margin-top: -5px;
 
+.lcp-chart{
+  border-radius: 10px;
+  margin: 5px 10px;
+  position: absolute;
+  padding: 25px;
 }
 /* Day page */
 
 
 .histogram-container {
-    margin-top: 10px;
+    margin-top: 50px;
     padding: 30px;
     background-color:   #F4F4F4;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 2px #e9ecef;
     width: 100%; /* Adjust width as needed */
     max-width: 800px; /* Set a maximum width for responsiveness */
+    align-items: center;
 }
 
-/* Employee Details page */
-.employee-card{
-  height: auto;
+.day-middle-row{
+  justify-content: space-between;
+  display: flex;
 }
+/* Employee Details page */
+/* .employee-card{
+  height: auto;
+  background-color: white;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  margin-left:0px;
+
+} */
 .employee-table{
   /* height: auto; */
   min-height: 100%;
+  margin-right: 0;
   /* display: inline-block; */
 }
 .employee-image{
-    height: 100px;
-    width: 100px;
-    border-radius: 10%;
+    height: 180px;
+    width: 180px;
+    /* border-radius: 10%; */
     object-fit: cover;
 }
 .ed-first{
-  display: flex;
+  /* display: flex; */
   align-items: stretch;
   width: 90%;
   display: inline-block;
+
+}
+
+
+.DateRangePicker.DateRangePicker_1 .DateInput.DateInput_1:first-child .DateInput_input.DateInput_input_1 {
+    background-color: #cae8f5;
 }

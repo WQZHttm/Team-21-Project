@@ -17,10 +17,10 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 """# Load dataset"""
-
-df = pd.read_csv('data_with_hour.csv')
-data2024 = pd.read_csv('test (2).csv')
-
+'''
+df = pd.read_csv('../input/data_with_hour.csv')
+data2024 = pd.read_csv('../input/test.csv')
+'''
 def pub_hol_df(data):
   public_holidays_df = data[data['Public Holiday'].notna()]
   public_holidays_df['Date'] = pd.to_datetime(public_holidays_df['Date'], format='%d/%m/%Y')
@@ -176,5 +176,3 @@ def DecisionTree(data,prediction_data):
                              '8pm-9pm',
                              '9pm-10pm']]
   return(predictions)
-
-DecisionTree(df,data2024)

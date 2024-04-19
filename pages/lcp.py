@@ -128,8 +128,8 @@ def calculate_total(selectedchef1, selectedservice1, selecteddishwasher1, select
 
 layout = html.Div([
     html.Br(),
-    html.Label(html.B('Select a date: ')),
-    dcc.DatePickerSingle(
+    html.Span([html.I(className='bi bi-calendar4-event'),
+                        html.B('Select a date: ', style={'margin-left': '5px'})]),    dcc.DatePickerSingle(
         id = 'date-picker',
         min_date_allowed = datetime.today(),
         max_date_allowed = datetime(2024, 12, 31),
@@ -170,7 +170,7 @@ layout = html.Div([
                                id = 'slider-dishwasher1', className='slider'),
                     html.Br(),
                     html.Div(id = 'selected-cost-output1', className='costtabletext')
-                ], className = 'card')
+                ], className = 'lcp-card')
             ], width = 4),
             dbc.Col([
                 dbc.Card([
@@ -201,7 +201,7 @@ layout = html.Div([
                                id = 'slider-dishwasher2', className='slider'),
                     html.Br(),
                     html.Div(id = 'selected-cost-output2', className='costtabletext')
-                ], className = 'card')
+                ], className = 'lcp-card')
             ], width = 4),
             dbc.Col([
                 dbc.Card([
@@ -232,7 +232,7 @@ layout = html.Div([
                                id = 'slider-dishwasher3', className='slider'),
                     html.Br(),
                     html.Div(id = 'selected-cost-output3', className='costtabletext')
-                ], className = 'card')
+                ], className = 'lcp-card')
             ], width = 4),
         ]),
         html.Br(),
@@ -242,19 +242,21 @@ layout = html.Div([
                 dbc.Card([
                     dbc.CardBody([
                         html.H5("Labour Cost for the day: ", className= "slidertitle"),
-                        html.Br(),
                         html.Div(id = 'baseline-cost', className='costtabletext'),
+                        html.H6("( Manual Scheduling without Optimisation )", style= {"font-weight": "250"}),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.Div(id = 'selected-total', className='costtabletext')
+                        html.H6("( Suggested Scheduling using Optimisation )", style= {"font-weight": "250"}),
+                        html.Div(id = 'selected-total', className='costtabletext'),
+                        html.H6("( Custom Scheduling based on selected sliders )", style= {"font-weight": "250"}),
                     ])
                 ], className = 'costtable',
                 ),
-            ], width = 3),
+            ], width = 4),
             dbc.Col([
-                html.Div(id = 'graph')
-            ], width = 6),
+                html.Div(id = 'graph',className='lcp-chart')
+            ]),
 
-        ])
+        ], style={'position':'relative'})
 
 
     ]),
@@ -285,7 +287,7 @@ def update_defaults(selected_date):
         defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2, \
         defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3, total_cost, baselinecost = calculate_defaults(selected_date)
     return (f"Optimised Cost: ${total_cost}",
-            f"Total Baseline Cost: ${baselinecost}",
+            f"Baseline Cost: ${baselinecost}",
             defaultchef1, defaultservice1, defaultdishwasher1, defaultpt1,
             defaultchef2, defaultservice2, defaultdishwasher2, defaultpt2,
             defaultchef3, defaultservice3, defaultdishwasher3, defaultpt3,
@@ -369,10 +371,10 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
 
     graphdata = [
         go.Bar(
-            y=['Baseline', 'Optimised', 'Selected'],
-            x=[baselinecost,total_cost, selectedtotal],
-            text=[f'${baselinecost}', f'${total_cost}', f'${selectedtotal}'],
-            marker=dict(color=['#6495ED', '#FF7F50','#32CD32']),
+            y=['Selected', 'Optimised', 'Baseline'],
+            x=[selectedtotal,total_cost, baselinecost],
+            text=[f'${selectedtotal}', f'${total_cost}', f'${baselinecost}'],
+            marker=dict(color=['#fda64a','#93c47d','#93d1e0']),
             orientation='h'
         )
     ]
@@ -381,11 +383,14 @@ def update_selected_total(selectedchef1, selectedservice1, selecteddishwasher1, 
         margin=dict(l=50, r=50, t=40, b=60),
         width= 800,
         height = 380
+        
     )
+    
+    
+    # px.bar
+    
+    
     figure = go.Figure(data=graphdata, layout=graphlayout)
     graph = dcc.Graph(figure = figure)
 
-    return f"Total Selected Labour Cost: ${selectedtotal}",  graph
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return f"Selected Labour Cost: ${selectedtotal}",  graph
