@@ -7,13 +7,13 @@ from dash import dash_table
 from datetime import datetime, timedelta, date
 import dash_bootstrap_components as dbc
 from urllib.parse import quote
+from shared_data import manpower_schedule
 
 dash.register_page(__name__, path='/employee_details', name="Employee Details👬")
 
 #Load data from CSV
 
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-
+manpower_schedule = manpower_schedule
 # define employee image mapping 
 
 employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg' }
