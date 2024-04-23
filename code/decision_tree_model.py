@@ -24,7 +24,7 @@ app.route('/predict', methods=['GET'])
 def predict():
     def DecisionTree(data,prediction_data):
       def pub_hol_df(data):
-        public_holidays_df = data[data['Public Holiday'].notna()]
+        public_holidays_df = data[data['Public_Holiday'].notna()]
         public_holidays_df['Date'] = pd.to_datetime(public_holidays_df['Date'], format='%d/%m/%Y')
         public_holidays_df['Date'] = public_holidays_df['Date'].dt.strftime('%d/%m/%Y')
         return public_holidays_df
@@ -37,8 +37,8 @@ def predict():
         data['Day'] = data['Date'].dt.day
         data['Date'] = data['Date'].dt.strftime('%d/%m/%Y')
         public_holiday = pub_hol_df(data)
-        data['Public Holiday'] = data['Public Holiday'].fillna(0)
-        data['Public Holiday'] = data['Public Holiday'].apply(lambda x: 1 if x else 0)
+        data['Public_Holiday'] = data['Public_Holiday'].fillna(0)
+        data['Public_Holiday'] = data['Public_Holiday'].apply(lambda x: 1 if x else 0)
         data['Event'] = data['Event'].apply(lambda x: 1 if x == 'TRUE' else 0)
         return data
 
@@ -148,16 +148,16 @@ def predict():
 
       def get_public_holiday(date):
           if date in pred_ph['Date'].values:
-              return pred_ph.loc[pred_ph['Date'] == date, 'Public Holiday'].iloc[0]
+              return pred_ph.loc[pred_ph['Date'] == date, 'Public_Holiday'].iloc[0]
           else:
               return ''
-      predictions['Public Holiday'] = predictions['Date'].apply(get_public_holiday)
+      predictions['Public_Holiday'] = predictions['Date'].apply(get_public_holiday)
       predictions['India_Reservation'] = prediction_data['India_Reservation']
       predictions['Chinese_Buffet_Busy'] = predictions['Predicted_Customers_Chinese'].apply(is_busy)
       predictions['Indian_Buffet_Busy'] = predictions['Predicted_Customers_India'].apply(is_busy)
       predictions = predictions[['Date',
                              'Day',
-                             'Public Holiday',
+                             'Public_Holiday',
                              'Predicted_Customers_Chinese',
                              'Chinese_Buffet_Busy',
                              'India_Reservation',
