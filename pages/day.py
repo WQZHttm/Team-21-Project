@@ -60,7 +60,7 @@ layout = html.Div([
                  ],className='day-middle-row'),
         dbc.Row([
             dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'),width='auto')
-                ],justify="left"),
+                ]),
 
         ], className='day-display'),
 
@@ -68,18 +68,18 @@ layout = html.Div([
 ])
 
 # update event of the day
-@callback(Output('event-header','children'),
-          Input('date-picker','date'))
-def update_event(date):
-    df2=customer_prediction.loc[customer_prediction['Date']==date]
-    if not isinstance(df2['Public Holiday'].item(),str):
-        return "Event of the Day: NA"
-    else:
-        return f"Event of the Day: {df2['Public Holiday'].item()}"
+# @callback(Output('event-header','children'),
+#           Input('date-picker','date'))
+# def update_event(date):
+#     df2=customer_prediction.loc[customer_prediction['Date']==date]
+#     if not isinstance(df2['Public Holiday'].item(),str):
+#         return "Event of the Day: NA"
+#     else:
+#         return f"Event of the Day: {df2['Public Holiday'].item()}"
 
 
 
-@callback([Output('employee-table', 'children'),Output('count-table','children'), Output('histogram-container', 'children')],
+@callback([Output('event-header','children'),Output('employee-table', 'children'),Output('count-table','children'), Output('histogram-container', 'children')],
           [Input('date-picker','date'),Input("shift","value")])
 
 
@@ -125,11 +125,14 @@ def produce_output(date,shift):
         ],
         class_name='standard-card',
     )
-    df3 = customer_prediction.loc[customer_prediction['Date']== date]
-    print(df3)
-    x_values = df3.columns[9:].tolist()
+    df2 = customer_prediction.loc[customer_prediction['Date']== date]
+    if not isinstance(df2['Public Holiday'].item(),str):
+        event= "Event of the Day: NA"
+    else:
+        event= f"Event of the Day: {df2['Public Holiday'].item()}"
+    x_values = df2.columns[9:].tolist()
     print(x_values)
-    y_values = df3.iloc[0, 9:].values.tolist() 
+    y_values = df2.iloc[0, 9:].values.tolist() 
     print(y_values)
     histogram_fig = px.histogram(x = x_values, y= y_values, title=f"Predicted Customer Demand on {date}",
         labels={'x': 'Time', 'y': 'Customer Count'}, histnorm = 'density')
@@ -148,4 +151,4 @@ def produce_output(date,shift):
     histogram_fig.add_hline(y=50,line_color='orange',annotation_text='Busy',annotation_position="right")
     histogram_container = dcc.Graph(figure=histogram_fig)
 
-    return table,count, histogram_container
+    return event, table,count, histogram_container
