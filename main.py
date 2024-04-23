@@ -4,8 +4,28 @@ import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
 import pandas as pd
-import mysql.connector
-import yaml
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import TypeDecorator, VARCHAR
+from dateutil.parser import parse
+
+####################### FLASK SERVER #############################
+server = Flask(__name__)
+
+# Database connection settings
+host = 'localhost'
+user = 'root'
+password = 'password'
+database = 'trial_schema'
+port = 3306
+
+server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{user}:{password}@{host}:{port}/{database}'
+server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+db = SQLAlchemy(server)
+
+
+
+
 
 ####################### SQL INTEGRATION #############################
 # with open("docker-compose.yml", "r") as file:
@@ -36,7 +56,7 @@ import yaml
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
-app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
+app = Dash(__name__,server=server, routes_pathname_prefix="/", pages_folder='pages', use_pages=True, external_stylesheets=external_css)
 # auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
