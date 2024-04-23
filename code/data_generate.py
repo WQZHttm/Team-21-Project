@@ -152,6 +152,6 @@ df['Chinese > 100'] = df['Customers_Chinese'] > 100
 df['Indian > 100'] = df['Customers_India'] > 100
 
 # save the file
-csv_file_path = "D:\\Lecture\\DSA3101-Group\\data.csv"
-df.to_csv(csv_file_path, index = False)
+
+df.to_csv('../input/data.csv', index = False)
 
