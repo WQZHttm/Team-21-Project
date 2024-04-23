@@ -65,19 +65,19 @@ def calculate_defaults(selected_date):
     filtered_data3 = filtered_data[filtered_data['Shift'] == '8pm-10pm']
     day = filtered_data['Day'].iloc[0]
 
-    defaultchef1 = len(filtered_data1[filtered_data1['Role'] == 'chef'])
-    defaultservice1 = len(filtered_data1[(filtered_data1['Role'] == 'service') & (filtered_data1['Job_status'] == 'full-time')])
-    defaultdishwasher1 = len(filtered_data1[filtered_data1['Role'] == 'dishwasher'])
+    defaultchef1 = len(filtered_data1[filtered_data1['Role'] == 'Chef'])
+    defaultservice1 = len(filtered_data1[(filtered_data1['Role'] == 'Service') & (filtered_data1['Job_status'] == 'full-time')])
+    defaultdishwasher1 = len(filtered_data1[filtered_data1['Role'] == 'Dishwasher'])
     defaultpt1 = len(filtered_data1[filtered_data1['Job_status'] == 'part-time'])
 
-    defaultchef2 = len(filtered_data2[filtered_data2['Role'] == 'chef'])
-    defaultservice2 = len(filtered_data2[(filtered_data2['Role'] == 'service') & (filtered_data2['Job_status'] == 'full-time')])
-    defaultdishwasher2 = len(filtered_data2[filtered_data2['Role'] == 'dishwasher'])
+    defaultchef2 = len(filtered_data2[filtered_data2['Role'] == 'Chef'])
+    defaultservice2 = len(filtered_data2[(filtered_data2['Role'] == 'Service') & (filtered_data2['Job_status'] == 'full-time')])
+    defaultdishwasher2 = len(filtered_data2[filtered_data2['Role'] == 'Dishwasher'])
     defaultpt2 = len(filtered_data2[filtered_data2['Job_status'] == 'part-time'])
 
-    defaultchef3 = len(filtered_data3[filtered_data3['Role'] == 'chef'])
-    defaultservice3 = len(filtered_data3[(filtered_data3['Role'] == 'service') & (filtered_data3['Job_status'] == 'full-time')])
-    defaultdishwasher3 = len(filtered_data3[filtered_data3['Role'] == 'dishwasher'])
+    defaultchef3 = len(filtered_data3[filtered_data3['Role'] == 'Chef'])
+    defaultservice3 = len(filtered_data3[(filtered_data3['Role'] == 'Service') & (filtered_data3['Job_status'] == 'full-time')])
+    defaultdishwasher3 = len(filtered_data3[filtered_data3['Role'] == 'Dishwasher'])
     defaultpt3 = len(filtered_data3[filtered_data3['Job_status'] == 'part-time'])
 
     w = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
