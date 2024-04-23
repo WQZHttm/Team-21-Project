@@ -44,7 +44,7 @@ headers_week=html.Div(
                         html.B('Select a date range: ', style={'margin-left': '5px'})]),
                     dcc.DatePickerRange(
                         id='date-picker-range',
-                        min_date_allowed=datetime(2024, 1, 1), # TO CHANGE
+                        min_date_allowed=datetime(2024, 1, 1),
                         max_date_allowed=datetime(2024, 12, 31), 
                         start_date=start_date_default,
                         end_date=end_date_default,
