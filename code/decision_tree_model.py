@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from flask import Flask,jsonify
 
 df = pd.read_csv('../input/data_with_hour.csv')
-data2024 = pd.read_csv('../input/test.csv')
+data2024 = pd.read_csv('../input/general_data.csv')
 
 app = Flask(__name__)
 app.route('/predict', methods=['GET'])
