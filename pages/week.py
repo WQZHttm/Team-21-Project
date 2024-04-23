@@ -6,19 +6,18 @@ import plotly.express as px
 from dash import dash_table 
 from datetime import datetime, timedelta, date
 import dash_bootstrap_components as dbc
+from shared_data import manpower_schedule,customer_prediction
 
 
 dash.register_page(__name__, path='/week', name="Week 📋")
 
 ####################### LOAD DATASET #############################
-df = pd.read_csv("output/predictions.csv")
-df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
-df['Public Holiday'] = df['Public Holiday'].fillna('')
-
-# customer_demand = pd.read_csv('Customer_demand.csv')
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-
+# df = pd.read_csv("output/predictions.csv")
+# df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
+# df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+# df['Public Holiday'] = df['Public Holiday'].fillna('')
+df=customer_prediction
+manpower_schedule=manpower_schedule
 #setting the date
 current_date = datetime.now()
 start_of_current_week = current_date - timedelta(days=current_date.weekday())
@@ -26,14 +25,6 @@ end_of_current_week = start_of_current_week + timedelta(days=6)
 start_date_default = start_of_current_week.date()
 end_date_default = end_of_current_week.date()
 
-
-#unique identifier for the days
-manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
-#tabulating the cost
-manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
-
-# customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
-manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
 
 ####################### PAGE LAYOUT #############################

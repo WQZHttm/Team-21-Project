@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: customer_data
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    command: --local-infile=1
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./output:/var/lib/mysql-files
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+

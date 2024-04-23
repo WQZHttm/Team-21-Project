@@ -2,16 +2,16 @@
 FROM python:3.10.6
 
 # Set the working directory in the container
-WORKDIR /main
+WORKDIR C:\Users\user\OneDrive - National University of Singapore\DSA3101\Project\Team-21-Project
 
-# Copy the current directory contents into the container at /app
-COPY . /main
+# Copy the current directory contents into the container at /main
+COPY . .
 
 # Install any needed dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 8050 available to the world outside this container
-EXPOSE 8050
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
 
 # Run app.py when the container launches
 CMD ["python", "main.py"]

@@ -6,27 +6,18 @@ import plotly.express as px
 from datetime import datetime
 import numpy as np
 import dash_bootstrap_components as dbc
-
+from shared_data import customer_prediction, manpower_schedule
 
 dash.register_page(__name__, path='/lcp', name="Labour Cost Percentage")
 
 
-#current date
-
 current_date = datetime.today().date()
-df = pd.read_csv("output/predictions.csv") # TO REMOVE
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 ####################### LOAD DATASET #############################
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
-#tabulating the cost
-manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
+customer_prediction=customer_prediction
+manpower_schedule=manpower_schedule
 
-# customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
-manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
-manpower_schedule['Total Paid'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
 
 ##Baseline##
 # A = ["A1", "A2", "A3", "A4", "A5"] #Chefs

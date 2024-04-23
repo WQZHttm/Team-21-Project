@@ -6,7 +6,8 @@ import plotly.express as px
 import datetime
 import numpy as np
 import dash_bootstrap_components as dbc
-
+from shared_data import customer_prediction, manpower_schedule
+# from main import fetch_data
 
 
 dash.register_page(__name__, path='/', name="Day 📋")
@@ -15,15 +16,8 @@ dash.register_page(__name__, path='/', name="Day 📋")
 
 current_date = datetime.datetime.today().date()
 ####################### LOAD DATASET #############################
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-customer_prediction = pd.read_csv('output/predictions.csv')
-customer_prediction['Date'] = pd.to_datetime(customer_prediction['Date'], format='%d/%m/%Y')
-manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
-#tabulating the cost
-manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
-
-# customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
-manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
+customer_prediction=customer_prediction
+manpower_schedule=manpower_schedule
 
 ####################### PAGE LAYOUT #############################
 
