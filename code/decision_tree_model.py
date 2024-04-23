@@ -87,7 +87,6 @@ def predict():
 
       training_ph = pub_hol_df(data)
       pred_ph = pub_hol_df(prediction_data)
-      training_clean_data = clean_data(data)
       pred_clean_data = clean_data(prediction_data)
       X_train,X_test,y_train,y_test = data_prep_train(data)
       pred = data_prep_predict(prediction_data)
