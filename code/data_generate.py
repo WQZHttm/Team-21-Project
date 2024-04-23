@@ -74,7 +74,7 @@ df = pd.DataFrame({
     "Day": days_of_week,
     "Customers_Chinese": num_customers_CN,
     "Customers_India": num_customers_India,
-    "Public Holiday": holiday_names
+    "Public_Holiday": holiday_names
 })
 
 # add Month column
@@ -141,7 +141,7 @@ df['India_Reservation'] = np.random.choice([True, False], size=len(df))
 
 # adjust reservation to be true when there is holiday or promotion
 # on holiday and events, I assume that there must be India reservation
-df.loc[df['Event'] | (df['Public Holiday'] != ""), 'India_Reservation'] = True
+df.loc[df['Event'] | (df['Public_Holiday'] != ""), 'India_Reservation'] = True
 
 # adjust the customer for India buffet
 df['Customers_India'] = df.apply(lambda row: row['Customers_India'] if row['India_Reservation'] else 0, axis=1)
