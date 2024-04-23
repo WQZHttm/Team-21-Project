@@ -24,9 +24,6 @@ server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(server)
 
 
-
-
-
 ####################### SQL INTEGRATION #############################
 # with open("docker-compose.yml", "r") as file:
 #     config =yaml.safe_load(file)['services']['db']['environment']
