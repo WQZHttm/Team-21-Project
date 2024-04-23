@@ -6,27 +6,18 @@ import plotly.express as px
 from datetime import datetime
 import numpy as np
 import dash_bootstrap_components as dbc
-
+from shared_data import customer_prediction, manpower_schedule
 
 dash.register_page(__name__, path='/lcp', name="Labour Cost Percentage")
 
 
-#current date
-
 current_date = datetime.today().date()
-df = pd.read_csv("output/predictions.csv") # TO REMOVE
-df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
 
 ####################### LOAD DATASET #############################
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
-#tabulating the cost
-manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
+customer_prediction=customer_prediction
+manpower_schedule=manpower_schedule
 
-# customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
-manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
 
-manpower_schedule['Total Paid'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
 
 ##Baseline##
 # A = ["A1", "A2", "A3", "A4", "A5"] #Chefs
@@ -65,19 +56,19 @@ def calculate_defaults(selected_date):
     filtered_data3 = filtered_data[filtered_data['Shift'] == '8pm-10pm']
     day = filtered_data['Day'].iloc[0]
 
-    defaultchef1 = len(filtered_data1[filtered_data1['Role'] == 'chef'])
-    defaultservice1 = len(filtered_data1[(filtered_data1['Role'] == 'service') & (filtered_data1['Job_status'] == 'full-time')])
-    defaultdishwasher1 = len(filtered_data1[filtered_data1['Role'] == 'dishwasher'])
+    defaultchef1 = len(filtered_data1[filtered_data1['Role'] == 'Chef'])
+    defaultservice1 = len(filtered_data1[(filtered_data1['Role'] == 'Service') & (filtered_data1['Job_status'] == 'full-time')])
+    defaultdishwasher1 = len(filtered_data1[filtered_data1['Role'] == 'Dishwasher'])
     defaultpt1 = len(filtered_data1[filtered_data1['Job_status'] == 'part-time'])
 
-    defaultchef2 = len(filtered_data2[filtered_data2['Role'] == 'chef'])
-    defaultservice2 = len(filtered_data2[(filtered_data2['Role'] == 'service') & (filtered_data2['Job_status'] == 'full-time')])
-    defaultdishwasher2 = len(filtered_data2[filtered_data2['Role'] == 'dishwasher'])
+    defaultchef2 = len(filtered_data2[filtered_data2['Role'] == 'Chef'])
+    defaultservice2 = len(filtered_data2[(filtered_data2['Role'] == 'Service') & (filtered_data2['Job_status'] == 'full-time')])
+    defaultdishwasher2 = len(filtered_data2[filtered_data2['Role'] == 'Dishwasher'])
     defaultpt2 = len(filtered_data2[filtered_data2['Job_status'] == 'part-time'])
 
-    defaultchef3 = len(filtered_data3[filtered_data3['Role'] == 'chef'])
-    defaultservice3 = len(filtered_data3[(filtered_data3['Role'] == 'service') & (filtered_data3['Job_status'] == 'full-time')])
-    defaultdishwasher3 = len(filtered_data3[filtered_data3['Role'] == 'dishwasher'])
+    defaultchef3 = len(filtered_data3[filtered_data3['Role'] == 'Chef'])
+    defaultservice3 = len(filtered_data3[(filtered_data3['Role'] == 'Service') & (filtered_data3['Job_status'] == 'full-time')])
+    defaultdishwasher3 = len(filtered_data3[filtered_data3['Role'] == 'Dishwasher'])
     defaultpt3 = len(filtered_data3[filtered_data3['Job_status'] == 'part-time'])
 
     w = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

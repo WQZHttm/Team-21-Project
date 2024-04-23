@@ -6,6 +6,7 @@ import plotly.express as px
 import datetime
 import numpy as np
 import dash_bootstrap_components as dbc
+from shared_data import customer_prediction, manpower_schedule
 # from main import fetch_data
 
 
@@ -15,17 +16,8 @@ dash.register_page(__name__, path='/', name="Day 📋")
 
 current_date = datetime.datetime.today().date()
 ####################### LOAD DATASET #############################
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-# customer_prediction = fetch_data('prediction')
-customer_prediction = pd.read_csv('output/predictions.csv')
-
-customer_prediction['Date'] = pd.to_datetime(customer_prediction['Date'], format='%d/%m/%Y')
-manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']
-#tabulating the cost
-manpower_schedule ['Cost'] = manpower_schedule['Hours_worked'] * manpower_schedule['Hourly_rate']
-
-# customer_demand['Date'] = pd.to_datetime(customer_demand['Date'], format='%Y-%m-%d')
-manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d')
+customer_prediction=customer_prediction
+manpower_schedule=manpower_schedule
 
 ####################### PAGE LAYOUT #############################
 
@@ -62,7 +54,7 @@ layout = html.Div([
                  ],className='day-middle-row'),
         dbc.Row([
             dbc.Col(html.Div(id= 'histogram-container', className='histogram-container'),width='auto')
-                ],justify="left"),
+                ]),
 
         ], className='day-display'),
 
@@ -70,18 +62,18 @@ layout = html.Div([
 ])
 
 # update event of the day
-@callback(Output('event-header','children'),
-          Input('date-picker','date'))
-def update_event(date):
-    df2=customer_prediction.loc[customer_prediction['Date']==date]
-    if not isinstance(df2['Public Holiday'].item(),str):
-        return "Event of the Day: NA"
-    else:
-        return f"Event of the Day: {df2['Public Holiday'].item()}"
+# @callback(Output('event-header','children'),
+#           Input('date-picker','date'))
+# def update_event(date):
+#     df2=customer_prediction.loc[customer_prediction['Date']==date]
+#     if not isinstance(df2['Public Holiday'].item(),str):
+#         return "Event of the Day: NA"
+#     else:
+#         return f"Event of the Day: {df2['Public Holiday'].item()}"
 
 
 
-@callback([Output('employee-table', 'children'),Output('count-table','children'), Output('histogram-container', 'children')],
+@callback([Output('event-header','children'),Output('employee-table', 'children'),Output('count-table','children'), Output('histogram-container', 'children')],
           [Input('date-picker','date'),Input("shift","value")])
 
 
@@ -127,11 +119,14 @@ def produce_output(date,shift):
         ],
         class_name='standard-card',
     )
-    df3 = customer_prediction.loc[customer_prediction['Date']== date]
-    print(df3)
-    x_values = df3.columns[9:].tolist()
+    df2 = customer_prediction.loc[customer_prediction['Date']== date]
+    if not isinstance(df2['Public Holiday'].item(),str):
+        event= "Event of the Day: NA"
+    else:
+        event= f"Event of the Day: {df2['Public Holiday'].item()}"
+    x_values = df2.columns[9:].tolist()
     print(x_values)
-    y_values = df3.iloc[0, 9:].values.tolist() 
+    y_values = df2.iloc[0, 9:].values.tolist() 
     print(y_values)
     histogram_fig = px.histogram(x = x_values, y= y_values, title=f"Predicted Customer Demand on {date}",
         labels={'x': 'Time', 'y': 'Customer Count'}, histnorm = 'density')
@@ -150,4 +145,4 @@ def produce_output(date,shift):
     histogram_fig.add_hline(y=50,line_color='orange',annotation_text='Busy',annotation_position="right")
     histogram_container = dcc.Graph(figure=histogram_fig)
 
-    return table,count, histogram_container
+    return event, table,count, histogram_container

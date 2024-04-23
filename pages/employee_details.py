@@ -7,13 +7,13 @@ from dash import dash_table
 from datetime import datetime, timedelta, date
 import dash_bootstrap_components as dbc
 from urllib.parse import quote
+from shared_data import manpower_schedule
 
 dash.register_page(__name__, path='/employee_details', name="Employee Details👬")
 
 #Load data from CSV
 
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
-
+manpower_schedule = manpower_schedule
 # define employee image mapping 
 
 employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg' }
@@ -197,42 +197,6 @@ def employee_schedule(start_date,end_date,employee_name):
         filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
 
         if not filtered_manpower_schedule.empty:
-            # # grouped_schedule = filtered_manpower_schedule.groupby('Date')['Shift'].apply(lambda x: '\n'.join(x)).reset_index()
-            
-
-            # # Get unique dates
-            # unique_dates = grouped_schedule['Date'].unique()
-
-            # # Create DataTable for work schedule
-            # work_schedule_table_columns = [{'name': 'Date', 'id': 'Date'}]  # Initialize columns with 'Date'
-            # work_schedule_table_data = [{'Date': 'Shift'}]  # Initialize data with 'Shift' for the first row
-
-
-            # for date in unique_dates:
-            #     # Add a new column for each unique date
-            #     work_schedule_table_columns.append({'name': date, 'id': date})
-                
-            #     # Get the shifts for the current date
-            #     shifts_for_date = grouped_schedule[grouped_schedule['Date'] == date]['Shift'].iloc[0]
-            #     work_schedule_table_data[0][date] = shifts_for_date
-
-
-            # work_schedule_table = dash_table.DataTable(
-            #     id='schedule',
-            #     columns=work_schedule_table_columns,
-            #     data=work_schedule_table_data,
-            #     style_table={'overflowY': 'auto'},
-            #     style_cell={"background-color": "#fce5cd", "border": "solid 1px white", "color": "black", "font-size": "11px", "text-align": "left",'font_family':"'Outfit', sans-serif","font-size": "16px","padding": "10px"},
-            #     style_data_conditional=[
-            #         {'if': {'column_id': 'Date'}, "background-color": "#fda64a", "font-weight": "bold", "color": "white", "padding": "10px", "font-size": "18px"},
-            #         {'if' : {'column_id' : unique_dates }, 'color' : 'black', 'whiteSpace': 'pre-line', 'border' : 'solid 1px white'}
-            #     ],
-            #     style_header_conditional=[
-                    
-            #             {'if': {'column_id': 'Date'},'backgroundColor': '#fda64a','color': 'white','fontWeight': 'bold','padding': '10px','fontSize': '18px'},
-            #             { 'if' :{'column_id' : unique_dates }, 'border' : 'solid 1px white'}
-            #     ]
-            # )
 
             filtered_manpower_schedule['☀️ Morning (10am-4.30pm)'] = filtered_manpower_schedule.apply(lambda x: x['Employee_ID'] if x['Shift'] == '10am-4.30pm' else '', axis=1)
             filtered_manpower_schedule['🌙 Night-Chinese (7pm-10pm)'] = filtered_manpower_schedule.apply(lambda x: x['Employee_ID'] if x['Shift'] == '7pm-10pm' else '', axis=1)
