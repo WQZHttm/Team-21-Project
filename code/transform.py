@@ -1,6 +1,11 @@
 import pandas as pd
 from datetime import datetime
 from schedule import *
+from sqlalchemy.types import VARCHAR
+import sys
+sys.path.append('../')
+from main import db
+import sqlalchemy
 
 def calculate_hourly_rate_chef(day, public_holiday):
   if public_holiday:
@@ -26,13 +31,15 @@ def calculate_hourly_rate_part(day, public_holiday):
   else:
     return 13
   
-def transform():
+def transform_run():
   chefs = ['A1', 'A2', 'A3', 'A4', 'A5']
   service = ['B1', 'B2', 'B3', 'B4', 'B5']
   dishwashers = ['C1', 'C2']
   parttimers = ['D1', 'D2', 'D3']
   schedule_data = []
-  for chunk in pd.read_csv('../output/predictions.csv', chunksize=7):
+  # chunk_df=pd.read_sql_query('SELECT * FROM predictions', con=db.engine,chunksize=7)
+  chunk_df=pd.read_csv('../output/predictions.csv',chunksize=7)
+  for chunk in chunk_df:
     chunk = chunk.reset_index(drop=True)
     final_schedule = smart_Schedule(chunk)
 
@@ -40,7 +47,7 @@ def transform():
       dat = row['Date']
       date = datetime.strptime(dat, '%d/%m/%Y')
       day = row['Day']
-      public_holiday = row['Public Holiday']
+      public_holiday = row['Public_Holiday']
       hourly_rate_chef = calculate_hourly_rate_chef(day, public_holiday)
       hourly_rate = calculate_hourly_rate(day, public_holiday)
       hourly_rate_part = calculate_hourly_rate_part(day, public_holiday)
@@ -82,10 +89,13 @@ def transform():
             else:
               schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
 
-  final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
+  final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public_Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
   final_sched['Date'] = pd.to_datetime(final_sched['Date'], errors='coerce')
   final_sched = final_sched.sort_values(by=['Date', 'Shift', 'Employee_ID'])
   final_sched.dropna(subset=['Date'], inplace=True)
-  final_sched.to_csv('final_schedule.csv', index=False)
+  # final_sched.to_csv('final_schedule.csv', index=False)
+  engine=db.engine
+  final_sched.to_sql('final_schedule', if_exists='replace',
+                con=engine, index=False,dtype={'Date': VARCHAR(50)})
   
-transform()
+transform_run()

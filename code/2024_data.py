@@ -10,6 +10,9 @@ Original file is located at
 import csv
 import pandas as pd
 import numpy as np
+import sys
+sys.path.append('../')
+from main import db
 
 # Generate date range
 date_range = pd.date_range(start="2024-01-01", end="2025-01-05")
@@ -68,4 +71,8 @@ df['India_Reservation'] = np.random.choice([True, False], size=len(df))
 # on holiday and events, I assume that there must be India reservation
 df.loc[df['Event'] | (df['Public Holiday'] != ""), 'India_Reservation'] = True
 
-df.to_csv('test.csv')
+df.to_csv('general_data.csv')
+# engine=db.engine
+# df.to_sql('general_data', if_exists='append',
+#                con=engine, index=False)
+# df2 = pd.read_sql_query('SELECT * FROM general_data', con=db.engine)

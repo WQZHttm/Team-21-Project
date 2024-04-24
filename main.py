@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc,Input, Output,callback
+from dash import Dash, html
 import dash
 import plotly.express as px
 import datetime
@@ -34,7 +34,6 @@ db = SQLAlchemy(server)
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__,server=server, routes_pathname_prefix="/", pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-# auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
     html.Br(),

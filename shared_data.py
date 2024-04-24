@@ -1,7 +1,18 @@
 import pandas as pd
-customer_prediction = pd.read_csv('output/predictions.csv')
-manpower_schedule = pd.read_csv('output/final_schedule.csv')
+import sys
+# sys.path.append('../')
+from main import db
 
+# manpower_schedule = pd.read_sql_query('SELECT * FROM final_schedule', con=db.engine)
+# print('sql',manpower_schedule.dtypes)
+customer_prediction = pd.read_csv('../output/predictions.csv')
+# customer_prediction = pd.read_sql_query('SELECT * FROM predictions', con=db.engine)
+
+manpower_schedule = pd.read_csv('../output/final_schedule.csv')
+print(manpower_schedule['Date'])
+# manpower_schedule['Date'][:10]
+# customer_prediction['Date'][:10]
+# print('csv',manpower_schedule.dtypes)
 # DAY
 
 manpower_schedule ['Date_and_day'] = manpower_schedule['Date'] + ' ' + manpower_schedule['Day']

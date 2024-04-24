@@ -15,12 +15,16 @@ from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 from flask import Flask,jsonify
+from sqlalchemy.types import VARCHAR
+import sys
+sys.path.append('../')
+from main import db
 
 df = pd.read_csv('../input/data_with_hour.csv')
 data2024 = pd.read_csv('../input/general_data.csv')
 
-app = Flask(__name__)
-app.route('/predict', methods=['GET'])
+# app = Flask(__name__)
+# app.route('/predict', methods=['GET'])
 def predict():
     def DecisionTree(data,prediction_data):
       def pub_hol_df(data):
@@ -175,9 +179,16 @@ def predict():
                              '7pm-8pm',
                              '8pm-9pm',
                              '9pm-10pm']]
-      return(predictions)
+      return(predictions)  
+
+    
     
     predicted = DecisionTree(df,data2024)
+    engine=db.engine
+    predicted.to_sql('predictions', if_exists='replace',
+                con=engine, index=False,dtype={'Date': VARCHAR(50)})
 
     # Return predictions as JSON response
-    return jsonify(predicted)
+    # return jsonify(predicted)
+
+predict()
