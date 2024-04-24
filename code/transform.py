@@ -40,7 +40,7 @@ def transform():
       dat = row['Date']
       date = datetime.strptime(dat, '%d/%m/%Y')
       day = row['Day']
-      public_holiday = row['Public Holiday']
+      public_holiday = row['Public_Holiday']
       hourly_rate_chef = calculate_hourly_rate_chef(day, public_holiday)
       hourly_rate = calculate_hourly_rate(day, public_holiday)
       hourly_rate_part = calculate_hourly_rate_part(day, public_holiday)
