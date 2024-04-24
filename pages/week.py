@@ -12,10 +12,6 @@ from shared_data import manpower_schedule,customer_prediction
 dash.register_page(__name__, path='/week', name="Week 📋")
 
 ####################### LOAD DATASET #############################
-# df = pd.read_csv("output/predictions.csv")
-# df ['Date_and_day'] = df['Date'] + ' ' + df['Day']
-# df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
-# df['Public Holiday'] = df['Public Holiday'].fillna('')
 df=customer_prediction
 manpower_schedule=manpower_schedule
 #setting the date
@@ -144,10 +140,10 @@ def update_graphs(start_date, end_date):
 
 
 
-        if (df2 ['Public Holiday'] != '').any():
-            filtered_df2 = df2[df2['Public Holiday'] != '']
+        if (df2 ['Public_Holiday'] != '').any():
+            filtered_df2 = df2[df2['Public_Holiday'] != '']
 
-            ph_obj = filtered_df2[['Date_and_day','Public Holiday']].apply(lambda row: ':\n'.join(map(str, row)), axis=1)
+            ph_obj = filtered_df2[['Date_and_day','Public_Holiday']].apply(lambda row: ':\n'.join(map(str, row)), axis=1)
 
             ph_text=''
             for string_row in ph_obj:

@@ -1,4 +1,4 @@
-Date,Day,Public Holiday,Predicted_Customers_Chinese,Chinese_Buffet_Busy,India_Reservation,Predicted_Customers_India,Indian_Buffet_Busy,Food_Court_Customer,10am-11am,11am-12pm,12pm-1pm,1pm-2pm,2pm-3pm,3pm-4pm,4pm-5pm,5pm-6pm,6pm-7pm,7pm-8pm,8pm-9pm,9pm-10pm
+Date,Day,Public_Holiday,Predicted_Customers_Chinese,Chinese_Buffet_Busy,India_Reservation,Predicted_Customers_India,Indian_Buffet_Busy,Food_Court_Customer,10am-11am,11am-12pm,12pm-1pm,1pm-2pm,2pm-3pm,3pm-4pm,4pm-5pm,5pm-6pm,6pm-7pm,7pm-8pm,8pm-9pm,9pm-10pm
 01/01/2024,Monday,New Year's Day,208.0,True,True,136.0,True,231.0,13.0,40.0,58.0,40.0,27.0,13.0,40.0,0.0,0.0,109.0,139.0,96.0
 02/01/2024,Tuesday,,111.0,True,True,76.0,False,97.0,5.0,17.0,25.0,17.0,11.0,5.0,17.0,0.0,0.0,52.0,89.0,46.0
 03/01/2024,Wednesday,,98.0,False,False,0.0,False,100.0,5.0,17.0,28.0,17.0,11.0,5.0,17.0,0.0,0.0,53.0,30.0,15.0

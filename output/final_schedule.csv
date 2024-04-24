@@ -1,4 +1,4 @@
-Date,Day,Public Holiday,Employee_ID,Shift,Role,Hours_worked,Hourly_rate,Job_status
+Date,Day,Public_Holiday,Employee_ID,Shift,Role,Hours_worked,Hourly_rate,Job_status
 2024-01-01,Monday,New Year's Day,A1,10am-4.30pm,Chef,6.5,17,full-time
 2024-01-01,Monday,New Year's Day,A2,10am-4.30pm,Chef,6.5,17,full-time
 2024-01-01,Monday,New Year's Day,A4,10am-4.30pm,Chef,6.5,17,full-time
