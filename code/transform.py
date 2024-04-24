@@ -82,7 +82,7 @@ def transform():
             else:
               schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
 
-  final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
+  final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public_Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
   final_sched['Date'] = pd.to_datetime(final_sched['Date'], errors='coerce')
   final_sched = final_sched.sort_values(by=['Date', 'Shift', 'Employee_ID'])
   final_sched.dropna(subset=['Date'], inplace=True)
