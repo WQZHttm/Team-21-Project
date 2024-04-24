@@ -43,7 +43,7 @@ def generate_general_data():
     df = pd.DataFrame({
         "Date": date_range,
         "Day": days_of_week,
-        "Public Holiday": holiday_names
+        "Public_Holiday": holiday_names
     })
 
     # add Month column
@@ -70,7 +70,7 @@ def generate_general_data():
 
     # adjust reservation to be true when there is holiday or promotion
     # on holiday and events, I assume that there must be India reservation
-    df.loc[df['Event'] | (df['Public Holiday'] != ""), 'India_Reservation'] = True
+    df.loc[df['Event'] | (df['Public_Holiday'] != ""), 'India_Reservation'] = True
 
     engine=db.engine
     df.to_sql('general_data', if_exists='replace',

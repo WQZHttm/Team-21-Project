@@ -1,25 +1,20 @@
 version: '3'
-
 services:
   db:
-    image: mysql:5.7
+    image: mysql:latest
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: my-secret-pw
-      MYSQL_DATABASE: customer_data
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    command: --local-infile=1
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
-      - ./output:/var/lib/mysql-files
+      MYSQL_DATABASE: 'trial_schema'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3307:3306'
 
   web:
     build: .
     ports:
-      - "5000:5000"
+      - "8050:8050"
     depends_on:
       - db
+    entrypoint: ["/usr/wait-for-it.sh", "db:3306", "--timeout=400", "--strict", "--", "python", "main.py"]
 
-volumes:
-  db-data:
 
