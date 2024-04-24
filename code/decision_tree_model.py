@@ -9,8 +9,9 @@ sys.path.append('../')
 from db_server import db
 
 
-df = pd.read_sql_query('SELECT * FROM data_with_hour', con=db.engine)
+
 data2024 = pd.read_sql_query('SELECT * FROM general_data', con=db.engine)
+df = pd.read_sql_query('SELECT * FROM data_with_hour', con=db.engine)
 
 def predict():
     def DecisionTree(data,prediction_data):
