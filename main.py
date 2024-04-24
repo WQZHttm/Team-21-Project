@@ -7,12 +7,9 @@ import pandas as pd
 from sqlalchemy.types import TypeDecorator, VARCHAR
 from dateutil.parser import parse
 from db_server import server
-
-
-
-####################### SQL INTEGRATION #############################
-# with open("docker-compose.yml", "r") as file:
-#     config =yaml.safe_load(file)['services']['db']['environment']
+import sys
+sys.path.append('code/')
+from backend_main import backend_run
 
 
 ####################### DASH APP #############################
@@ -67,4 +64,5 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	backend_run()
+	app.run_server(host='0.0.0.0', port=8050, debug=False)
