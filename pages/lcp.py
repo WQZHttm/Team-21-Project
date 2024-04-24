@@ -234,11 +234,11 @@ layout = html.Div([
                     dbc.CardBody([
                         html.H5("Labour Cost for the day: ", className= "slidertitle"),
                         html.Div(id = 'baseline-cost', className='costtabletext'),
-                        html.H6("( Manual Scheduling without Optimisation )", style= {"font-weight": "250"}),
+                        html.H6("(Manual Scheduling without Optimisation)", style= {"font-weight": "250"}),
                         html.Div(id = 'total-cost-output', className='costtabletext'),
-                        html.H6("( Suggested Scheduling using Optimisation )", style= {"font-weight": "250"}),
+                        html.H6("(Suggested Scheduling using Optimisation)", style= {"font-weight": "250"}),
                         html.Div(id = 'selected-total', className='costtabletext'),
-                        html.H6("( Custom Scheduling based on selected sliders )", style= {"font-weight": "250"}),
+                        html.H6("(Custom Scheduling based on selected sliders)", style= {"font-weight": "250"}),
                     ])
                 ], className = 'costtable',
                 ),

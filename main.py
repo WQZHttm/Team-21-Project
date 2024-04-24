@@ -4,39 +4,36 @@ import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
 import pandas as pd
-import mysql.connector
-import yaml
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import TypeDecorator, VARCHAR
+from dateutil.parser import parse
+
+####################### FLASK SERVER #############################
+server = Flask(__name__)
+
+# Database connection settings
+host = 'localhost'
+user = 'root'
+password = 'password'
+database = 'trial_schema'
+port = 3306
+
+server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{user}:{password}@{host}:{port}/{database}'
+server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+db = SQLAlchemy(server)
+
 
 ####################### SQL INTEGRATION #############################
 # with open("docker-compose.yml", "r") as file:
 #     config =yaml.safe_load(file)['services']['db']['environment']
-    
-
-# def fetch_data(table):
-
-#     cnx = mysql.connector.connect(
-#         host='db',
-#         user=config['MYSQL_USER'],
-#         password=config['MYSQL_PASSWORD'],
-#         database=config['MYSQL_DATABASE']
-#     )
-#     cursor = cnx.cursor()
-#     print('connected', cnx.is_connected())
-#     cursor.execute(f"SELECT * FROM {table}")
-#     result = cursor.fetchall()
-#     cursor.close()
-#     cnx.close()
-#     return pd.DataFrame(result)
-
-
-
 
 
 ####################### DASH APP #############################
 
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
-app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=external_css)
+app = Dash(__name__,server=server, routes_pathname_prefix="/", pages_folder='pages', use_pages=True, external_stylesheets=external_css)
 # auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
@@ -82,11 +79,6 @@ app.layout = html.Div([
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
 
-# TO UPDATE WHEN APP HAS AUTHENTICATION
-# @app.callback(
-# 	Output('user-login','children'),
-# 	Input()
-# )
 
 
 if __name__ == '__main__':
