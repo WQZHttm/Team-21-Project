@@ -11,8 +11,8 @@ import pandas as pd
 
 def backend_run():
     print('START OF BACKEND_RUN')
-    print(pd.read_sql_query('SELECT DATABASE()', con=db.engine))
-    print(pd.read_sql_query("SHOW TABLES LIKE 'team21_v1_general_data'", con=db.engine))
+    # print(pd.read_sql_query('SELECT DATABASE()', con=db.engine))
+    # print(pd.read_sql_query("SHOW TABLES LIKE 'team21_v1_general_data'", con=db.engine))
     # 1. generate data from decision tree model
     generate_data_hour()
     start = monotonic()
