@@ -47,24 +47,24 @@ def transform():
 
       for employee_id in final_schedule[idx][0]:
         if employee_id in chefs:
-          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'chef', 6.5, hourly_rate_chef, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'Chef', 6.5, hourly_rate_chef, 'full-time'])
         elif employee_id in service:
-          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'service', 6.5, hourly_rate, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'Service', 6.5, hourly_rate, 'full-time'])
         elif employee_id in parttimers:
-          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'service', 6.5, hourly_rate_part, 'part-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'Service', 6.5, hourly_rate_part, 'part-time'])
         else:
-          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'dishwasher', 6.5, hourly_rate, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '10am-4.30pm', 'Dishwasher', 6.5, hourly_rate, 'full-time'])
 
 
       for employee_id in final_schedule[idx][1]:
         if employee_id in chefs:
-          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'chef', 3, hourly_rate_chef, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'Chef', 3, hourly_rate_chef, 'full-time'])
         elif employee_id in service:
-          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'service', 3, hourly_rate, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'Service', 3, hourly_rate, 'full-time'])
         elif employee_id in parttimers:
-          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'service', 3, hourly_rate_part, 'part-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'Service', 3, hourly_rate_part, 'part-time'])
         else:
-          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'dishwasher', 3, hourly_rate, 'full-time'])
+          schedule_data.append([date, day, public_holiday, employee_id, '7pm-10pm', 'Dishwasher', 3, hourly_rate, 'full-time'])
 
 
       for employee_id in final_schedule[idx][2]:
@@ -74,13 +74,13 @@ def transform():
               break
           else:
             if employee_id in chefs:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'chef', 2, hourly_rate_chef, 'full-time'])
+              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Chef', 2, hourly_rate_chef, 'full-time'])
             elif employee_id in service:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'service', 2, hourly_rate, 'full-time'])
+              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate, 'full-time'])
             elif employee_id in parttimers:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'service', 2, hourly_rate_part, 'part-time'])
+              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate_part, 'part-time'])
             else:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'dishwasher', 2, hourly_rate, 'full-time'])
+              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
 
   final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
   final_sched['Date'] = pd.to_datetime(final_sched['Date'], errors='coerce')
