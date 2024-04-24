@@ -7,7 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1-VYtWAAD626yev5CZCn54emNstSw9bzf
 """
 
-import csv
 import pandas as pd
 import numpy as np
 import sys

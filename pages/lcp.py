@@ -1,8 +1,7 @@
 import pandas as pd
 import dash
-from dash import html, dash_table, dcc,Input, Output,callback, State
+from dash import html, dcc,Input, Output,callback
 import plotly.graph_objects as go
-import plotly.express as px
 from datetime import datetime
 import numpy as np
 import dash_bootstrap_components as dbc

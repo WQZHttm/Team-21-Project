@@ -4,7 +4,7 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'trial_schema'
+      MYSQL_DATABASE: 'team21_v1'
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
       - '3307:3306'

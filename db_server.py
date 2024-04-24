@@ -4,6 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 server = Flask(__name__)
 
 # Database connection settings
+# host = 'db'
+# user = 'root'
+# password = 'password'
+# database = 'team21_v1'
+
+
 host = 'localhost'
 user = 'root'
 password = 'password'
