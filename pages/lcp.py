@@ -75,7 +75,7 @@ def calculate_defaults(selected_date):
     for i in range(len(Week)):
         if w[i] == day:
             hours = Week[i]
-            if not pd.isna(filtered_data['Public Holiday'].iloc[0]):
+            if not pd.isna(filtered_data['Public_Holiday'].iloc[0]):
                 baselinecost = (hours[0] * 17) + (hours[1] * 16) + (hours[2] * 16) + (hours[3] * 15)
             elif filtered_data['Day'].iloc[0] == 'Saturday':
                 baselinecost = (hours[0] * 16) + (hours[1] * 15) + (hours[2] * 15) + (hours[3] * 14)
@@ -95,7 +95,7 @@ def calculate_defaults(selected_date):
 def calculate_selected(selectedchef, selectedservice, selecteddishwasher, selectedpt, selecteddate, shift):
     filtered_data = manpower_schedule[manpower_schedule['Date'] == selecteddate]
     hours = [6.5,3,2]
-    if not pd.isna(filtered_data['Public Holiday'].iloc[0]):
+    if not pd.isna(filtered_data['Public_Holiday'].iloc[0]):
         selectedcost = (selectedchef * 17 * hours[shift]) + (selectedservice * 16 * hours[shift]) + (selecteddishwasher * 16 * hours[shift]) + (selectedpt * 15 * hours[shift])
     elif filtered_data['Day'].iloc[0] == 'Saturday':
         selectedcost = (selectedchef * 16 * hours[shift]) + (selectedservice * 15 * hours[shift]) + (selecteddishwasher * 15 * hours[shift]) + (selectedpt * 14 * hours[shift])

@@ -12,7 +12,7 @@ manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y
 customer_prediction ['Date_and_day'] = customer_prediction['Date'] + ' ' + customer_prediction['Day']
 customer_prediction['Date'] = pd.to_datetime(customer_prediction['Date'], format='%d/%m/%Y')
 
-customer_prediction['Public Holiday'] = customer_prediction['Public Holiday'].fillna('')
+customer_prediction['Public_Holiday'] = customer_prediction['Public_Holiday'].fillna('')
 
 
 # LCP
