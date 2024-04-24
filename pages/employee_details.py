@@ -16,8 +16,10 @@ dash.register_page(__name__, path='/employee_details', name="Employee DetailsðŸ‘
 manpower_schedule = manpower_schedule
 # define employee image mapping 
 
-employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg' }
-
+employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg', 'A3': '/assets/A3.jpg', 'A4': '/assets/A4.jpg', 'A5': '/assets/A5.jpg',
+                         'B1': '/assets/B1.jpg', 'B2': '/assets/B2.jpg', 'B3': '/assets/B3.jpg', 'B4': '/assets/B4.jpg', 'B5': '/assets/B5.jpg',
+                         'C1': '/assets/C1.jpg', 'C2': '/assets/C2.jpg',
+                         'D1': '/assets/D1.jpg', 'D2': '/assets/D2.jpg', 'D3': '/assets/D3.jpg'}
 
 # Calculate current week's start and end date
 current_date = datetime.now()
