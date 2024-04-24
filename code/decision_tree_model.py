@@ -18,13 +18,12 @@ from flask import Flask,jsonify
 from sqlalchemy.types import VARCHAR
 import sys
 sys.path.append('../')
-from main import db
+from db_server import db
 
-df = pd.read_csv('../input/data_with_hour.csv')
-data2024 = pd.read_csv('../input/general_data.csv')
 
-# app = Flask(__name__)
-# app.route('/predict', methods=['GET'])
+df = pd.read_sql_query('SELECT * FROM data_with_hour', con=db.engine)
+data2024 = pd.read_sql_query('SELECT * FROM general_data', con=db.engine)
+
 def predict():
     def DecisionTree(data,prediction_data):
       def pub_hol_df(data):
@@ -191,4 +190,4 @@ def predict():
     # Return predictions as JSON response
     # return jsonify(predicted)
 
-predict()
+# predict()

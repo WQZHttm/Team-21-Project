@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import sys
+sys.path.append('../')
+from db_server import db
 
 # Generate date range
 date_range = pd.date_range(start="2021-01-01", end="2023-12-31")
@@ -81,7 +84,7 @@ np.random.seed(45)
 df['India_Reservation'] = np.random.choice([True, False], size=len(df))
 
 # adjust reservation to be true when there is holiday or promotion
-df.loc[df['Event'] | (df['Public Holiday'] != ""), 'India_Reservation'] = True
+df.loc[df['Event'] | (df['Public_Holiday'] != ""), 'India_Reservation'] = True
 
 # adjust the customer for India buffet for reservation
 df['Customers_India'] = df.apply(lambda row: row['Customers_India'] if row['India_Reservation'] else 0, axis=1)
@@ -200,6 +203,8 @@ df['Chinese > 100'] = df['Customers_Chinese'] > 100
 df['Indian > 100'] = df['Customers_India'] > 100
 
 # save the file
-df.to_csv('../input/data_with_hour.csv', index = False)
+engine=db.engine
+df.to_sql('data_with_hour', if_exists='replace',
+               con=engine, index=False)
 
 

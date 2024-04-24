@@ -4,7 +4,7 @@ from schedule import *
 from sqlalchemy.types import VARCHAR
 import sys
 sys.path.append('../')
-from main import db
+from db_server import db
 import sqlalchemy
 
 def calculate_hourly_rate_chef(day, public_holiday):
@@ -37,8 +37,8 @@ def transform_run():
   dishwashers = ['C1', 'C2']
   parttimers = ['D1', 'D2', 'D3']
   schedule_data = []
-  # chunk_df=pd.read_sql_query('SELECT * FROM predictions', con=db.engine,chunksize=7)
-  chunk_df=pd.read_csv('../output/predictions.csv',chunksize=7)
+  chunk_df=pd.read_sql_query('SELECT * FROM predictions', con=db.engine,chunksize=7)
+  # chunk_df=pd.read_csv('../output/predictions.csv',chunksize=7)
   for chunk in chunk_df:
     chunk = chunk.reset_index(drop=True)
     final_schedule = smart_Schedule(chunk)
@@ -98,4 +98,4 @@ def transform_run():
   final_sched.to_sql('final_schedule', if_exists='replace',
                 con=engine, index=False,dtype={'Date': VARCHAR(50)})
   
-transform_run()
+# transform_run()
