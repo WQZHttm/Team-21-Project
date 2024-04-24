@@ -27,26 +27,6 @@ db = SQLAlchemy(server)
 ####################### SQL INTEGRATION #############################
 # with open("docker-compose.yml", "r") as file:
 #     config =yaml.safe_load(file)['services']['db']['environment']
-    
-
-# def fetch_data(table):
-
-#     cnx = mysql.connector.connect(
-#         host='db',
-#         user=config['MYSQL_USER'],
-#         password=config['MYSQL_PASSWORD'],
-#         database=config['MYSQL_DATABASE']
-#     )
-#     cursor = cnx.cursor()
-#     print('connected', cnx.is_connected())
-#     cursor.execute(f"SELECT * FROM {table}")
-#     result = cursor.fetchall()
-#     cursor.close()
-#     cnx.close()
-#     return pd.DataFrame(result)
-
-
-
 
 
 ####################### DASH APP #############################
@@ -99,11 +79,6 @@ app.layout = html.Div([
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
 
-# TO UPDATE WHEN APP HAS AUTHENTICATION
-# @app.callback(
-# 	Output('user-login','children'),
-# 	Input()
-# )
 
 
 if __name__ == '__main__':
