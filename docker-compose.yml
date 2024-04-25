@@ -1,4 +1,5 @@
-version: '1.29'
+version: '3.8'
+
 services:
   db:
     image: mysql:latest
@@ -10,37 +11,30 @@ services:
       - '3307:3306'
     volumes:
       - ./init:/docker-entrypoint-initdb.d
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   backend:
     build: .
-    # restart: always
-    ports:
-      - '3308:3308'
+    restart: on-failure
     depends_on:
       - db
       # db:
-      #   condition: service_completed_successfully
-        # condition: service_healthy
-        # healthcheck:
-        #   test: ["CMD", "curl", "-f", "http://db:3306/readiness"]
-        #   interval: 10s
-        #   timeout: 10s
-        #   retries: 5
+      #   condition: service_healthy
+    entrypoint: ['python', 'backend_main.py']
 
-    entrypoint: ["/usr/wait-for-it.sh", "db:3306", "--timeout=100", "--strict", "--", 'python','backend_main.py']
   web:
     build: .
     ports:
-      - "8050:8050"
-    depends_on:
-      - backend
-      # backend:
-      #   condition: service_completed_successfully
-        # healthcheck:
-        #   test: ["CMD", "curl", "-f", "http://db:3306/readiness"]
-        #   interval: 10s
-        #   timeout: 10s
-        #   retries: 5
-    entrypoint: ["/usr/wait-for-it.sh", "backend:3308", "--timeout=900", "--strict", "--", "python", "main.py"]
-
-
+      - '8050:8050'
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        while [ "$(docker inspect -f '{{.State.Running}}' backend)" = "true" ]; do
+          sleep 5;
+        done;
+        /usr/wait-for-it.sh db:3306 --timeout=100 -- python main.py
