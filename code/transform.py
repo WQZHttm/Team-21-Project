@@ -6,9 +6,11 @@ import sys
 sys.path.append('../')
 from db_server import db
 
+pub_hols = ["New Year's Day", "Chinese New Year", "Good Friday", "Hari Raya Puasa", "Labour Day", "Vesak Day", "Hari Raya Haji","National Day", "Deepavali", "Christmas Day"]
+
 
 def calculate_hourly_rate_chef(day, public_holiday):
-  if public_holiday:
+  if public_holiday in pub_hols:
     return 17
   elif day == 'Saturday' or day == 'Sunday':
       return 16
@@ -16,7 +18,7 @@ def calculate_hourly_rate_chef(day, public_holiday):
       return 15
 
 def calculate_hourly_rate(day, public_holiday):
-  if public_holiday:
+  if public_holiday in pub_hols:
     return 16
   elif day == 'Saturday' or day == 'Sunday':
     return 15
@@ -24,7 +26,7 @@ def calculate_hourly_rate(day, public_holiday):
     return 14
 
 def calculate_hourly_rate_part(day, public_holiday):
-  if public_holiday:
+  if public_holiday in pub_hols:
     return 15
   elif day == 'Saturday' or day == 'Sunday':
     return 14
@@ -48,6 +50,7 @@ def transform_run():
       date = datetime.strptime(dat, '%d/%m/%Y')
       day = row['Day']
       public_holiday = row['Public_Holiday']
+      Indian_R = row['India_Reservation']
       hourly_rate_chef = calculate_hourly_rate_chef(day, public_holiday)
       hourly_rate = calculate_hourly_rate(day, public_holiday)
       hourly_rate_part = calculate_hourly_rate_part(day, public_holiday)
@@ -75,19 +78,20 @@ def transform_run():
 
 
       for employee_id in final_schedule[idx][2]:
-        if schedule_data:
-          for rw in schedule_data:
-            if employee_id in rw and date in rw and rw[4] == '7pm-10pm':
-              break
-          else:
-            if employee_id in chefs:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Chef', 2, hourly_rate_chef, 'full-time'])
-            elif employee_id in service:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate, 'full-time'])
-            elif employee_id in parttimers:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate_part, 'part-time'])
+        if Indian_R:
+          if schedule_data:
+            for rw in schedule_data:
+              if employee_id in rw and date in rw and rw[4] == '7pm-10pm':
+                break
             else:
-              schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
+              if employee_id in chefs:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Chef', 2, hourly_rate_chef, 'full-time'])
+              elif employee_id in service:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate, 'full-time'])
+              elif employee_id in parttimers:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate_part, 'part-time'])
+              else:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
 
   final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public_Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
   final_sched['Date'] = pd.to_datetime(final_sched['Date'], errors='coerce')
