@@ -3,6 +3,8 @@ from datetime import datetime
 import pandas as pd
 import time
 
+pub_hols = ["New Year's Day", "Chinese New Year", "Good Friday", "Hari Raya Puasa", "Labour Day", "Vesak Day", "Hari Raya Haji", "National Day", "Deepavali", "Christmas Day"]
+
 def Requirements(C_Buffet, I_Buffet, I_Reserve):
     Req = []
     for i in range(7):
@@ -39,11 +41,10 @@ def smart_Schedule(input):
     Chinese = input['Chinese_Buffet_Busy'].tolist()
     Indian = input['Indian_Buffet_Busy'].tolist()
     Indian_R = input['India_Reservation'].tolist()
-    PH = input['Public_Holiday'].tolist()
     Day = input['Day'].tolist()
 
     req = Requirements(Chinese, Indian, Indian_R)
-    day_status = day_state(PH, Day)
+    day_status = day_state(pub_hols, Day)
 
     def kitchen_Schedule(req, day_status):
 
