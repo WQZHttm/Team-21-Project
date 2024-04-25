@@ -1,3 +1,6 @@
+# import sys
+# sys.path.append('code/')
+# from backend_main import backend_run
 from dash import Dash, html
 import dash
 import plotly.express as px
@@ -7,9 +10,11 @@ import pandas as pd
 from sqlalchemy.types import TypeDecorator, VARCHAR
 from dateutil.parser import parse
 from db_server import server
-import sys
-sys.path.append('code/')
-from backend_main import backend_run
+# import logging
+# logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w")
+
+
+
 
 
 ####################### DASH APP #############################
@@ -64,5 +69,5 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-	backend_run()
+	# backend_run()
 	app.run_server(host='0.0.0.0', port=8050, debug=False)

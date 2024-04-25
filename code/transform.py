@@ -5,7 +5,7 @@ from sqlalchemy.types import VARCHAR
 import sys
 sys.path.append('../')
 from db_server import db
-import sqlalchemy
+
 
 def calculate_hourly_rate_chef(day, public_holiday):
   if public_holiday:
