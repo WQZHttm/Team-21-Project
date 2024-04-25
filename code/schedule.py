@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 import time
 
+# Computes the staffings requirements of each shift of each day of the week by 3 binary lists of 7
 def Requirements(C_Buffet, I_Buffet, I_Reserve):
     Req = []
     for i in range(7):
@@ -21,6 +22,7 @@ def Requirements(C_Buffet, I_Buffet, I_Reserve):
 
     return Req
 
+# Computes the status of day 2 for PH, 1 for weekend and 0 for neither based on 2 string lists of 7 
 def day_state(PH, Day):
     day_status = []
     for i in range(len(PH)):
@@ -39,14 +41,16 @@ def smart_Schedule(input):
     Chinese = input['Chinese_Buffet_Busy'].tolist()
     Indian = input['Indian_Buffet_Busy'].tolist()
     Indian_R = input['India_Reservation'].tolist()
-    PH = ["New Year's Day", "Chinese New Year", "Good Friday", "Hari Raya Puasa", "Labor Day", "Vesak Day", "Hari Raya Haji", "National Day", "Deepavali", "Christmas Day"]
+    PH = input['Public_Holiday'].tolist()
     Day = input['Day'].tolist()
 
     req = Requirements(Chinese, Indian, Indian_R)
     day_status = day_state(PH, Day)
 
+    # Sub-algorithm that computes optimal schedule for kitchen staffs
     def kitchen_Schedule(req, day_status):
 
+        # Schedule requirements for the week
         kitchen_req = [[], [], [], [], [], [], []]
         for i in range(7):
             for j in range(3):
@@ -54,6 +58,7 @@ def smart_Schedule(input):
                 elif j == 1: kitchen_req[i].extend([req[i][j][0] for k in range(2)])
                 else: kitchen_req[i][2] += req[i][j][0]
 
+        # Rank least to most bziest day of the week for kitchen staff
         Rank = [kitchen_req[i][2] for i in range(7)]
         info = [i[0] for i in sorted(enumerate(Rank), key=lambda x:x[1])]
         lst = []
@@ -63,6 +68,7 @@ def smart_Schedule(input):
 
         Shifts = [6.5, 1, 2]
 
+        # Create solver using SCIP 
         solver = pywraplp.Solver.CreateSolver('SCIP')
         variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 106)]
 
@@ -119,9 +125,11 @@ def smart_Schedule(input):
             return roster
         else:
             print('The problem does not have an optimal solution.')
+
+    # Sub-algorithm that computes optimal schedule for full-time service and part-time staffs
     def SP_Schedule(req, day_status):
 
-        # Schedule meets requirements for the week
+        # Schedule requirements for the week
         service_req = [[], [], [], [], [], [], []]
         for i in range(7):
             for j in range(3):
@@ -129,6 +137,7 @@ def smart_Schedule(input):
                 elif j == 1: service_req[i].extend([req[i][j][1] for k in range(2)])
                 else: service_req[i][2] += req[i][j][1]
 
+        # Rank least to most bziest day of the week
         Rank = [service_req[i][2] for i in range(7)]
         info = [i[0] for i in sorted(enumerate(Rank), key=lambda x:x[1])]
         Rank_lst = []
@@ -138,8 +147,10 @@ def smart_Schedule(input):
 
         Shifts = [6.5, 1, 2]
 
+        ## Check all 8 possibilities (for D1's off status)
         for k in range(8):
 
+            # Create solver using SCIP
             solver = pywraplp.Solver.CreateSolver('SCIP')
             variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 169)]
 
@@ -161,8 +172,8 @@ def smart_Schedule(input):
                     constraint.SetCoefficient(variables[i+(j*21)], 1)
 
             # At least one day off
-            # Idea: A1 off on least bziest day, A2 off on 2nd least bziest day, ..., A5 off on 5th least bziest day
-            ## 1st person go on off whenver possible
+            # Idea: D2 off on least bziest day, D3 off on 2nd least bziest day, B1 off on 3rd bziest day, ..., B5 off on 5th least bziest day
+            ## D1 go on off whenver possible
 
             if k < 7:
               constraint = solver.Constraint(0, 0)
@@ -208,9 +219,10 @@ def smart_Schedule(input):
             else:
                   print('The problem does not have an optimal solution.')
 
-
+    # Sub-algorithm that computes optimal schedule for dishwashing staffs
     def dish_Schedule(req, day_status):
 
+        # Schedule requirements for the week
         dish_req = [[], [], [], [], [], [], []]
         for i in range(7):
             for j in range(3):
@@ -218,6 +230,7 @@ def smart_Schedule(input):
                 elif j == 1: dish_req[i].extend([req[i][j][2] for k in range(2)])
                 else: dish_req[i][2] += req[i][j][2]
 
+        # Rank least to most bziest day of the week 
         Rank = [dish_req[i][2] for i in range(7)]
         info = [i[0] for i in sorted(enumerate(Rank), key=lambda x:x[1])]
         lst = []
@@ -227,6 +240,7 @@ def smart_Schedule(input):
 
         Shifts = [6.5, 1, 2]
 
+        # Create solver using SCIP
         solver = pywraplp.Solver.CreateSolver('SCIP')
         variables = [solver.IntVar(0, 1, f'x{i}') for i in range(1, 43)]
 
@@ -246,7 +260,8 @@ def smart_Schedule(input):
                 constraint.SetCoefficient(variables[i+(j*21)], 1)
 
         # At least one day off
-        # Idea: Need 2 least buziest day that is not 2 dishwashers if only everyday except one is 2 dish, then prioritise C1
+        # Idea: Need 2 least buziest day that does not need 2 dishwashers on the same day
+        # If only everyday except one needs to 2 dishwashers, then prioritise C1
         if Rank[lst[0]] < 2:
           constraint = solver.Constraint(0, 0)
           tmp1 = lst[0]*3
@@ -296,6 +311,7 @@ def smart_Schedule(input):
     serve = SP_Schedule(req, day_status)
     dish = dish_Schedule(req, day_status)
 
+    # Combine outputs of sub-algorithms to form complete schedule
     full_Schedule = kitchen
     for i in range(7):
         for j in range(3):
