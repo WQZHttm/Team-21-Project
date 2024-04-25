@@ -1,4 +1,5 @@
 #Pages Folder 
+
 This folder contains Python scripts for different pages in our Dash dashboard
 
 #Contents
@@ -9,6 +10,7 @@ This folder contains Python scripts for different pages in our Dash dashboard
 5. ‘__pycache__’: Folder containing cached Python files (Automatically generated, you may ignore this)
 
 #Description
+
 Each Python script in this folder corresponds to a specific page in our dashboard. These scripts contain the code that defines the layout, componenets and functionality of each page. 
 
 #Usage
@@ -17,4 +19,5 @@ Each Python script in this folder corresponds to a specific page in our dashboar
 3. Run the ‘main.py’ file 
 
 #Note
+
 Ensure that all dependencies required by these scripts are installed. 
