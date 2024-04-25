@@ -23,6 +23,7 @@ end_date_default = end_of_current_week.date()
 
 ####################### PAGE LAYOUT #############################
 
+#Layout of the page (Date picker range and texts)
 headers_week=html.Div(
         children = [html.Span([
                         html.I(className='bi bi-calendar4-range'),
@@ -41,7 +42,7 @@ headers_week=html.Div(
 
 ])
 
-
+#Layout of page
 layout = html.Div(children=[
     html.Br(),
     html.Div([
@@ -56,6 +57,7 @@ layout = html.Div(children=[
 
     html.Br()])
 
+#Changing the date picker range to always select Monday as the start date 
 @callback(
     Output('date-picker-range', 'start_date'),
     Input('date-picker-range', 'start_date')
@@ -74,6 +76,8 @@ def update_start_date(start_date):
     Output('date-picker-range', 'end_date'),
     [Input('date-picker-range', 'start_date')]
 )
+
+#Ensuring the end date is the last day of the week 
 def update_end_date(start_date):
     if start_date is not None:
         start_date = datetime.strptime(start_date.split(' ')[0], '%Y-%m-%d').date()
@@ -83,7 +87,7 @@ def update_end_date(start_date):
 
 
 
-# Define callback to update other graphs
+# Define callback by taking in date picker range parameters to update staff and cost graph 
 @callback(
     [Output('staff-present-fig', 'figure'),
      Output('output-table', 'children'),
