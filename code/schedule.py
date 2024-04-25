@@ -39,7 +39,7 @@ def smart_Schedule(input):
     Chinese = input['Chinese_Buffet_Busy'].tolist()
     Indian = input['Indian_Buffet_Busy'].tolist()
     Indian_R = input['India_Reservation'].tolist()
-    PH = input['Public_Holiday'].tolist()
+    PH = ["New Year's Day", "Chinese New Year", "Good Friday", "Hari Raya Puasa", "Labor Day", "Vesak Day", "Hari Raya Haji", "National Day", "Deepavali", "Christmas Day"]
     Day = input['Day'].tolist()
 
     req = Requirements(Chinese, Indian, Indian_R)
