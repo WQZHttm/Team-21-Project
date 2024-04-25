@@ -33,16 +33,16 @@ services:
     ports:
       - "8050:8050"
     depends_on:
-      - db
-      - backend
+      # - db
+      # - backend
       # db:
       #   condition: service_completed_successfully        
-      # backend:
-      #   condition: service_completed_successfully
+      backend:
+        condition: service_completed_successfully
         # healthcheck:
         #   test: ["CMD", "curl", "-f", "http://db:3306/readiness"]
         #   interval: 10s
         #   timeout: 10s
         #   retries: 5
-    entrypoint: ["/usr/wait-for-it.sh", "backend:3308", "--timeout=700", "--strict", "--", "python", "main.py"]
+    entrypoint: ["python", "main.py"]
 
