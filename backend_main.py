@@ -4,8 +4,10 @@
 from time import sleep,monotonic
 import pandas as pd
 import sys
+import datetime
 
 def backend_run():
+    print(datetime.datetime.now())
     print('START OF BACKEND_RUN')
 
     # 1. generate data from decision tree model
@@ -28,6 +30,9 @@ def backend_run():
     from transform import transform_run   
     transform_run()
     sleep(120)
+    print(datetime.datetime.now())
     print('END OF BACKEND_RUN')
+    
+
 
 backend_run()
