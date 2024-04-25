@@ -1,10 +1,8 @@
 import pandas as pd
 import dash
-from dash import html, dash_table, dcc,Input, Output,callback
-import plotly.graph_objects as go
+from dash import html,dcc,Input, Output,callback
 import plotly.express as px
-from dash import dash_table 
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import dash_bootstrap_components as dbc
 from shared_data import manpower_schedule,customer_prediction
 

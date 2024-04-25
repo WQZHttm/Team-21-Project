@@ -210,7 +210,8 @@ def employee_schedule(start_date,end_date,employee_name):
                 '🌙 Night-Chinese (7pm-10pm)': ' '.join,
                 '🌕 Night-Indian (8pm-10pm)': ' '.join
             }).reset_index()
-            
+            filtered_manpower_schedule['Date'] = filtered_manpower_schedule['Date'].dt.strftime('%Y-%m-%d')
+
             # Convert non-empty employee IDs to ticks and store them in new columns
             for col in ['☀️ Morning (10am-4.30pm)', '🌙 Night-Chinese (7pm-10pm)', '🌕 Night-Indian (8pm-10pm)']:
                 filtered_manpower_schedule[col] = filtered_manpower_schedule[col].apply(lambda x: '✓' if x.strip() != '' else '')

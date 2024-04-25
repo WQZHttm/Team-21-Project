@@ -1,32 +1,20 @@
-from dash import Dash, html, dcc,Input, Output,callback
+# import sys
+# sys.path.append('code/')
+# from backend_main import backend_run
+from dash import Dash, html
 import dash
 import plotly.express as px
 import datetime
 import dash_bootstrap_components as dbc
 import pandas as pd
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.types import TypeDecorator, VARCHAR
 from dateutil.parser import parse
-
-####################### FLASK SERVER #############################
-server = Flask(__name__)
-
-# Database connection settings
-host = 'localhost'
-user = 'root'
-password = 'password'
-database = 'trial_schema'
-port = 3306
-
-server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{user}:{password}@{host}:{port}/{database}'
-server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-db = SQLAlchemy(server)
+from db_server import server
+# import logging
+# logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w")
 
 
-####################### SQL INTEGRATION #############################
-# with open("docker-compose.yml", "r") as file:
-#     config =yaml.safe_load(file)['services']['db']['environment']
+
 
 
 ####################### DASH APP #############################
@@ -34,7 +22,6 @@ db = SQLAlchemy(server)
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
 app = Dash(__name__,server=server, routes_pathname_prefix="/", pages_folder='pages', use_pages=True, external_stylesheets=external_css)
-# auth=dash_auth.BasicAuth(app,USER_PASS_MAPPING)
 
 sidebar = html.Div([
     html.Br(),
@@ -82,4 +69,5 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	# backend_run()
+	app.run_server(host='0.0.0.0', port=8050, debug=False)
