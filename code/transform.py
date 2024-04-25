@@ -49,7 +49,7 @@ def transform_run():
       dat = row['Date']
       date = datetime.strptime(dat, '%d/%m/%Y')
       day = row['Day']
-      public_holiday = row['Public_Holiday']
+      public_holiday = row['Public Holiday']
       Indian_R = row['India_Reservation']
       hourly_rate_chef = calculate_hourly_rate_chef(day, public_holiday)
       hourly_rate = calculate_hourly_rate(day, public_holiday)
