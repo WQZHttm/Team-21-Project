@@ -7,11 +7,14 @@ from sqlalchemy.types import VARCHAR
 import sys
 sys.path.append('../')
 from db_server import db
-
+#This Python script utilises the 'pandas' library for data manipulation.
+#It also employs 'sklearn' for machine learning tasks, such as decision tree regression, model evaluation, and splitting the dataset into training and testing subsets.
 
 
 data2024 = pd.read_sql_query('SELECT * FROM general_data', con=db.engine)
 df = pd.read_sql_query('SELECT * FROM data_with_hour', con=db.engine)
+#The data_with_hour.csv dataset contains the data generated using data_generate.py in the previous section, which consists of historical data from the year 2021 to 2023 used for training the model.
+#The general_data.csv dataset contains data such as date, day, public holiday, event and Indian reservation, generated using generate_2024_data.py, for which the model will make predictions with.
 
 def predict():
     def DecisionTree(data,prediction_data):
@@ -20,6 +23,8 @@ def predict():
         public_holidays_df['Date'] = pd.to_datetime(public_holidays_df['Date'],dayfirst = True)
         public_holidays_df['Date'] = public_holidays_df['Date'].dt.strftime('%d/%m/%Y')
         return public_holidays_df
+      #This function extracts public holidays from the dataset and converts the date column to the correct datetime format.
+      #This is to store the names of the public holidays for future referencing.
 
       def clean_data(data):
         data['Date'] = pd.to_datetime(data['Date'],dayfirst = True)
@@ -33,6 +38,9 @@ def predict():
         data['Public_Holiday'] = data['Public_Holiday'].apply(lambda x: 1 if x else 0)
         data['Event'] = data['Event'].apply(lambda x: 1 if x == 'TRUE' else 0)
         return data
+      #This function cleans and preprocesses the data.
+      #It converts the 'Date' column to datetime format, extracts the year, month, day of the week, and day from the 'Date' column.
+      #It also fill in missing values in the 'Public_Holiday' column with 0 and converts 'Public_Holiday' and 'Event' columns to binary (1 for true, 0 for false).
 
       def data_prep_train(data):
         train = clean_data(data)
@@ -71,21 +79,27 @@ def predict():
             '9pm-10pm']]
         X_train,X_test,y_train, y_test = train_test_split(X,y, random_state=42)
         return X_train,X_test,y_train, y_test
+      #This function prepares training data for the model.
+      #It cleans the data using the clean_data function, separating the features (X) and the target variables (y)
+      #It then split the dataset into training and testing sets using a 75/25 split ratio.
+
 
       def data_prep_predict(data):
         predict = clean_data(data)
         data = predict.drop(columns = ['Date'])
-        return data 
+        return data
+      #This function prepares data for making predictions by cleaning the prediction data and dropping the ‘Date’ column.
 
-
-      training_ph = pub_hol_df(data)
-      pred_ph = pub_hol_df(prediction_data)
-      X_train,X_test,y_train,y_test = data_prep_train(data)
-      pred = data_prep_predict(prediction_data)
+      training_ph = pub_hol_df(data) #public holidays in training data
+      pred_ph = pub_hol_df(prediction_data) #public holidays in prediction data
+      X_train,X_test,y_train,y_test = data_prep_train(data) #cleaned training data
+      pred = data_prep_predict(prediction_data) #cleaned prediction data
 
       busy_threshold = 100
       def is_busy(customers_prediction):
           return customers_prediction > busy_threshold
+      #This function take in the predictions for customer count and compare it with the threshold.
+      #If the customer count is greater than the busy threshold, is_busy will return true.
 
       model = DecisionTreeRegressor(random_state=42)
       model.fit(X_train,y_train)
@@ -132,6 +146,9 @@ def predict():
                                                              '7pm-8pm',
                                                              '8pm-9pm',
                                                              '9pm-10pm'])
+      #predicted customer count by day and the customer spread for the day.
+
+      #post-processing of data
       prediction_data.reset_index(drop=True, inplace=True)
       date = prediction_data.apply(lambda row: f"{row['Day']}/{row['Month']}/{row['Year']}", axis=1)
       predictions['Date'] = pd.to_datetime(date,format = "%d/%m/%Y").dt.strftime('%d/%m/%Y')
@@ -142,6 +159,7 @@ def predict():
               return pred_ph.loc[pred_ph['Date'] == date, 'Public_Holiday'].iloc[0]
           else:
               return ''
+      #to return the public holiday name if it is a public holiday on that date
       predictions['Public_Holiday'] = predictions['Date'].apply(get_public_holiday)
       predictions['India_Reservation'] = prediction_data['India_Reservation']
       predictions['Chinese_Buffet_Busy'] = predictions['Predicted_Customers_Chinese'].apply(is_busy)
@@ -167,16 +185,12 @@ def predict():
                              '7pm-8pm',
                              '8pm-9pm',
                              '9pm-10pm']]
-      return(predictions)  
+      #final predictions table with all the information needed
+      return(predictions)
 
-    
-    
+
+
     predicted = DecisionTree(df,data2024)
     engine=db.engine
     predicted.to_sql('predictions', if_exists='replace',
                 con=engine, index=False,dtype={'Date': VARCHAR(50)})
-
-    # Return predictions as JSON response
-    # return jsonify(predicted)
-
-# predict()
