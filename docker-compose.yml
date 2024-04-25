@@ -8,21 +8,29 @@ services:
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
       - '3307:3306'
+    
+    # initialise database
     volumes:
       - ./init:/docker-entrypoint-initdb.d
 
+  # run all the prediction data
   backend:
     build: .
     ports:
       - '3308:3308'
     depends_on:
       - db
+    
+    # wait for db to finish running (so that database is created before creating tables)
     entrypoint: ["/usr/wait-for-it.sh", "db:3306", "--timeout=100", "--strict", "--", 'python','backend_main.py']
   
+  # Dash app
   web:
     build: .
     ports:
       - "8050:8050"
+
+    # wait for database tables to be created and inserted into before running frontend
     depends_on:     
       backend:
         condition: service_completed_successfully

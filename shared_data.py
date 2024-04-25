@@ -2,9 +2,12 @@ import pandas as pd
 import sys
 from db_server import db
 
+# read data from database
 manpower_schedule = pd.read_sql_query('SELECT * FROM final_schedule', con=db.engine)
 customer_prediction = pd.read_sql_query('SELECT * FROM predictions', con=db.engine)
 
+
+# AMEND DATA FOR THE FOLLOWING PAGES:
 # DAY
 manpower_schedule['Date'] = pd.to_datetime(manpower_schedule['Date'], format='%Y-%m-%d %H:%M:%S')
 manpower_schedule['Day'] = manpower_schedule['Day'].astype(str)
