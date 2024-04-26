@@ -1,7 +1,7 @@
 # src Folder 
 This is main folder for all source codes for our application.
 
-## Contents
+## Directory Layout
 ```
 .
 ├── assets               # Folder containing assets used for the dashboard
