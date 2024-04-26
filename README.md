@@ -25,7 +25,7 @@ This is done so in the following order:
 1. Ensure Docker Desktop is downloaded and open in the background. Remove all existing containers and images if possible.
 2. Open Command Prompt.
 3. Ensure directory in Command Prompt is the same as the cloned repository.
-4. Build the Docker image manually by cloning the Git repo. It will take approximately 30 minutes to build the image.
+4. Build the Docker image manually by cloning the Git repo. It will take approximately 30 minutes to build the image. (docker compose works well)
 ```
 git clone git@github.com:WQZHttm/Team-21-Project.git
 ```
