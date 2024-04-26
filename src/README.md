@@ -2,6 +2,7 @@
 This is main folder for all source codes for our application.
 
 ## Contents
+```
 .
 ├── assets               # Folder containing assets used for the dashboard
 ├── backend              # Folder for all backend code
@@ -12,5 +13,6 @@ This is main folder for all source codes for our application.
 ├── shared_data.py       # Contains optimized schedule and customer demand prediction
 ├── backend_main.py      # Facilitates running all backend code to generate schedules and predictions for dashboard
 ├── README.md
+```
 
 ### All codes in our main branch are working***
