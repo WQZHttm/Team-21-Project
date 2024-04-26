@@ -14,7 +14,7 @@ COPY . /main
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
-# Expose the port number on which the Flask app will run
+# Expose the port number on which the Dash app will run
 EXPOSE 8050
 
 # Run app.py when the container launches

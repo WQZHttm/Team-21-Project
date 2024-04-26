@@ -1,6 +1,3 @@
-# import sys
-# sys.path.append('code/')
-# from backend_main import backend_run
 from dash import Dash, html
 import dash
 import plotly.express as px
@@ -10,30 +7,34 @@ import pandas as pd
 from sqlalchemy.types import TypeDecorator, VARCHAR
 from dateutil.parser import parse
 from db_server import server
-# import logging
-# logging.basicConfig(level=logging.INFO, filename="py_log.log",filemode="w")
-
-
-
 
 
 ####################### DASH APP #############################
 
+# styling (icons, using css to customise colours & layout)
 external_css = [dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP,dbc.icons.FONT_AWESOME,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css", ]
 
+# Dash app using Flask server; routes_pathname_prefix="/" means Dash app will be shown when they first open the local webpage
 app = Dash(__name__,server=server, routes_pathname_prefix="/", pages_folder='pages', use_pages=True, external_stylesheets=external_css)
 
+# sidebar layout
 sidebar = html.Div([
     html.Br(),
+    # logo of Mount Faber
     html.Img(src='https://eber.co/wp-content/uploads/2023/08/mount-faber-logo-768x288.png', style={'height': '70px', 'margin-right': '10px','float': 'left'}),
+   
+    # spacing between logo and user 
     html.Br(),
-
     html.Br(), 
     html.Br(),
+    
+    # shows user
     html.Div([html.Span([
                     html.I(className='bi bi-person-circle'),
                     html.Span('Hao Xiang', id='user-login',style={'margin-left': '5px'})])],
              className='sidebar-user'),
+    
+    # buttons that lead to their respective pages
     dbc.Nav(
         [
             dbc.NavLink(html.Span([
@@ -56,18 +57,14 @@ sidebar = html.Div([
 ], className='sidebar')
 
 
-
-app.layout = html.Div([
-	# html.H1(datetime.datetime.now().strftime('Last updated: %Y-%m-%d %H:%M:%S'),
-	# 	style={'opacity': '1','color': 'blue', 'fontSize': 15, 'position': 'absolute', 'top': '2px', 'right': '2px'}),
-    # html.Br(),
-    
+# overall layout of app
+app.layout = html.Div([   
     # side bar
     html.Div(children=dbc.Row([dbc.Col(sidebar, width=2), dbc.Col(dash.page_container)])),
 ])
 
-
-
 if __name__ == '__main__':
-	# backend_run()
+    # run Dash app
+    # (host='0.0.0.0') means server accessible from any IP address on the machine, connected to port 8050
+    # debug=True means no error messages will be shown to users (deployment mode)
 	app.run_server(host='0.0.0.0', port=8050, debug=False)

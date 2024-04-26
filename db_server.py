@@ -1,6 +1,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+
+# use Flask as a server to connect to MySQL database
 server = Flask(__name__)
 
 # Database connection settings

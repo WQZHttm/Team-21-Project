@@ -11,13 +11,15 @@ from shared_data import manpower_schedule
 
 dash.register_page(__name__, path='/employee_details', name="Employee Details👬")
 
-#Load data from CSV
+#Load data from SQL
 
 manpower_schedule = manpower_schedule
 # define employee image mapping 
 
-employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg' }
-
+employee_image_mapping = {'A2': '/assets/A2.jpeg' , 'A1': '/assets/A1.jpg', 'A3': '/assets/A3.jpg', 'A4': '/assets/A4.jpg', 'A5': '/assets/A5.jpg',
+                         'B1': '/assets/B1.jpg', 'B2': '/assets/B2.jpg', 'B3': '/assets/B3.jpg', 'B4': '/assets/B4.jpg', 'B5': '/assets/B5.jpg',
+                         'C1': '/assets/C1.jpg', 'C2': '/assets/C2.jpg',
+                         'D1': '/assets/D1.jpg', 'D2': '/assets/D2.jpg', 'D3': '/assets/D3.jpg'}
 
 # Calculate current week's start and end date
 current_date = datetime.now()
@@ -25,8 +27,8 @@ start_of_current_week = current_date - timedelta(days=current_date.weekday())
 end_of_current_week = start_of_current_week + timedelta(days=6)
 
 
-
-# headers 
+ 
+# Layout of page (Date picker, text, name input)
 header = html.Div([
     dbc.Row([
         dbc.Col(html.Div([
@@ -53,11 +55,7 @@ header = html.Div([
 
 ])
 
-
-
-
-#first row
-
+# Layout of page (Employee info table, Whatsapp icon)
 first_row = html.Div([
     dbc.Row([
         dbc.Col(html.Div(id='employee-info-output',className='employee-table'), width=7),
@@ -67,13 +65,15 @@ first_row = html.Div([
     ])],className='ed-first')
 
 
-#second row 
+#Layout of page (Work schedule table)
 
 second_row = html.Div([
     dbc.Row([
         dbc.Col(html.Div(id= 'work-schedule-output'), width = {'size': 9})
         ])
     ])
+
+# Layout of page
 
 layout = html.Div([
     html.Br(),
@@ -93,13 +93,15 @@ layout = html.Div([
     Output('employee-schedule-heading', 'children'),
     [Input('employee-name-input', 'value')]
 )
+
+# Function to return the header for employee schedule table 
 def update_employee_schedule_heading(employee_name):
     if employee_name and employee_name in manpower_schedule['Employee_ID'].unique():
         return html.B(f"{employee_name}'s Schedule", style={'font-size': '20px'})
     else:
         return ""
 
-# Callback to update employee information based on selected date range and employee ID
+# Callback to update employee information,employee image based on selected date range and employee ID
 @callback(
     [Output('employee-info-output', 'children'),
      Output('employee-card', 'children'),
@@ -108,6 +110,8 @@ def update_employee_schedule_heading(employee_name):
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
 )
+
+#Function which returns employee information table, employee card/image and whatsapp icon
 def update_employee_info(start_date, end_date, employee_name):
     if start_date and end_date and employee_name:
         filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
@@ -153,6 +157,7 @@ def update_employee_info(start_date, end_date, employee_name):
                                         
                                     ],
                                     className='employee-card')
+            #Whatsapp button 
             whatsapp_button=html.A("WhatsApp Message",
                         href=f"https://wa.me/6585224420/?text={quote('Hello, please be informed that...')}",
                         target="_blank",
@@ -185,13 +190,14 @@ def update_employee_info(start_date, end_date, employee_name):
 
 
 
-
+# Callback to update employee schedule based on selected date range and employee ID
 @callback(
     Output('work-schedule-output', 'children'),
     [Input('date-picker-range', 'start_date'),
      Input('date-picker-range', 'end_date'),
      Input('employee-name-input', 'value')]
     )
+#Function which returns employee schedule table 
 def employee_schedule(start_date,end_date,employee_name):
     if start_date and end_date and employee_name:
         filtered_manpower_schedule = manpower_schedule[(manpower_schedule['Date'] >= start_date) & (manpower_schedule['Date'] <= end_date) & (manpower_schedule['Employee_ID'] == employee_name)]
@@ -213,7 +219,7 @@ def employee_schedule(start_date,end_date,employee_name):
             # Convert non-empty employee IDs to ticks and store them in new columns
             for col in ['☀️ Morning (10am-4.30pm)', '🌙 Night-Chinese (7pm-10pm)', '🌕 Night-Indian (8pm-10pm)']:
                 filtered_manpower_schedule[col] = filtered_manpower_schedule[col].apply(lambda x: '✓' if x.strip() != '' else '')
-            
+            #Creating data table for employee schedule
             work_schedule_table=dash_table.DataTable(
                     id='table',
                     columns=[{"name": i, "id": i} for i in filtered_manpower_schedule.columns],
@@ -225,7 +231,7 @@ def employee_schedule(start_date,end_date,employee_name):
                             'if': {'column_id': col},
                             'backgroundColor': '#b6d7a8',
                             # 'color': 'white'
-                        } for col in filtered_manpower_schedule.columns[1:] if filtered_manpower_schedule[col].str.contains('✓').any()
+                        } for col in filtered_manpower_schedule.columns[1:] if filtered_manpower_schedule[col].str.contains('✓').any() #adding in the ticks 
                     ] + [
                         {
                             'if': {'column_id': col, 'filter_query': '{{{0}}} is blank'.format(col)},

@@ -19,7 +19,7 @@ def generate_data_hour():
         "2023-08-09": "National Day","2023-11-22": "Deepavali","2023-12-25": "Christmas Day"
     }
 
-    # On Chinese New year, more people for CN buffet, same for Deepavali
+    # Culturally significant holidays：Chinese New year, Deepavali
     CN_holiday = {
         "2021-02-12": "Chinese New Year",
         "2022-02-01": "Chinese New Year",
@@ -51,7 +51,7 @@ def generate_data_hour():
     # Adding public holiday column
     holiday_names = [public_holidays.get(date.strftime("%Y-%m-%d"), "") for date in date_range]
 
-    # Assemble to be a data frame 
+    # Assemble to be a data frame -- the base data frame to work on
     df = pd.DataFrame({
         "Date": date_range,
         "Day": days_of_week,
@@ -79,7 +79,7 @@ def generate_data_hour():
     # Apply the function to assign promotions
     df['Event'] = assign_promotions(df['Date'])
 
-    # India Reservation
+    # India Reservation:  simulates random reservations for the Indian buffet daily
     np.random.seed(45)
     # Generating random reservations (1 or 0) for each day
     df['India_Reservation'] = np.random.choice([True, False], size=len(df))
@@ -87,9 +87,11 @@ def generate_data_hour():
     # adjust reservation to be true when there is holiday or promotion
     df.loc[df['Event'] | (df['Public_Holiday'] != ""), 'India_Reservation'] = True
 
-    # adjust the customer for India buffet for reservation
+    # adjust the customer for India buffet for reservation (no customer when no reservation)
     df['Customers_India'] = df.apply(lambda row: row['Customers_India'] if row['India_Reservation'] else 0, axis=1)
 
+    # Apply a series of adjustments to ensure the data reflects a realistic pattern.
+    
     # Adjusting the customer numbers to be higher on public holidays for both Chinese and Indian customers
     # Define adjustment function to increase customer numbers for holidays
     def adjust_for_holidays(num_customers, dates, increase_factor=1.5): # use a increase factor
@@ -99,7 +101,7 @@ def generate_data_hour():
     df['Customers_Chinese'] = adjust_for_holidays(df['Customers_Chinese'], df['Date'])
     df['Customers_India'] = adjust_for_holidays(df['Customers_India'], df['Date'])
 
-    # adjust for CN new year and Deepavali
+    # adjust for CN new year and Deepavali (special holidays)
     def adjust_for_chinese_holidays(num_customers, dates, increase_factor=1.5):
         return [int(customer * increase_factor) if date.strftime("%Y-%m-%d") in CN_holiday else customer
                 for customer, date in zip(num_customers, dates)]
@@ -120,7 +122,7 @@ def generate_data_hour():
     df['Customers_Chinese'] = adjust_for_peak_months(df['Customers_Chinese'], df['Date'])
     df['Customers_India'] = adjust_for_peak_months(df['Customers_India'], df['Date'])
 
-    # adjust for promotion
+    # adjust for promotion event
     def adjust_customers_for_events(customers, event_flag, increase_factor=1.25):
         return [int(customer * increase_factor) if event else customer for customer, event in zip(customers, event_flag)]
 
@@ -128,7 +130,7 @@ def generate_data_hour():
     df['Customers_India'] = adjust_customers_for_events(df['Customers_India'], df['Event'])
 
     # the food court customer and distribution 
-
+    #  follow information from restaurant that food court's customer base closely mirrors that of the Chinese buffet.
     np.random.seed(46)
     random_factors = np.random.uniform(0.75, 1.25, size=len(df))
     df['Food_Court_Customer'] = (df['Customers_Chinese']) * random_factors
@@ -183,7 +185,7 @@ def generate_data_hour():
         lambda row: distribute_customers(row['Customers_Chinese']), axis=1, result_type='expand'
     )
 
-    # for india customer
+    # for Indian buffet
     def distribute_customers_india_fixed(customers):
         part_one = round(customers * 0.65)  # 65% for 8PM to 9PM
         part_two = customers - part_one  # Remaining 35% for 9PM to 10PM
