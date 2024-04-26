@@ -66,5 +66,5 @@ app.layout = html.Div([
 if __name__ == '__main__':
     # run Dash app
     # (host='0.0.0.0') means server accessible from any IP address on the machine, connected to port 8050
-    # debug=True means no error messages will be shown to users (deployment mode)
+    # debug=False means no error messages will be shown to users (deployment mode)
 	app.run_server(host='0.0.0.0', port=8050, debug=False)
