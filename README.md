@@ -19,7 +19,7 @@ This is done so in the following order:
 ## Directory Layout
 ```
 ├── __pycache__                 # Compiled Python files
-├── src                         # Source files for Dash app
+├── src                         # Folder containing source files for Dash app
 ├── docker-compose.yml          # Configuration file for Docker Compose
 ├── Dockerfile                  # Docker image definition file
 ├── README.md                   # Project documentation
