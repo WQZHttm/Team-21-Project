@@ -2,7 +2,7 @@
 
 ## Overview
 
-In context of Good Old Days’ (under Mount Faber Leisure Group) difficulty in finding potential part-time staff to support the business, “Time for Change” is an ambitious endeavour that aims to predict customer count, make use of predicted customer count to generate an optimal schedule for the week based on business requirements and build a simple yet meaningful dashboard that displays the schedule and many more information to empower stakeholders’ decision making in an interactive way. This project’s backend exemplifies how data science involves more than just statistical learning such as machine learning models, but also includes operation research (OR) techniques, and specifically for this project, a branch of OR known as scheduling theory. On the other hand, frontend demonstrates how the utilisation of advanced softwares such as mySQL, python flask and docker, can greatly improve the delivery of information on the business operation to relevant stakeholders in the most appealing and efficient ways. In conclusion, “Time for Change” is a full stack data science project aimed at solving real-world business problems and delivering the solution as a product in the form of a dashboard.
+In context of Good Old Days’ (under Mount Faber Leisure Group) difficulty in finding potential part-time staff to support the business, “Time for Change” is an ambitious endeavour that aims to predict customer count, make use of predicted customer count to generate an optimal schedule for the week based on business requirements and build a simple yet meaningful dashboard that displays the schedule and many more information to empower stakeholders’ decision making in an interactive way. This project’s backend exemplifies how data science involves more than just statistical learning such as machine learning models, but also includes operation research (OR) techniques, and specifically for this project, a branch of OR known as scheduling theory. On the other hand, frontend demonstrates how the utilisation of advanced softwares such as MySQL, Python Flask and Docker, can greatly improve the delivery of information on the business operation to relevant stakeholders in the most appealing and efficient ways. In conclusion, “Time for Change” is a full stack data science project aimed at solving real-world business problems and delivering the solution as a product in the form of a dashboard.
 
 ## Methodology
 
@@ -56,17 +56,28 @@ Optimised staffing can prevent employee burnout and ensure a fair distribution o
 
 Future enhancements to this project may include:
 
-Backend:
+#### Backend:
 - Proprietary data: Use proprietary data that competitors have no access to, to gain a data edge over them
 - Custom made ML model: Build proprietary machine learning model to suit business needs
 - Optimising optimisers: Buy licence to use “Gurobi” optimiser as it is renowned to produce the best results in constraint optimisation (such as the one in our project) but has not been tried due to lack of funds
 - Deferred offs feature: Instead of completely separating the weeks to optimise schedule, we can take into account future week’s to defer offs that employees missed in the present week 
 
-Frontend
+#### Frontend
 
 - Authentication Login: Having users to login before accessing the dashboard can improve application’s data privacy for stakeholders  
 - Save Report Feature: Download feature to save staff schedules, relevant employee information, etc for future reference
 - Employee Availability page: The page will feature employees who initially indicated their availability for each day in the form of employee cards (which features their name, role, Whatsapp button to contact them). In the event staff allocated for the day cannot attend work last minute, the head chef can fill up these vacancies easily by checking this page and conveniently contacting them.
+
+## Directory Layout
+.
+├── __pycache__                 # Compiled Python files
+├── src                         # Source files (e.g. Python scripts, modules)
+├── docker-compose.yml          # Configuration file for Docker Compose
+├── Dockerfile                  # Docker image definition file
+├── README.md                   # Project documentation
+├── requirements.txt            # Python dependencies list
+├── wait-for-it.sh              # Script for waiting on services (e.g. database) to be ready when dockerising
+
 
 
 ## Running the App
