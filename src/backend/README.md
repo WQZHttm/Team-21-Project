@@ -10,7 +10,7 @@ This folder also contains the optimal schedule in the form of a csv file.
 - `generate_2024_data.py`: Codes for generating target data (2024) for our predictive model to predict desired information
 - `requirements.txt`: A copy of requirements from other file "deployments". Copied here so it is more convenient to build a virtual environment
 - `schedule.py`: Codes for the integer program based scheduling algorithm that optimises weekly schedule
-- `transform.py`: Codes that combine year worth of weekly schedules and transform it into a dataframe (later converted into sql) file called "final_schedule"
+- `transform.py`: Codes that combine year worth of weekly schedules and transform it into a dataframe and later converted into sql
 
 ### Usage and Possible changes
 - Historical data can be used to replace data_generate.py and real time information about the future can replace generate_2024_data.py
