@@ -41,10 +41,11 @@ def smart_Schedule(input):
     Chinese = input['Chinese_Buffet_Busy'].tolist()
     Indian = input['Indian_Buffet_Busy'].tolist()
     Indian_R = input['India_Reservation'].tolist()
+    PH = input['Public_Holiday'].tolist()
     Day = input['Day'].tolist()
 
     req = Requirements(Chinese, Indian, Indian_R)
-    day_status = day_state(pub_hols, Day)
+    day_status = day_state(PH, Day)
 
     # Sub-algorithm that computes optimal schedule for kitchen staffs
     def kitchen_Schedule(req, day_status):
