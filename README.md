@@ -30,7 +30,7 @@ This is done so in the following order:
 
 ## Running the App
 
-#### Kindly ignore all commit messages (e.g 'not working'), as all final code pushed into main works.
+#### Kindly ignore all commit messages (e.g 'not working'), as all final code pushed into main branch works.
 
 ### Build application
 1. Ensure Docker Desktop is downloaded and open in the background. Remove all existing containers and images if possible.
