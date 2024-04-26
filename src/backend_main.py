@@ -9,7 +9,7 @@ import datetime
 def backend_run():
     print(datetime.datetime.now())
     print('START OF BACKEND_RUN')
-    sys.path.append('./backend')
+    sys.path.append('./src/backend')
     
     # 1. generate data from decision tree model
     # 1a. generate data by the hour
