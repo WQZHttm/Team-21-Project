@@ -11,7 +11,7 @@ pub_hols = ["New Year's Day", "Chinese New Year", "Good Friday", "Hari Raya Puas
 
 #calculate_hourly_rate_xxx functions will help to determine the hourly pay for each worker since the pays change according to different roles, job statuses, whether it is a public holiday, and type of day
 def calculate_hourly_rate_chef(day, public_holiday):
-  if public_holiday in pub_hols in pub_hols:
+  if public_holiday in pub_hols:
     return 17
   elif day == 'Saturday' or day == 'Sunday':
       return 16
@@ -19,7 +19,7 @@ def calculate_hourly_rate_chef(day, public_holiday):
       return 15
 
 def calculate_hourly_rate(day, public_holiday):
-  if public_holiday in pub_hols in pub_hols:
+  if public_holiday in pub_hols:
     return 16
   elif day == 'Saturday' or day == 'Sunday':
     return 15
@@ -27,7 +27,7 @@ def calculate_hourly_rate(day, public_holiday):
     return 14
 
 def calculate_hourly_rate_part(day, public_holiday):
-  if public_holiday in pub_hols in pub_hols:
+  if public_holiday in pub_hols:
     return 15
   elif day == 'Saturday' or day == 'Sunday':
     return 14
@@ -93,20 +93,19 @@ def transform_run():
       #there are various circumstances to check for given the fact that we should not repeat workers who are already working in the Chinese buffet. We also need to make sure no workers are assigned on days that there is no Indian Reservation at all
       for employee_id in final_schedule[idx][2]:
         if Indian_R:
-          if Indian_R:
           if schedule_data:
-              for rw in schedule_data:
-                if employee_id in rw and date in rw and rw[4] == '7pm-10pm':
-                  break
+            for rw in schedule_data:
+              if employee_id in rw and date in rw and rw[4] == '7pm-10pm':
+                break
+            else:
+              if employee_id in chefs:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Chef', 2, hourly_rate_chef, 'full-time'])
+              elif employee_id in service:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate, 'full-time'])
+              elif employee_id in parttimers:
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate_part, 'part-time'])
               else:
-                if employee_id in chefs:
-                  schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Chef', 2, hourly_rate_chef, 'full-time'])
-                elif employee_id in service:
-                  schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate, 'full-time'])
-                elif employee_id in parttimers:
-                  schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Service', 2, hourly_rate_part, 'part-time'])
-                else:
-                  schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
+                schedule_data.append([date, day, public_holiday, employee_id, '8pm-10pm', 'Dishwasher', 2, hourly_rate, 'full-time'])
 
   #schedule_data now contains all the relevant information. final_sched is a dataframe that contains the necessary information according to the following column names
   final_sched = pd.DataFrame(schedule_data, columns=['Date', 'Day', 'Public_Holiday', 'Employee_ID', 'Shift', 'Role', 'Hours_worked', 'Hourly_rate', 'Job_status'])
