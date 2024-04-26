@@ -1,4 +1,4 @@
-# Backend ReadMe
+# Backend Folder
 
 ### Overview
 This folder contains all the codes used by the backend to output predictions and optimal schedule. 
