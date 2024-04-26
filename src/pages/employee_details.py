@@ -179,17 +179,6 @@ def update_employee_info(start_date, end_date, employee_name):
         return [], None, None
 
 
-    
-
-
-
-
-
-
-
-
-
-
 # Callback to update employee schedule based on selected date range and employee ID
 @callback(
     Output('work-schedule-output', 'children'),

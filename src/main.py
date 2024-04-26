@@ -37,17 +37,20 @@ sidebar = html.Div([
     # buttons that lead to their respective pages
     dbc.Nav(
         [
+			# Daily button
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-cloud'),
+                    html.I(className='bi bi-cloud'), # Bootstrap icon for Day
                     html.Span('Daily', style={'margin-left': '5px'})]), href='/', active='exact',className='sidebar-list-item'),
+            # Weekly button
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-collection'),
+                    html.I(className='bi bi-collection'), # Bootstrap icon for Week
                     html.Span('Weekly', style={'margin-left': '5px'})]), href='/week', active='exact',className='sidebar-list-item'),
+            # Employee Details button
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-card-list'),
+                    html.I(className='bi bi-card-list'), # Bootstrap icon for Employee Details
                     html.Span('Employee Details', style={'margin-left': '5px'})]), href='/employee_details', active='exact',className='sidebar-list-item'),
             dbc.NavLink(html.Span([
-                    html.I(className='bi bi-percent'),
+                    html.I(className='bi bi-percent'), # Bootstrap icon for LCP
                     html.Span('Labour Cost Percentage', style={'margin-left': '5px'})]), href='/lcp', active='exact',className='sidebar-list-item'),
     
         ],
@@ -66,5 +69,5 @@ app.layout = html.Div([
 if __name__ == '__main__':
     # run Dash app
     # (host='0.0.0.0') means server accessible from any IP address on the machine, connected to port 8050
-    # debug=True means no error messages will be shown to users (deployment mode)
+    # debug=False means no error messages will be shown to users (deployment mode)
 	app.run_server(host='0.0.0.0', port=8050, debug=False)

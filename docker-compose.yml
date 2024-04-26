@@ -34,5 +34,6 @@ services:
     depends_on:     
       backend:
         condition: service_completed_successfully
+    # run dash app
     entrypoint: ["python", "./src/main.py"]
 

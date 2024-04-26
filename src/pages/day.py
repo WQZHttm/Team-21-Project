@@ -12,8 +12,6 @@ from shared_data import customer_prediction, manpower_schedule
 
 dash.register_page(__name__, path='/', name="Day 📋")
 
-#current date
-
 current_date = datetime.datetime.today().date()
 ####################### LOAD DATASET #############################
 customer_prediction=customer_prediction
@@ -27,12 +25,15 @@ layout = html.Div([
     
     html.Span([html.I(className='bi bi-calendar4-event'),
                         html.B('Select a date: ', style={'margin-left': '5px'})]),
+
+    # pick date
     dcc.DatePickerSingle(id='date-picker',
         min_date_allowed=datetime.datetime(2024, 1, 1),
         max_date_allowed=datetime.datetime(2024, 12, 31),
         date=current_date,
         style={'width':'200px', 'margin':'10px'}),
     html.Br(),
+    # Header for Event of the Day
     html.H2(id='event-header'),
     html.Br(),
     html.Div([
@@ -145,7 +146,9 @@ def produce_output(date,shift):
 )
     # Adding line graph to histogram
     histogram_fig.add_scatter(x=x_values, y=y_values, mode='lines', line=dict(shape='spline', smoothing=1.3), showlegend = False, line_color = 'black')
+    # change colour of histogram
     histogram_fig.update_traces(marker_color='#b6d7a8')
+    # line to indicate whether restaurant is busy
     histogram_fig.add_hline(y=50,line_color='orange',annotation_text='Busy',annotation_position="right")
     histogram_container = dcc.Graph(figure=histogram_fig)
 
