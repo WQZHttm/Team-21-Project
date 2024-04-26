@@ -7,8 +7,11 @@ WORKDIR /main
 # Copy the wait-for-it script into the container
 COPY wait-for-it.sh /usr/wait-for-it.sh
 
-# Copy the current directory contents into the container at /app
-COPY . /main
+# Copy the src folder into the container at /main/src
+COPY src /main/src
+
+# Copy the requirements file into the container at /main
+COPY requirements.txt /main/
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --upgrade pip
@@ -18,6 +21,4 @@ RUN pip3 install -r requirements.txt
 EXPOSE 8050
 
 # Run app.py when the container launches
-CMD ["python", "main.py"]
-
-
+CMD ["python", "./src/main.py"]

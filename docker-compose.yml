@@ -11,7 +11,7 @@ services:
     
     # initialise database
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - ./src/init:/docker-entrypoint-initdb.d
 
   # run all the prediction data
   backend:
@@ -22,7 +22,7 @@ services:
       - db
     
     # wait for db to finish running (so that database is created before creating tables)
-    entrypoint: ["/usr/wait-for-it.sh", "db:3306", "--timeout=100", "--strict", "--", 'python','backend_main.py']
+    entrypoint: ["/usr/wait-for-it.sh", "db:3306", "--timeout=100", "--strict", "--", 'python','./src/backend_main.py']
   
   # Dash app
   web:
@@ -34,5 +34,5 @@ services:
     depends_on:     
       backend:
         condition: service_completed_successfully
-    entrypoint: ["python", "main.py"]
+    entrypoint: ["python", "./src/main.py"]
 

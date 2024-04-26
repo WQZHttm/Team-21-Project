@@ -22,34 +22,15 @@ This is done so in the following order:
 ## Running the App
 
 ### Build application
-Build the Docker image manually by cloning the Git repo.
+1. Ensure Docker Desktop is downloaded and open in the background. Remove all existing containers and images if possible.
+2. Open Command Prompt.
+3. Ensure directory in Command Prompt is the same as the cloned repository.
+4. Build the Docker image manually by cloning the Git repo.
 ```
 git clone git@github.com:WQZHttm/Team-21-Project.git
 docker-compose up --build
 ```
-
-### Run the container
-1. Ensure Docker Desktop is downloaded and open in the background. Remove all existing containers and images if possible.
-2. Open Command Prompt.
-3. Ensure directory in Command Prompt is the same as the cloned repository.
-4. Create a container (named `my-container`) from the image.
-```
-docker run --name my-container -d -p 8050:8050 team21_v1
-```
 5. Visit http://localhost:8050 .
 
-
-<!-- ```
- The hostname of the container is 6095273a4e9b and its IP is 172.17.0.2. 
-```
-
-### Verify the running container
-Verify by checking the container ip and hostname (ID):
-```
-$ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' my-container
-172.17.0.2
-$ docker inspect -f '{{ .Config.Hostname }}' my-container
-6095273a4e9b
-``` -->
-
-
+### Troubleshooting
+If you face the following issue: `backend-1  | /usr/bin/env: ‘bash\r’: No such file or directory`, go to `wait-for-it.sh` file, change End of Line Sequence from "CRLF” to “LF” for. For users using Visual Studio Code on Windows, refer to the bottom of the page and click on "CRLF".
