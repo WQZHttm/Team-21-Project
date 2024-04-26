@@ -35,4 +35,4 @@ docker-compose up --build
 5. Visit http://localhost:8050 once image is built.
 
 ### Troubleshooting
-If you face the following issue: `backend-1  | /usr/bin/env: ‘bash\r’: No such file or directory`, go to wait-for-it.sh file, change End of Line Sequence from "CRLF” to “LF” for. For users using Visual Studio Code on Windows, refer to the bottom of the page and click on "CRLF".
+If you face the following issue: `backend-1  | /usr/bin/env: ‘bash\r’: No such file or directory`, go to `wait-for-it.sh` file, change End of Line Sequence from "CRLF” to “LF” for. For users using Visual Studio Code on Windows, refer to the bottom of the page and click on "CRLF".
