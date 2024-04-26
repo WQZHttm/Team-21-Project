@@ -5,13 +5,12 @@ This folder contains all the codes used by the backend to output predictions and
 This folder also contains the optimal schedule in the form of a csv file.
 
 ### Content
-- data_generate.py: Codes used to generate training data (2010-2023) for training our preditive model based on the relevant knowledge we learnt about the business from both stakeholders' meeting and public data
-- decision_tree_model.py: Codes for the predictive model that we used to predict customer counts
-- final_schedule.csv: The transformed optimal schedule in csv format (that is ready to be uploaded into database)
-- generate_2024_data.py: Codes for generating target data (2024) for our predictive model to predict desired information
-- requirements.txt: A copy of requirements from other file "deployments". Copied here so it is more convenient to build a virtual environment
-- schedule.py: Codes for the integer program based scheduling algorithm that optimises weekly schedule
-- transform.py: Codes that combine year worth of weekly schedules and transform it into a csv file called "final_schedule.csv"
+- `data_generate.py`: Codes used to generate training data (2010-2023) for training our preditive model based on the relevant knowledge we learnt about the business from both stakeholders' meeting and public data
+- `decision_tree_model.py`: Codes for the predictive model that we used to predict customer counts
+- `generate_2024_data.py`: Codes for generating target data (2024) for our predictive model to predict desired information
+- `requirements.txt`: A copy of requirements from other file "deployments". Copied here so it is more convenient to build a virtual environment
+- `schedule.py`: Codes for the integer program based scheduling algorithm that optimises weekly schedule
+- `transform.py`: Codes that combine year worth of weekly schedules and transform it into a csv file called "final_schedule.csv"
 
 ### Usage and Possible changes
 - Historical data can be used to replace data_generate.py and real time information about the future can replace generate_2024_data.py
