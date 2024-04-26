@@ -10,3 +10,5 @@ This is main folder for all source codes for our application.
 6. `init` folder: database initialisation for MySQL
 7. `pages` folder: contains pages for Dash
 8. `backend_main.py`: facilitates the running of all backend codes to generate data(schedules and predictions) used in dashboard
+
+### All codes in our main branch are working***
