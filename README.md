@@ -36,3 +36,6 @@ docker-compose up --build
 
 ### Troubleshooting
 If you face the following issue: `backend-1  | /usr/bin/env: ‘bash\r’: No such file or directory`, go to `wait-for-it.sh` file, change End of Line Sequence from "CRLF” to “LF” for. For users using Visual Studio Code on Windows, refer to the bottom of the page and click on "CRLF".
+
+### Additional Notes
+Kindly ignore all commit messages, as all final code pushed into main works.
