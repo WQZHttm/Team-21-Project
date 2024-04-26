@@ -14,7 +14,19 @@ This is done so in the following order:
 
 2. A scheduling algorithm that recommends a schedule based on the prediction of customer count for the week and the number of employees 
 
-3. Display of customer counts, recommended schedule and costs reduced by using the recommended schedule as compared to a manually written schedule 
+3. Display of customer counts, recommended schedule and costs reduced by using the recommended schedule as compared to a manually written schedule
+
+## Directory Layout
+```
+├── __pycache__                 # Compiled Python files
+├── src                         # Source files for Dash app
+├── docker-compose.yml          # Configuration file for Docker Compose
+├── Dockerfile                  # Docker image definition file
+├── README.md                   # Project documentation
+├── requirements.txt            # Python dependencies list
+├── wait-for-it.sh              # Script for waiting on services (e.g. database) to be ready
+
+```
 
 ## Running the App
 
