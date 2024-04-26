@@ -1,4 +1,4 @@
-# Pages Folder 
+# src Folder 
 This is main folder for all source codes for our application.
 
 ## Contents
